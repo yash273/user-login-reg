@@ -1,16 +1,15 @@
 <mat-toolbar color="primary" class="mat-elevation-z6">
     <mat-toolbar-row>
-        <span>My App</span>
+        <span>Login to My app</span>
         <span class="example-spacer"></span>
-        <button mat-raised-button color="accent">Accent</button>
     </mat-toolbar-row>
 </mat-toolbar>
 
 <mat-card class="userreg-card mat-elevation-z3">
     <mat-card-header>
         <div mat-card-avatar class=""></div>
-        <mat-card-title>Welcome To My App</mat-card-title>
-        <mat-card-subtitle>Enter following Details</mat-card-subtitle>
+        <mat-card-title>Welcome back</mat-card-title>
+        <mat-card-subtitle>Enter following Details to login</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
         <form [formGroup]="userForm" (ngSubmit)="onLogin()">
@@ -37,6 +36,10 @@
                 <button mat-button mat-raised-button [disabled]="userForm.invalid" color="accent" type="submit">Login</button>
             </mat-card-actions>
         </form>
+        <span>
+            <p>Create New Account</p>
+            <a mat-button mat-raised-button color="primary" routerLink="/register">Register</a>
+        </span>
     </mat-card-content>
 
 </mat-card>

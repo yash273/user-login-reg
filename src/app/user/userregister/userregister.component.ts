@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl,FormGroup,FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { UserService } from '../user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-userregister',
@@ -11,10 +12,10 @@ import { UserService } from '../user.service';
 })
 export class UserregisterComponent implements OnInit {
 
-  constructor(private fb: FormBuilder,private us: UserService) { }
+  constructor(private fb: FormBuilder,private us: UserService,private router: Router) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
+
   nameRegx =/[a-zA-Z]+$/
   emailRegx = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/
   passRegx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
@@ -27,17 +28,15 @@ export class UserregisterComponent implements OnInit {
     pass : ['',[Validators.required,Validators.pattern(this.passRegx)]],
     userMob : ['', [Validators.pattern(this.mobRegx)]]
   })
-   hide = true;
 
+  hide = true;
 
   onSubmit() {
-  this.us.saveUser(this.userForm.value)
-    
-  
-}
+    this.us.saveUser(this.userForm.value);
+    this.router.navigate(['/login']); 
+  }
 
-get uf() { 
-  return this.userForm.controls; 
-}
-
+  get uf() { 
+    return this.userForm.controls; 
+  }
 }

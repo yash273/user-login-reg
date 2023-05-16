@@ -5,11 +5,13 @@ import { UserloginComponent } from './userlogin/userlogin.component';
 import { UserregisterComponent } from './userregister/userregister.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { UserlistComponent } from './userlist/userlist.component';
 
 @NgModule({
   declarations: [
     UserloginComponent,
-    UserregisterComponent
+    UserregisterComponent,
+    UserlistComponent
   ],
   imports: [
     CommonModule,
