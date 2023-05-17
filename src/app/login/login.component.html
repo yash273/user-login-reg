@@ -16,8 +16,8 @@
             <mat-form-field appearance="outline">
                 <mat-label>Email</mat-label>
                 <input matInput formControlName="email">
-                <mat-error *ngIf="uf.email.errors?.email">Please enter valid input</mat-error>
-                <mat-error *ngIf="uf.email.errors?.required">Email should not be empty</mat-error>
+                <mat-error *ngIf="userform.email.errors?.email">Please enter valid input</mat-error>
+                <mat-error *ngIf="userform.email.errors?.required">Email should not be empty</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>Enter your password</mat-label>
@@ -25,12 +25,12 @@
                 <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                     <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
-                <mat-error *ngIf="uf.pass.errors?.pattern">
+                <mat-error *ngIf="userform.pass.errors?.pattern">
                     Include at least 8 characters which must have at least <br>
                     one upper case characters (A-Z), one lower case character (a-z), <br>
                     a number (0-9) and a symbol (!, #, $, etc.)
                 </mat-error>
-                <mat-error *ngIf="uf.pass.errors?.required">Password should not be empty</mat-error>
+                <mat-error *ngIf="userform.pass.errors?.required">Password should not be empty</mat-error>
             </mat-form-field>
             <mat-card-actions>
                 <button mat-button mat-raised-button [disabled]="userForm.invalid" color="accent" type="submit">Login</button>

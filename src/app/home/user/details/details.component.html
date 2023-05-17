@@ -1,0 +1,26 @@
+<div class="card-title mat-elevation-z6">
+    <h1 mat-dialog-title>Details of {{user.name}}</h1>
+</div>
+
+<div mat-dialog-content>
+    <span>
+        <h3>Name:</h3>
+        <p>{{user.name}}</p>
+    </span>
+    <span>
+        <h3>Email:</h3>
+        <p> {{user.email}}</p>
+    </span>
+    <span>
+        <h3>Type:</h3>
+        <p> {{user.type}}</p>
+    </span>
+    <span>
+        <h3>Mobile:</h3>
+        <p>{{user.mob}}</p>
+    </span>
+</div>
+
+<div mat-dialog-actions>
+    <button mat-button cdkFocusInitial mat-dialog-close (click)="onClose">Ok</button>
+</div>

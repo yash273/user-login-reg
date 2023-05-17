@@ -1,8 +1,8 @@
-export class userObj{
-    userId?:number;
-    userName?: string;
-    userEmail?: string;
-    userType?: string;
-    userpass? : string;
-    userMob?: number
+export interface userObj {
+    id?: number;
+    name?: string;
+    email?: string;
+    type?: string;
+    pass?: string;
+    mob?: number
 }

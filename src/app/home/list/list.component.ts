@@ -3,13 +3,14 @@ import { UserService } from '../user/user.service';
 
 @Component({
   selector: 'app-userlist',
-  templateUrl: './userlist.component.html',
-  styles: [
-  ]
+  templateUrl: './list.component.html',
+  styleUrls: ['./list.component.scss']
 })
-export class UserlistComponent implements OnInit {
+export class ListComponent implements OnInit {
 
   userList: any;
+
+  displayedColumns: string[] = ['srNo', 'name', 'mobile', 'type', 'email', 'Action'];
 
   constructor(private userService: UserService) {
     this.userList = []
@@ -21,8 +22,6 @@ export class UserlistComponent implements OnInit {
       this.userList = JSON.parse(oldRecords)
     }
   }
-
-  displayedColumns: string[] = ['srNo', 'name', 'mobile', 'type', 'email', 'Action'];
 
   onLogout() {
     this.userService.logoutUser()
