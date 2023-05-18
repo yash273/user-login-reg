@@ -26,16 +26,11 @@ export class UserService {
   }
 
   // create new user id
-  newUserId() {
-    const oldRecords = localStorage.getItem('userData');
-    if (oldRecords !== null) {
-      const userList = JSON.parse(oldRecords);
-      const lastItem = userList.slice(-1).pop()
-      const lastItemId = JSON.parse(lastItem.id)
-      return lastItemId + 1
-    } else {
-      return 1;
-    }
+  newUserId(): number {
+    const timestamp = new Date().getTime();
+    const randomNum = Math.floor(Math.random() * 1000000);
+    const uniqueId = timestamp * 1000000 + randomNum;
+    return uniqueId;
   }
 
   // save user
@@ -118,7 +113,7 @@ export class UserService {
     const oldRecords = localStorage.getItem('userData');
     if (oldRecords !== null) {
       const userList = JSON.parse(oldRecords);
-      const idIndex = userList.findIndex((a: any) => a.id == id)
+      const idIndex = userList.findIndex((a: any) => a.id == id);
       return userList[idIndex]
     }
   }
@@ -128,10 +123,24 @@ export class UserService {
     const oldRecords = localStorage.getItem('userData');
     if (oldRecords !== null) {
       const userList = JSON.parse(oldRecords);
-      userList.splice(userList.findIndex((a: any) => data.id == id), 1);
-      data.id = id
-      userList.push(data);
-      localStorage.setItem('userData', JSON.stringify(userList));
+      userList.splice(userList.findIndex((a: any) => a.id == id), 1);
+      data.id = id;
+      const loggedRecords = localStorage.getItem('loggedUserData');
+      if (loggedRecords !== null) {
+        const newList = JSON.parse(loggedRecords);
+        const x = newList.findIndex((b: any) => b.id == id);
+        const y = newList[x].id
+        if (y !== data.id) {
+          userList.push(data);
+          localStorage.setItem('userData', JSON.stringify(userList));
+        } else {
+          userList.push(data);
+          localStorage.setItem('userData', JSON.stringify(userList));
+          newList.splice(newList.findIndex((a: any) => a.id == id), 1);
+          newList.push(data);
+          localStorage.setItem('loggedUserData', JSON.stringify(newList));
+        }
+      }
     }
     this.router.navigateByUrl('/home/list');
   }
