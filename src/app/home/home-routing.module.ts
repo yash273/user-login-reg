@@ -16,8 +16,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [ReactiveFormsModule,
-    RouterModule.forChild(routes)],
+  imports: [
+    ReactiveFormsModule,
+    RouterModule.forChild(routes)
+  ],
   exports: [RouterModule]
 })
 export class HomeRoutingModule { }

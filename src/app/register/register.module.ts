@@ -19,7 +19,6 @@ import { ReactiveFormsModule } from '@angular/forms';
         { path: '', component: RegisterComponent },
       ]
     )
-
   ]
 })
 export class RegisterModule { }

@@ -56,7 +56,7 @@ export class UserService {
 
   }
 
-  // log user
+  // login user
   logUser(dataEmail: string, dataPass: string) {
     const oldRecords = localStorage.getItem('userData');
     if (oldRecords !== null) {
