@@ -4,14 +4,16 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: #fefafa;}
 .example-spacer {flex: 1 1 auto;}
 .userreg-card{width: 100%;max-width: 600px;margin: 30px auto;
-    form{margin: auto;width: 100%;max-width: 500px;
-        +span{display: flex;align-items: center;justify-content: space-around;
+    form{margin: auto;width: 100%;max-width: 500px;}
+    mat-form-field{width: 100%;} 
+    mat-card-actions{margin-top: 20px;display: flex;justify-content: space-between;
+        mat-button{    margin: 0 8px;}
+        span{display: flex;align-items: center;
             p{margin: 0;}
         }
     }
-    mat-form-field{width: 100%;} 
-    mat-card-actions{margin-top: 20px;}
 }
+mat-card .mat-card-actions:not(.mat-card-actions-align-end) .mat-button:first-child, .mat-card-actions:not(.mat-card-actions-align-end) .mat-raised-button:first-child{margin: 0 8px;}
 table th.mat-header-cell,table td.mat-cell,table td.mat-footer-cell{padding: 0 30px;}
 table th.mat-column-Action.mat-header-cell{padding: 0 40px;}
 .cta{display: flex;max-width: 400px;width: 100%;align-items: center;justify-content: space-between;margin: 6px 0 20px;}
@@ -21,6 +23,7 @@ tr.mat-row:hover {background: whitesmoke;}
 .table-res{overflow-y: hidden}
 .success.mat-snack-bar-container{ background: #33d633; color: #e6fae6;}
 .error.mat-snack-bar-container{ background: #d11a1a; color: #fae6e6;}
-// .default.mat-snack-bar-container{ background: #9c27b0; color: aliceblue;}
-simple-snack-bar{.mat-button{color: whitesmoke;}}
+simple-snack-bar{
+    .mat-button{color: whitesmoke;}
+}
 .mat-toolbar-row button{margin-left: 20px;}

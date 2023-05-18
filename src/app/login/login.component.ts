@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../home/user/user.service';
+import { emailRegx, passRegx } from '../regex-rules/regex';
 
 
 @Component({
@@ -10,12 +11,9 @@ import { UserService } from '../home/user/user.service';
 })
 export class LoginComponent implements OnInit {
 
-  emailRegx = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/
-  passRegx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-
   userForm = this.formBuilder.group({
-    email: ['', [Validators.required, Validators.email]],
-    pass: ['', [Validators.required, Validators.pattern(this.passRegx)]],
+    email: ['', [Validators.required, Validators.pattern(emailRegx)]],
+    pass: ['', [Validators.required]],
   })
 
   hide = true;

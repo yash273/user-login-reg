@@ -23,7 +23,7 @@
             <mat-form-field appearance="outline">
                 <mat-label>Email</mat-label>
                 <input matInput formControlName="email">
-                <mat-error *ngIf="userform.email.errors?.email">Please enter valid input</mat-error>
+                <mat-error *ngIf="userform.email.errors?.pattern">Please enter valid input</mat-error>
                 <mat-error *ngIf="userform.email.errors?.required">Email should not be empty</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
@@ -37,7 +37,7 @@
             <mat-form-field appearance="outline">
                 <mat-label>Enter your password</mat-label>
                 <input matInput [type]="hide ? 'password' : 'text'" formControlName="pass">
-                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                     <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
                 <mat-error *ngIf="userform.pass.errors?.pattern">
@@ -55,13 +55,12 @@
 
             <mat-card-actions>
                 <button mat-button mat-raised-button [disabled]="userForm.invalid" color="accent" type="submit">Register</button>
+                <span>
+                    <p>Already an user?</p>
+                    <a mat-button mat-raised-button type="button" color="primary" routerLink="/login">LOGIN</a>
+                </span>
             </mat-card-actions>
         </form>
-        <span>
-            <p>Already an user?</p>
-            <a mat-button mat-raised-button color="primary" routerLink="/login">LOGIN</a>
-        </span>
-
     </mat-card-content>
 
 </mat-card>
