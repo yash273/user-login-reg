@@ -8,6 +8,7 @@
 </mat-toolbar>
 
 <mat-card>
+    <h1>Hello {{ truncateName(currentUser?.name) }}</h1>
     <div class="table-res">
 
         <table mat-table [dataSource]="userList" class="mat-elevation-z8">

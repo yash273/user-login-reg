@@ -30,3 +30,16 @@ snack-bar-container{
     }
 }
 .mat-toolbar-row button{margin-left: 20px;}
+
+@media (max-width : 700px) {
+    .userreg-card{width: 100%;max-width: 400px;margin: 30px auto;
+        form{margin: auto;width: 100%;}
+        mat-form-field{width: 100%;} 
+        mat-card-actions{margin-top: 20px;display: flex;justify-content: space-between;
+            mat-button{    margin: 0 8px;}
+            span{display: flex;align-items: center;
+                p{margin: 0;}
+            }
+        }
+    }
+}

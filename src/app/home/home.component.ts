@@ -29,4 +29,12 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  truncateName(name: any): any {
+    const maxLength = 20;
+    if (name.length > maxLength) {
+      return name.slice(0, maxLength) + '...';
+    }
+    return name;
+  }
+
 }
