@@ -4,3 +4,15 @@ mat-card{width: 100%; max-width: 600px;margin:30px auto;padding:30px;
     mat-card-actions button{ margin: 0 20px}
 }
 
+@media (max-width : 700px) {
+    mat-card{width: 100%;max-width: 400px;margin: 30px auto;
+        .mat-card-title{font-size: 24px;}
+    }
+}
+
+@media (max-width : 450px) {
+    mat-card{width: 100%;max-width: 300px;margin: 30px auto;
+        .mat-card-title{font-size: 20px;}
+    }
+}
+
