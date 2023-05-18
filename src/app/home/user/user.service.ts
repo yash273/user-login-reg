@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { userObj } from '../../interfaces/user';
 import { Router } from '@angular/router';
-import { AlertsService } from 'src/app/alerts/alerts.service';
+import { AlertService } from 'src/app/alerts/alert.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DetailsComponent } from './details/details.component';
 import { DeleteComponent } from './delete/delete.component';
@@ -13,7 +13,7 @@ export class UserService {
 
   loggedData: userObj | undefined | null;
 
-  constructor(private router: Router, private alertsService: AlertsService, private dialog: MatDialog) { }
+  constructor(private router: Router, private alertsService: AlertService, private dialog: MatDialog) { }
 
   // get logged user data
   public get userValue() {
@@ -52,7 +52,7 @@ export class UserService {
       userArr.push(data);
       localStorage.setItem('userData', JSON.stringify(userArr));
     }
-    this.alertsService.showAlert('Registration Successful!', 'close', 'success')
+    this.alertsService.showAlert('Registration Successful!', 'success')
 
   }
 
@@ -63,17 +63,17 @@ export class UserService {
       const userList = JSON.parse(oldRecords);
       const currentEmail = userList.findIndex((a: any) => a.email == dataEmail);
       if (currentEmail > -1 && userList[currentEmail].pass === dataPass) {
-        this.alertsService.showAlert('Login Successful!', 'close', 'success')
+        this.alertsService.showAlert('Login Successful!', 'success')
         localStorage.removeItem('loggedUserData');
         const userNewArr = [];
         userNewArr.push(userList[currentEmail]);
         localStorage.setItem('loggedUserData', JSON.stringify(userNewArr));
         this.router.navigate(['/home']);
       } else {
-        this.alertsService.showAlert('Invalid Email or Password!', 'close', 'error')
+        this.alertsService.showAlert('Invalid Email or Password!', 'error')
       }
     } else {
-      this.alertsService.showAlert('Invalid Email or Password!', 'close', 'error')
+      this.alertsService.showAlert('Invalid Email or Password!', 'error')
     }
   }
 
@@ -84,6 +84,7 @@ export class UserService {
       localStorage.removeItem('loggedUserData');
     }
     this.loggedData = null
+    this.alertsService.showAlert('Sucessfully Logged out!', 'success')
     this.router.navigate(['/login'])
   }
 

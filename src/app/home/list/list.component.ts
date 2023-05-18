@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user/user.service';
 import { userObj } from 'src/app/interfaces/user';
-import { AlertsService } from 'src/app/alerts/alerts.service';
+import { AlertService } from 'src/app/alerts/alert.service';
 
 @Component({
   selector: 'app-userlist',
@@ -17,7 +17,7 @@ export class ListComponent implements OnInit {
   displayedColumns: string[] = ['srNo', 'name', 'mobile', 'type', 'email', 'Action'];
 
   constructor(private userService: UserService,
-    private alertService: AlertsService) {
+    private alertService: AlertService) {
     this.userList = []
   }
 
@@ -46,11 +46,11 @@ export class ListComponent implements OnInit {
             const loggedUserList = JSON.parse(loggedRecords);
             const y = loggedUserList.findIndex((a: any) => a.id == id);
             if (y !== -1) {
-              this.alertService.showAlert('Cannot Delete Current Logged User', 'close', 'error')
+              this.alertService.showAlert('Cannot Delete Current Logged User', 'error')
             } else {
               userList.splice(userList.findIndex((a: any) => a.id == id), 1);
               localStorage.setItem('userData', JSON.stringify(userList));
-              this.alertService.showAlert('Record Deleted', 'close', 'success')
+              this.alertService.showAlert('Record Deleted', 'success')
             }
           }
           const records = localStorage.getItem('userData');

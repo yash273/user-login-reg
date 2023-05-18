@@ -7,12 +7,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './login/login.component';
 import { MaterialModule } from './material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AlertComponent } from './alerts/alert.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,

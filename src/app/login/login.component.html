@@ -16,7 +16,7 @@
             <mat-form-field appearance="outline">
                 <mat-label>Email</mat-label>
                 <input matInput formControlName="email">
-                <mat-error *ngIf="userform.email.errors?.email">Please enter valid input</mat-error>
+                <mat-error *ngIf="userform.email.errors?.pattern">Please enter valid input</mat-error>
                 <mat-error *ngIf="userform.email.errors?.required">Email should not be empty</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">

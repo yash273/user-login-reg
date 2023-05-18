@@ -1,16 +1,20 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AlertComponent } from './alert.component';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AlertsService {
+export class AlertService {
 
   constructor(private snackBar: MatSnackBar) { }
 
-  showAlert(message: string, buttonText: string, alertType: 'default' | 'error' | 'success') {
-    this.snackBar.open(message, buttonText, {
-      duration: 20000,
+  showAlert(message: string, alertType: 'default' | 'error' | 'success') {
+    this.snackBar.openFromComponent(AlertComponent, {
+      data: {
+        message: message,
+      },
+      duration: 3000,
       horizontalPosition: 'right',
       verticalPosition: 'top',
       panelClass: alertType
