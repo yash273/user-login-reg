@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AlertsService } from 'src/app/alerts/alerts.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DetailsComponent } from './details/details.component';
+import { DeleteComponent } from './delete/delete.component';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,7 @@ export class UserService {
   }
 
   newUserId() {
+    // debugger
     const oldRecords = localStorage.getItem('userData');
     if (oldRecords !== null) {
       const userList = JSON.parse(oldRecords);
@@ -36,6 +38,7 @@ export class UserService {
   }
 
   saveUser(data: userObj) {
+    // debugger
     const latestId = this.newUserId();
     data.id = latestId;
     const oldRecords = localStorage.getItem('userData');
@@ -94,7 +97,46 @@ export class UserService {
     });
   }
 
-  delete() {
-
+  deleteUser(user: userObj) {
+    return this.dialog.open(DeleteComponent, {
+      width: '400px',
+      disableClose: true,
+      data: {
+        name: user.name,
+      }
+    });
   }
+
+  getdata(id: number) {
+    const oldRecords = localStorage.getItem('userData');
+    if (oldRecords !== null) {
+      const userList = JSON.parse(oldRecords);
+      const newid = userList.findIndex((a: any) => a.id == id)
+      return userList[newid]
+    }
+  }
+
+  updateUser(user: userObj) {
+    const oldRecords = localStorage.getItem('userData');
+    if (oldRecords !== null) {
+      const userList = JSON.parse(oldRecords);
+      const index = userList.findIndex((u: any) => u.id === user.id);
+      if (index !== -1) {
+        userList[index] = user;
+      }
+    }
+  }
+
+  update(data: userObj, id: any) {
+    const oldRecords = localStorage.getItem('userData');
+    if (oldRecords !== null) {
+      const userList = JSON.parse(oldRecords);
+      userList.splice(userList.findIndex((a: any) => data.id == id), 1);
+      data.id = id
+      userList.push(data);
+      localStorage.setItem('userData', JSON.stringify(userList));
+    }
+    this.router.navigateByUrl('/home/list');
+  }
+
 }
