@@ -11,7 +11,7 @@ import { ListComponent } from './list/list.component';
 @NgModule({
   declarations: [
     HomeComponent,
-    ListComponent
+    // ListComponent
   ],
   imports: [
     CommonModule,

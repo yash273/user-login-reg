@@ -11,13 +11,9 @@ export class HomeComponent implements OnInit {
 
   user?: userObj | null;
   userData: any;
-  // userList: userObj[];
-
 
   constructor(private userService: UserService) {
     this.user = this.userService.userValue;
-    // this.userList = [];
-
   }
 
   ngOnInit(): void {

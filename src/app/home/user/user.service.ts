@@ -15,6 +15,7 @@ export class UserService {
 
   constructor(private router: Router, private alertsService: AlertsService, private dialog: MatDialog) { }
 
+  // get logged user data
   public get userValue() {
     const loggedRecords = localStorage.getItem('loggedUserData');
     if (loggedRecords !== null) {
@@ -24,8 +25,8 @@ export class UserService {
     return this.loggedData
   }
 
+  // create new user id
   newUserId() {
-    // debugger
     const oldRecords = localStorage.getItem('userData');
     if (oldRecords !== null) {
       const userList = JSON.parse(oldRecords);
@@ -37,8 +38,8 @@ export class UserService {
     }
   }
 
+  // save user
   saveUser(data: userObj) {
-    // debugger
     const latestId = this.newUserId();
     data.id = latestId;
     const oldRecords = localStorage.getItem('userData');
@@ -55,6 +56,7 @@ export class UserService {
 
   }
 
+  // log user
   logUser(dataEmail: string, dataPass: string) {
     const oldRecords = localStorage.getItem('userData');
     if (oldRecords !== null) {
@@ -75,6 +77,7 @@ export class UserService {
     }
   }
 
+  // logout user
   logoutUser() {
     const logUser = localStorage.getItem('loggedUserData')
     if (logUser !== null) {
@@ -84,6 +87,7 @@ export class UserService {
     this.router.navigate(['/login'])
   }
 
+  // open detail dialog
   openDetail(currentUser: userObj) {
     return this.dialog.open(DetailsComponent, {
       width: '400px',
@@ -97,6 +101,7 @@ export class UserService {
     });
   }
 
+  // open delete confirm dialog
   deleteUser(user: userObj) {
     return this.dialog.open(DeleteComponent, {
       width: '400px',
@@ -107,27 +112,18 @@ export class UserService {
     });
   }
 
+  // get entered data
   getdata(id: number) {
     const oldRecords = localStorage.getItem('userData');
     if (oldRecords !== null) {
       const userList = JSON.parse(oldRecords);
-      const newid = userList.findIndex((a: any) => a.id == id)
-      return userList[newid]
+      const idIndex = userList.findIndex((a: any) => a.id == id)
+      return userList[idIndex]
     }
   }
 
-  updateUser(user: userObj) {
-    const oldRecords = localStorage.getItem('userData');
-    if (oldRecords !== null) {
-      const userList = JSON.parse(oldRecords);
-      const index = userList.findIndex((u: any) => u.id === user.id);
-      if (index !== -1) {
-        userList[index] = user;
-      }
-    }
-  }
-
-  update(data: userObj, id: any) {
+  // update data
+  update(data: userObj, id: number) {
     const oldRecords = localStorage.getItem('userData');
     if (oldRecords !== null) {
       const userList = JSON.parse(oldRecords);
