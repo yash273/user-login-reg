@@ -33,6 +33,7 @@
                     <mat-option value="user">User</mat-option>
                     <mat-option value="author">Author</mat-option>
                 </mat-select>
+                <mat-error *ngIf="userform.email.errors?.required">This is a required Field</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>Enter your password</mat-label>

@@ -13,11 +13,6 @@ const routes: Routes = [
     loadChildren: () => import('./list/list.module').then(m => m.ListModule),
   },
   { path: 'edit/:id', component: EditComponent },
-  // {
-  //   path: 'edit/:id',
-  //   component: ListComponent,
-  //   loadChildren: () => import('./home.module').then(m => m.HomeModule),
-  // },
 ];
 
 @NgModule({

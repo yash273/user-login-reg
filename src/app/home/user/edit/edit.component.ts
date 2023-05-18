@@ -34,7 +34,7 @@ export class EditComponent implements OnInit {
     this.editForm = this.formBuilder.group({
       name: [this.prevdata.name, [Validators.required, Validators.pattern(nameRegx)]],
       email: [this.prevdata.email, [Validators.required, Validators.pattern(emailRegx)]],
-      type: [this.prevdata.type],
+      type: [this.prevdata.type, [Validators.required]],
       pass: [this.prevdata.pass, [Validators.required, Validators.pattern(passRegx)]],
       mob: [this.prevdata.mob, [Validators.pattern(mobRegx)]]
     })

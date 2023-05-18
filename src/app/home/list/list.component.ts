@@ -33,11 +33,9 @@ export class ListComponent implements OnInit {
   }
 
   delete(id: any) {
-    debugger
     const thisId = this.userList.findIndex((m: any) => m.id == id)
     this.userService.deleteUser(this.userList[thisId])
       .afterClosed().subscribe((res: boolean) => {
-        debugger
         if (res) {
           const oldRecords = localStorage.getItem('userData');
           const loggedRecords = localStorage.getItem('loggedUserData')
