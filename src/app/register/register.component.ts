@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, FormArray, AbstractControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { UserService } from '../home/user/user.service';
 import { Router } from '@angular/router';
@@ -13,7 +13,10 @@ import { emailRegx, mobRegx, nameRegx, passRegx } from '../regex-rules/regex';
 export class RegisterComponent implements OnInit {
 
   hide = true;
-  userForm!: FormGroup;
+  userForm: any
+  // controls: any;
+  addGroup!: FormGroup;
+  // addresses: any;
 
   constructor(private formBuilder: FormBuilder, private userService: UserService, private router: Router) { }
 
@@ -23,8 +26,9 @@ export class RegisterComponent implements OnInit {
       email: ['', [Validators.required, Validators.pattern(emailRegx)]],
       type: ['', [Validators.required]],
       pass: ['', [Validators.required, Validators.pattern(passRegx)]],
-      mob: ['', [Validators.pattern(mobRegx)]]
-    })
+      mob: ['', [Validators.pattern(mobRegx)]],
+      addresses: this.formBuilder.array([this.createAddressGroup()])
+    });
   }
 
   onSubmit() {
@@ -35,4 +39,23 @@ export class RegisterComponent implements OnInit {
   get userform() {
     return this.userForm.controls;
   }
+
+  get addresses(): FormArray {
+    return this.userForm.get('addresses') as FormArray;
+  }
+
+  createAddressGroup(): FormGroup {
+    return this.formBuilder.group({
+      add: ['', Validators.required],
+    });
+  }
+
+  addAddress() {
+    this.addresses.push(this.createAddressGroup());
+  }
+
+  removeAddress(index: number) {
+    this.addresses.removeAt(index);
+  }
+
 }

@@ -1,0 +1,13 @@
+<div class="card-title mat-elevation-z6">
+    <h1 mat-dialog-title>Address {{user.addIndex + 1}}</h1>
+</div>
+
+<div mat-dialog-content>
+    <span>
+        <p>{{user.add}}</p>
+    </span>
+</div>
+
+<div mat-dialog-actions>
+    <button mat-button cdkFocusInitial mat-dialog-close (click)="onClose">Ok</button>
+</div>

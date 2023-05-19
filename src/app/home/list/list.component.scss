@@ -1,3 +1,7 @@
 mat-card{width: 90%;margin: 30px auto;}
 .mat-column-Action a{margin: 0 5px;}
 th{ background-color: beige; color: indigo; font-size: 20px; text-align: center; }
+.mat-column-addresses>div{display: flex;justify-content: space-between;align-items: center;width: 500px;
+    &>span{margin-right: 5px;}
+    .address-display{white-space: pre-wrap;}
+}

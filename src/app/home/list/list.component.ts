@@ -14,7 +14,8 @@ export class ListComponent implements OnInit {
   user?: userObj | null;
   currentUser: userObj | null | undefined;
 
-  displayedColumns: string[] = ['srNo', 'name', 'mobile', 'type', 'email', 'Action'];
+
+  displayedColumns: string[] = ['srNo', 'name', 'mobile', 'type', 'email', 'addresses', 'Action'];
 
   constructor(private userService: UserService,
     private alertService: AlertService) {
@@ -31,6 +32,10 @@ export class ListComponent implements OnInit {
 
   onLogout() {
     this.userService.logoutUser()
+  }
+
+  onViewAddress(add: any, addIndex: number) {
+    this.userService.openAddressDetail(add, addIndex)
   }
 
   delete(id: any) {
@@ -66,6 +71,14 @@ export class ListComponent implements OnInit {
       return name.slice(0, maxLength) + '...';
     }
     return name;
+  }
+
+  truncateAddress(address: any): any {
+    const maxLength = 40;
+    if (address.length > maxLength) {
+      return address.slice(0, maxLength) + '...';
+    }
+    return address;
   }
 
 }

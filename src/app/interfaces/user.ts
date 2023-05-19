@@ -4,5 +4,6 @@ export interface userObj {
     email?: string;
     type?: string;
     pass?: string;
-    mob?: number
+    mob?: number;
+    addresses: any;
 }

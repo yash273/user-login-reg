@@ -6,12 +6,14 @@ import { RouterModule } from '@angular/router';
 import { EditComponent } from './edit/edit.component';
 import { DeleteComponent } from './delete/delete.component';
 import { DetailsComponent } from './details/details.component';
+import { AddressComponent } from './address/address.component';
 
 @NgModule({
   declarations: [
     EditComponent,
     DeleteComponent,
-    DetailsComponent
+    DetailsComponent,
+    AddressComponent
   ],
   imports: [
     CommonModule,

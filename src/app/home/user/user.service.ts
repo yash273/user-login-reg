@@ -5,6 +5,7 @@ import { AlertService } from 'src/app/alerts/alert.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DetailsComponent } from './details/details.component';
 import { DeleteComponent } from './delete/delete.component';
+import { AddressComponent } from './address/address.component';
 
 @Injectable({
   providedIn: 'root'
@@ -148,5 +149,17 @@ export class UserService {
       }
     }
     this.router.navigateByUrl('/home/list');
+  }
+
+  openAddressDetail(add: string, addIndex: number) {
+    // debugger
+    return this.dialog.open(AddressComponent, {
+      width: '400px',
+      disableClose: true,
+      data: {
+        add: add,
+        addIndex: addIndex
+      }
+    });
   }
 }

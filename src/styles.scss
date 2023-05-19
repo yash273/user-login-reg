@@ -30,6 +30,13 @@ snack-bar-container{
     }
 }
 .mat-toolbar-row button{margin-left: 20px;}
+.address-div{position: relative;
+    .addAddress{position: absolute;bottom: -18px;left: 0;}
+}
+.address-innerdiv{position: relative;margin-bottom:10px;
+    .removeAddress{position: absolute;bottom: -18px;right: 0;}
+
+}
 
 @media (max-width : 700px) {
     .userreg-card{width: 100%;max-width: 400px;margin: 30px auto;}
