@@ -119,7 +119,7 @@ export class UserService {
   }
 
   // update data
-  update(data: userObj, id: number) {
+  update(data: userObj, id: any) {
     const oldRecords = localStorage.getItem('userData');
     if (oldRecords !== null) {
       const userList = JSON.parse(oldRecords);
@@ -129,20 +129,24 @@ export class UserService {
       if (loggedRecords !== null) {
         const newList = JSON.parse(loggedRecords);
         const x = newList.findIndex((b: any) => b.id == id);
-        const y = newList[x].id
-        if (y !== data.id) {
-          userList.push(data);
-          localStorage.setItem('userData', JSON.stringify(userList));
+        if (x !== -1) {
+          const y = newList[x].id
+          if (y !== data.id) {
+            userList.push(data);
+            localStorage.setItem('userData', JSON.stringify(userList));
+          } else {
+            userList.push(data);
+            localStorage.setItem('userData', JSON.stringify(userList));
+            newList.splice(newList.findIndex((a: any) => a.id == id), 1);
+            newList.push(data);
+            localStorage.setItem('loggedUserData', JSON.stringify(newList));
+          }
         } else {
           userList.push(data);
           localStorage.setItem('userData', JSON.stringify(userList));
-          newList.splice(newList.findIndex((a: any) => a.id == id), 1);
-          newList.push(data);
-          localStorage.setItem('loggedUserData', JSON.stringify(newList));
         }
       }
     }
     this.router.navigateByUrl('/home/list');
   }
-
 }
