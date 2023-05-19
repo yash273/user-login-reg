@@ -12,19 +12,20 @@ import { emailRegx, mobRegx, nameRegx, passRegx } from '../regex-rules/regex';
 })
 export class RegisterComponent implements OnInit {
 
-  userForm = this.formBuilder.group({
-    name: ['', [Validators.required, Validators.pattern(nameRegx)]],
-    email: ['', [Validators.required, Validators.pattern(emailRegx)]],
-    type: ['', [Validators.required]],
-    pass: ['', [Validators.required, Validators.pattern(passRegx)]],
-    mob: ['', [Validators.pattern(mobRegx)]]
-  })
-
   hide = true;
+  userForm!: FormGroup;
 
   constructor(private formBuilder: FormBuilder, private userService: UserService, private router: Router) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.userForm = this.formBuilder.group({
+      name: ['', [Validators.required, Validators.pattern(nameRegx)]],
+      email: ['', [Validators.required, Validators.pattern(emailRegx)]],
+      type: ['', [Validators.required]],
+      pass: ['', [Validators.required, Validators.pattern(passRegx)]],
+      mob: ['', [Validators.pattern(mobRegx)]]
+    })
+  }
 
   onSubmit() {
     this.userService.saveUser(this.userForm.value);
