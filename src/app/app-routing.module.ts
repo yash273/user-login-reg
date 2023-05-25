@@ -23,7 +23,11 @@ const routes: Routes = [
     path: '',
     redirectTo: '/login',
     pathMatch: 'full'
-  }
+  },
+  {
+    path: 'postlist',
+    loadChildren: () => import('./jsonplaceholder/post-list/post-list.module').then(m => m.PostListModule),
+  },
 ];
 
 @NgModule({

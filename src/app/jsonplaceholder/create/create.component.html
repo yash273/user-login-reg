@@ -1,0 +1,28 @@
+<mat-toolbar color="primary" class="mat-elevation-z6">
+    <mat-toolbar-row>
+        <span>Create Record</span>
+        <span class="example-spacer"></span>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-card class="userreg-card mat-elevation-z3">
+    <form (ngSubmit)="createData()">
+        <mat-form-field appearance="outline">
+            <mat-label>User ID</mat-label>
+            <input matInput type="number" id="userId" name="userId" [(ngModel)]="data.userId" required>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Title</mat-label>
+            <input matInput type="text" id="title" name="title" [(ngModel)]="data.title" required>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Body</mat-label>
+            <textarea matInput id="body" name="body" [(ngModel)]="data.body" required></textarea>
+        </mat-form-field>
+        <mat-card-actions>
+            <button mat-flat-button color="primary" type="submit" [disabled]="!isFormValid()">Create</button>
+            <button mat-flat-button color="accent" type="button" routerLink="/postlist">Cancel</button>
+        </mat-card-actions>
+    </form>
+
+</mat-card>

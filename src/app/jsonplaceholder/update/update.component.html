@@ -1,0 +1,23 @@
+<mat-toolbar color="primary" class="mat-elevation-z6">
+    <mat-toolbar-row>
+        <span>Update Record</span>
+        <span class="example-spacer"></span>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-card class="userreg-card mat-elevation-z3">
+    <form (submit)="updatePost()">
+        <mat-form-field appearance="outline">
+            <mat-label>Title</mat-label>
+            <input matInput type="text" id="title" name="title" [(ngModel)]="post.title" required>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Body</mat-label>
+            <textarea matInput id="body" name="body" [(ngModel)]="post.body" required></textarea>
+        </mat-form-field>
+        <mat-card-actions>
+            <button mat-flat-button color="primary" type="submit">Update</button>
+            <button mat-flat-button color="accent" type="button" routerLink="/postlist">Cancel</button>
+        </mat-card-actions>
+    </form>
+</mat-card>
