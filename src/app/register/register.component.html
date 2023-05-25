@@ -55,10 +55,10 @@
                 <div formArrayName="addresses">
                     <div *ngFor="let address of addresses.controls; let i = index" class="address-innerdiv">
                         <div [formGroupName]="i">
-                            <mat-form-field class="max-100" appearance="outline">
+                            <mat-form-field appearance="outline">
                                 <mat-label>Address {{i + 1}}</mat-label>
                                 <textarea matInput formControlName="add"></textarea>
-                                <mat-error *ngIf="userform.addresses.errors?.required">Password should not be empty</mat-error>
+                                <mat-error *ngIf="userform.addresses.errors?.required">Address should not be empty</mat-error>
                             </mat-form-field>
                             <button *ngIf="i > 0" class="removeAddress" type="button" mat-icon-button color="warn" (click)="removeAddress(i)">
                                 <mat-icon>remove_circle</mat-icon>

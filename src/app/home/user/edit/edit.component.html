@@ -51,6 +51,26 @@
                 <input matInput formControlName="mob" type="tel">
                 <mat-error *ngIf="editform.mob.errors?.pattern">Please enter valid input</mat-error>
             </mat-form-field>
+            <div class="address-div">
+                <div formArrayName="addresses">
+                    <div *ngFor="let address of addresses.controls; let i = index" class="address-innerdiv">
+                        <div [formGroupName]="i">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Address {{i + 1}}</mat-label>
+                                <textarea matInput formControlName="add"></textarea>
+                                <mat-error *ngIf="editform.addresses.errors?.required">Address should not be empty</mat-error>
+                            </mat-form-field>
+                            <button *ngIf="i > 0" class="removeAddress" type="button" mat-icon-button color="warn" (click)="removeAddress(i)">
+                                <mat-icon>remove_circle</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="addAddress" mat-icon-button type="button" color="primary" (click)="addAddress()">
+                        <mat-icon>control_point</mat-icon>
+                    </button>
+                </div>
+
+            </div>
 
             <mat-card-actions>
                 <button mat-button mat-raised-button color="accent" type="submit" [disabled]="editForm.invalid">Edit</button>

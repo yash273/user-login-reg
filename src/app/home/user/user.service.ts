@@ -36,20 +36,27 @@ export class UserService {
 
   // save user
   saveUser(data: userObj) {
+    const oldRecords = localStorage.getItem('userData');
     const latestId = this.newUserId();
     data.id = latestId;
-    const oldRecords = localStorage.getItem('userData');
+
     if (oldRecords !== null) {
       const userList = JSON.parse(oldRecords);
-      userList.push(data);
-      localStorage.setItem('userData', JSON.stringify(userList));
-    } else {
-      const userArr = [];
-      userArr.push(data);
-      localStorage.setItem('userData', JSON.stringify(userArr));
-    }
-    this.alertsService.showAlert('Registration Successful!', 'success')
+      const oldEmail = userList.findIndex((e: any) => e.email == data.email);
 
+      if (oldEmail === -1) {
+        userList.push(data);
+        localStorage.setItem('userData', JSON.stringify(userList));
+        this.alertsService.showAlert('Registration Successful!', 'success')
+      }
+      else {
+        this.alertsService.showAlert('User already Exists! Please register with different Email Id..', 'error')
+      }
+    } else {
+      const userArr = [data];
+      localStorage.setItem('userData', JSON.stringify(userArr));
+      this.alertsService.showAlert('Registration Successful!', 'success')
+    }
   }
 
   // login user
@@ -86,6 +93,7 @@ export class UserService {
 
   // open detail dialog
   openDetail(currentUser: userObj) {
+    const addresses = currentUser.addresses.map((address: { add: any; }) => address.add);
     return this.dialog.open(DetailsComponent, {
       width: '400px',
       disableClose: true,
@@ -93,7 +101,8 @@ export class UserService {
         name: currentUser.name,
         email: currentUser.email,
         type: currentUser.type,
-        mob: currentUser.mob
+        mob: currentUser.mob,
+        add: addresses
       }
     });
   }
@@ -152,7 +161,6 @@ export class UserService {
   }
 
   openAddressDetail(add: string, addIndex: number) {
-    // debugger
     return this.dialog.open(AddressComponent, {
       width: '400px',
       disableClose: true,
