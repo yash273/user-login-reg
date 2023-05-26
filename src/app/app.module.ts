@@ -8,6 +8,7 @@ import { MaterialModule } from './material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AlertComponent } from './alerts/alert.component';
 import { HttpClientModule } from '@angular/common/http';
+import { WeatherModule } from './weather/weather.module';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
     MaterialModule,
     ReactiveFormsModule,
     HttpClientModule,
+    WeatherModule
   ],
   providers: [],
   bootstrap: [AppComponent]

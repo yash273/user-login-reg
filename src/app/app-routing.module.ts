@@ -28,6 +28,10 @@ const routes: Routes = [
     path: 'postlist',
     loadChildren: () => import('./jsonplaceholder/post-list/post-list.module').then(m => m.PostListModule),
   },
+  {
+    path: 'weather',
+    loadChildren: () => import('./weather/weather.module').then(m => m.WeatherModule)
+  }
 ];
 
 @NgModule({
