@@ -5,3 +5,20 @@
         <button mat-button mat-raised-button color="warn" routerLink="/home">Home</button>
     </mat-toolbar-row>
 </mat-toolbar>
+
+<div class="container">
+    <h1>Weather App</h1>
+
+    <input type="text" placeholder="Enter location" [(ngModel)]="location" (keydown.enter)="searchWeather()">
+
+    <button (click)="searchWeather()">Search</button>
+
+    <div class="weather-info" *ngIf="weatherData">
+        <h2>{{ weatherData.name }}</h2>
+
+        <!-- <div class="hourly-weather" *ngFor="let hour of weatherData.hourly">
+            <p>{{ hour.time }}</p>
+            <p>{{ hour.temperature }}°C</p>
+        </div> -->
+    </div>
+</div>

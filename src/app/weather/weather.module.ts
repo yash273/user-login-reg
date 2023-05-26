@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { WeatherRoutingModule } from './weather-routing.module';
 import { WeatherComponent } from './weather.component';
 import { MaterialModule } from '../material/material.module';
+import { FormsModule } from '@angular/forms';
+
 
 
 @NgModule({
@@ -13,7 +15,8 @@ import { MaterialModule } from '../material/material.module';
   imports: [
     CommonModule,
     WeatherRoutingModule,
-    MaterialModule
+    MaterialModule,
+    FormsModule
   ]
 })
 export class WeatherModule { }
