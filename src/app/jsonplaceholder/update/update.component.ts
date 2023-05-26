@@ -16,7 +16,8 @@ export class UpdateComponent implements OnInit {
     private JSONplaceholder: JSONplaceholderserviceService,
     private route: ActivatedRoute,
     private alertsService: AlertService,
-    private router: Router) { }
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -26,6 +27,10 @@ export class UpdateComponent implements OnInit {
         this.getDataId();
       }
     });
+  }
+
+  isFormValid(): boolean {
+    return this.post.userId !== null && this.post.title !== '' && this.post.body !== '';
   }
 
   getDataId(): void {

@@ -6,21 +6,27 @@
 </mat-toolbar>
 
 <mat-card class="userreg-card mat-elevation-z3">
-    <form (ngSubmit)="createData()">
+    <form [formGroup]="createForm" (ngSubmit)="createData()">
         <mat-form-field appearance="outline">
             <mat-label>User ID</mat-label>
-            <input matInput type="number" id="userId" name="userId" [(ngModel)]="data.userId" required>
+            <input matInput type="number" formControlName="userId">
+            <mat-error *ngIf="createform.userId.errors?.pattern">Please enter valid input</mat-error>
+            <mat-error *ngIf="createform.userId.errors?.required">UserId should not be empty</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label>Title</mat-label>
-            <input matInput type="text" id="title" name="title" [(ngModel)]="data.title" required>
+            <input matInput type="text" formControlName="title">
+            <mat-error *ngIf="createform.title.errors?.pattern">Please enter valid input</mat-error>
+            <mat-error *ngIf="createform.title.errors?.required">Title should not be empty</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label>Body</mat-label>
-            <textarea matInput id="body" name="body" [(ngModel)]="data.body" required></textarea>
+            <textarea matInput type="text" formControlName="body"></textarea>
+            <mat-error *ngIf="createform.body.errors?.pattern">Please enter valid input</mat-error>
+            <mat-error *ngIf="createform.body.errors?.required">Body should not be empty</mat-error>
         </mat-form-field>
         <mat-card-actions>
-            <button mat-flat-button color="primary" type="submit" [disabled]="!isFormValid()">Create</button>
+            <button mat-flat-button color="primary" type="submit" [disabled]="createForm.invalid">Create</button>
             <button mat-flat-button color="accent" type="button" routerLink="/postlist">Cancel</button>
         </mat-card-actions>
     </form>

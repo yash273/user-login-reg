@@ -44,7 +44,7 @@ export class JSONplaceholderserviceService {
   // open view dialog
   openView(data: any) {
     return this.dialog.open(ViewComponent, {
-      width: '400px',
+      width: '600px',
       disableClose: true,
       data: {
         title: data.title,

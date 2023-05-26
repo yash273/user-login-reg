@@ -9,14 +9,14 @@
     <form (submit)="updatePost()">
         <mat-form-field appearance="outline">
             <mat-label>Title</mat-label>
-            <input matInput type="text" id="title" name="title" [(ngModel)]="post.title" required>
+            <input matInput type="text" id="title" name="title" [(ngModel)]="post.title">
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label>Body</mat-label>
-            <textarea matInput id="body" name="body" [(ngModel)]="post.body" required></textarea>
+            <textarea matInput id="body" name="body" [(ngModel)]="post.body"></textarea>
         </mat-form-field>
         <mat-card-actions>
-            <button mat-flat-button color="primary" type="submit">Update</button>
+            <button mat-flat-button color="primary" type="submit" [disabled]="!isFormValid()">Update</button>
             <button mat-flat-button color="accent" type="button" routerLink="/postlist">Cancel</button>
         </mat-card-actions>
     </form>

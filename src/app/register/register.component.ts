@@ -14,11 +14,13 @@ export class RegisterComponent implements OnInit {
 
   hide = true;
   userForm: any
-  // controls: any;
   addGroup!: FormGroup;
-  // addresses: any;
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private router: Router) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private userService: UserService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.userForm = this.formBuilder.group({

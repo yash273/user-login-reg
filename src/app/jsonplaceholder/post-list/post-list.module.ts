@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { UpdateComponent } from '../update/update.component';
 import { ViewComponent } from '../view/view.component';
 import { DeleteComponent } from '../delete/delete.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { DeleteComponent } from '../delete/delete.component';
     PostListRoutingModule,
     MaterialModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class PostListModule { }
