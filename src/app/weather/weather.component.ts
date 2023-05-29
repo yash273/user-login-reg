@@ -1,5 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { WeatherService } from './weather.service';
+import { AlertService } from '../alerts/alert.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-weather',
@@ -7,26 +10,33 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./weather.component.scss']
 })
 export class WeatherComponent implements OnInit {
+  data: any;
+  location: any;
+  dataSource!: MatTableDataSource<any>;
+  forecastData: any;
 
-  location = 'london';
-  weatherData: any;
-  // apiKey = '60fd1100666f49b2a8284450232605';
+  constructor(
+    private weatherService: WeatherService,
+    private alertService: AlertService
+  ) { }
+  displayedColumns: string[] = ['date', 'temparature', 'condition']
 
-  constructor(private http: HttpClient) { }
   ngOnInit(): void {
   }
 
   searchWeather() {
-    debugger
-    const apiKey = '60fd1100666f49b2a8284450232605';
-    const apiUrl = `https://api.weatherapi.com/v1/forecast.json?q=${this.location}&days=14&key=${apiKey}`
-
-    this.http.get(apiUrl).subscribe((data: any) => {
-      debugger
-      this.weatherData = {
-        name: data.name
+    this.weatherService.getWeather(this.location).subscribe(
+      (res) => {
+        debugger
+        console.log(res), this.data = res,
+          this.forecastData = this.data.forecast.forecastday,
+          console.log(this.forecastData)
+        this.dataSource = new MatTableDataSource<any>(this.forecastData);
+      },
+      (err) => {
+        this.alertService.showAlert('Please Enter Valid Data', 'error')
       }
-    })
+    )
   }
 
 }

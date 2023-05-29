@@ -1,0 +1,22 @@
+.current-info{ display: flex; flex-direction: column;}
+// .current-weather{
+//     // >span{ display: flex;align-items:flex-end;justify-content: space-between;}
+// }
+.current-location{
+    >span{ display: flex; justify-content: space-between;}
+}
+.mat-typography h2{margin: 0;}
+.info-container{display: flex;justify-content: space-between;}
+.night-bg{background-image: url('https://img.freepik.com/free-vector/meadow-with-pond-conifers-hills-night_107791-10085.jpg?w=1380&t=st=1685339375~exp=1685339975~hmac=6336336cb8f6497f619e0975e17769560f7d865581c4e0a876c16f03e40eccd5');
+    background-repeat: no-repeat;background-size: cover;background-position: center;background-color: #022351;
+    color:#9290a6
+}
+.day-bg{background-image: url('https://img.freepik.com/free-vector/rice-field-terraces-illustration_107791-5424.jpg?w=1380&t=st=1685339264~exp=1685339864~hmac=1666ca4f9ffe86bbe795b02f49e0fbea55f6c9db028e26cb1eccb5d8dfaf0967');
+    background-repeat: no-repeat;background-size: cover;background-position: center;background-color: #D1F762;
+    color:#022351
+}
+th{ background-color: beige; color: indigo; font-size: 20px; text-align: center; }
+.weather-table{width: 40%;}
+.mat-row .mat-column-condition{display: flex;align-items: center;
+    img{width: 48px;height: 48px;}}
+.chart-table-container{display: flex;align-items: center;justify-content: space-between;}
