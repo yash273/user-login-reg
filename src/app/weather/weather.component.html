@@ -9,9 +9,9 @@
 <div class="container">
     <mat-form-field>
         <mat-label>Search</mat-label>
-        <input matInput type="text" placeholder="Enter location" [(ngModel)]="location" (keydown.enter)="searchWeather()">
+        <input matInput type="text" placeholder="Enter location" [(ngModel)]="location" (keydown.enter)="searchWeatherLocation()">
     </mat-form-field>
-    <button mat-flat-button color="accent" (click)="searchWeather()">Search</button>
+    <button mat-flat-button color="accent" (click)="searchWeatherLocation()">Search</button>
 
     <ng-container *ngIf="data">
         <div class="current-info" [ngClass]="{'day-bg': data.current.is_day == 1 , 'night-bg' :  data.current.is_day == 0}">
@@ -31,13 +31,12 @@
                 <div class="current-weather">
                     <p>Humidity: {{data.current.humidity}} %</p>
                     <p>visibility: {{data.current.vis_km}} km</p>
-                    <p>{{data.forecast.forecastday[0].date}}</p>
                 </div>
             </div>
         </div>
         <div class="chart-table-container">
-            <div>
-                <!-- <app-echart></app-echart>> -->
+            <div class="chart-section">
+                <app-chart></app-chart>
             </div>
             <div class="table-res weather-table">
                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">

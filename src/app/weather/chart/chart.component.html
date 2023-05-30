@@ -1,0 +1,6 @@
+<!-- <mat-tab-group headerPosition="below"> -->
+<!-- <ng-container *ngFor="let x of forecastData;"> -->
+<!-- <mat-tab *ngFor="let x of forecastData;" label="{{x.date}}">hello</mat-tab> -->
+<!-- </ng-container> -->
+<!-- </mat-tab-group>    -->
+<google-chart *ngIf="chartData" [type]="chartType" [data]="chartData" [options]="chartOptions"></google-chart>

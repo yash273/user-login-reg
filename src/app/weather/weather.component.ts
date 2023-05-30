@@ -18,25 +18,26 @@ export class WeatherComponent implements OnInit {
   constructor(
     private weatherService: WeatherService,
     private alertService: AlertService
-  ) { }
-  displayedColumns: string[] = ['date', 'temparature', 'condition']
-
-  ngOnInit(): void {
-  }
-
-  searchWeather() {
-    this.weatherService.getWeather(this.location).subscribe(
+  ) {
+    this.weatherService.getWeather().subscribe(
       (res) => {
-        debugger
-        console.log(res), this.data = res,
+        this.data = res,
           this.forecastData = this.data.forecast.forecastday,
-          console.log(this.forecastData)
-        this.dataSource = new MatTableDataSource<any>(this.forecastData);
+          this.dataSource = new MatTableDataSource<any>(this.forecastData);
       },
       (err) => {
         this.alertService.showAlert('Please Enter Valid Data', 'error')
       }
     )
+
+  }
+  displayedColumns: string[] = ['date', 'temparature', 'condition']
+
+  ngOnInit(): void {
+  }
+
+  searchWeatherLocation() {
+    this.weatherService.newLocation(this.location)
   }
 
 }

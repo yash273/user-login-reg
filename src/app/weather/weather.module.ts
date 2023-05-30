@@ -5,22 +5,19 @@ import { WeatherRoutingModule } from './weather-routing.module';
 import { WeatherComponent } from './weather.component';
 import { MaterialModule } from '../material/material.module';
 import { FormsModule } from '@angular/forms';
-// import { EchartComponent } from './echart/echart.component';
-// import { NgxEchartsModule } from 'ngx-echarts';
-
-
-
+import { ChartComponent } from './chart/chart.component';
+import { GoogleChartsModule } from 'angular-google-charts';
 @NgModule({
   declarations: [
     WeatherComponent,
-    // EchartComponent,
+    ChartComponent
   ],
   imports: [
     CommonModule,
     WeatherRoutingModule,
     MaterialModule,
     FormsModule,
-    // NgxEchartsModule
+    GoogleChartsModule.forRoot(),
   ]
 })
 export class WeatherModule { }
