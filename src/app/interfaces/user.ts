@@ -5,5 +5,5 @@ export interface userObj {
     type?: string;
     pass?: string;
     mob?: number;
-    addresses: any;
+    addresses: Array<{ add: string }>;
 }

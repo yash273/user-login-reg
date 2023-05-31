@@ -10,11 +10,8 @@ import { ChartType } from 'angular-google-charts';
 })
 export class ChartComponent implements OnInit {
 
-  location!: string;
-  datax: any;
-  datac: any;
+  dataW: any;
   forecastData: any;
-
   public chart: any;
 
 
@@ -24,33 +21,29 @@ export class ChartComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.weatherData()
-
   }
 
-  chartType = ChartType.BarChart;;
+  chartType = ChartType.AreaChart;
   chartData: any;
   chartOptions = {
     title: 'Temperature',
-    hAxis: {
-      title: 'Day',
-    },
     vAxis: {
       title: 'Temperature (°C)',
     },
+    hAxis: {
+      title: 'Day',
+    },
+    colors: ['#484CE3', '#004411', '#EE1C25'],
+    backgroundColor: 'transparent',
   };
-  // chartWidth = ;
-  // chartHeight = ;
-
 
   weatherData() {
     this.weatherService.getWeather().subscribe(
       (res) => {
-        this.datax = res
-        this.forecastData = this.datax.forecast.forecastday,
-          console.log(this.forecastData)
-        this.prepareChartData();
+        this.dataW = res
+        this.forecastData = this.dataW.forecast.forecastday,
+          this.prepareChartData();
       },
       (err) => {
         this.alertService.showAlert('Please Enter Valid Data', 'error')
@@ -58,9 +51,8 @@ export class ChartComponent implements OnInit {
     )
   }
 
-
   prepareChartData() {
-    const newForecastData = this.forecastData.map((item: any) => [item.date, item.day.avgtemp_c]);
+    const newForecastData = this.forecastData.map((item: any) => [item.date, item.day.maxtemp_c, item.day.avgtemp_c, item.day.mintemp_c]);
     this.chartData = newForecastData
   }
 

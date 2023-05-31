@@ -1,0 +1,13 @@
+.example-right-align {
+    text-align: right;
+  }
+  
+  input.example-right-align::-webkit-outer-spin-button,
+  input.example-right-align::-webkit-inner-spin-button {
+    display: none;
+  }
+  .availibility-div{display: flex;align-items: center;justify-content: flex-start;margin:20px 0;
+    >.radio{display: flex;width: 25.5%;align-items: center;justify-content: space-between;margin-left: 50px;}
+    >.check{display: flex;width: 30%;align-items: center;justify-content: space-between;margin-left: 66px;}
+  }
+  .mat-form-field-type-mat-input.mat-form-field-appearance-outline .mat-form-field-prefix, .mat-form-field-type-mat-input.mat-form-field-appearance-outline .mat-form-field-suffix{top: 0}

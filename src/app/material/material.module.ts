@@ -12,6 +12,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [],
@@ -28,7 +30,9 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatSnackBarModule,
     MatDialogModule,
     MatPaginatorModule,
-    MatTabsModule
+    MatTabsModule,
+    MatRadioModule,
+    MatCheckboxModule
   ],
   exports: [
     MatButtonModule,
@@ -42,7 +46,9 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatSnackBarModule,
     MatDialogModule,
     MatPaginatorModule,
-    MatTabsModule
+    MatTabsModule,
+    MatRadioModule,
+    MatCheckboxModule
   ]
 })
 export class MaterialModule { }

@@ -1,23 +1,49 @@
-.current-info{ display: flex; flex-direction: column;}
-// .current-weather{
-//     // >span{ display: flex;align-items:flex-end;justify-content: space-between;}
-// }
 .current-location{
     >span{ display: flex; justify-content: space-between;}
 }
 .mat-typography h2{margin: 0;}
-.info-container{display: flex;justify-content: space-between;}
+.info-container{display: flex;justify-content: flex-end;}
 .night-bg{background-image: url('https://img.freepik.com/free-vector/meadow-with-pond-conifers-hills-night_107791-10085.jpg?w=1380&t=st=1685339375~exp=1685339975~hmac=6336336cb8f6497f619e0975e17769560f7d865581c4e0a876c16f03e40eccd5');
     background-repeat: no-repeat;background-size: cover;background-position: center;background-color: #022351;
-    color:#9290a6
+    color:#F5F5DC
 }
+.night-bg-col{background-color: #224D92;color:#F5F5DC}
 .day-bg{background-image: url('https://img.freepik.com/free-vector/rice-field-terraces-illustration_107791-5424.jpg?w=1380&t=st=1685339264~exp=1685339864~hmac=1666ca4f9ffe86bbe795b02f49e0fbea55f6c9db028e26cb1eccb5d8dfaf0967');
     background-repeat: no-repeat;background-size: cover;background-position: center;background-color: #D1F762;
     color:#022351
 }
+.day-bg-col{background-color: #8EC3EC;
+    color:#022351
+}
 th{ background-color: beige; color: indigo; font-size: 20px; text-align: center; }
-.weather-table{width: 40%;}
+// .weather-table{width: 40%;}
 .mat-row .mat-column-condition{display: flex;align-items: center;
     img{width: 48px;height: 48px;}}
 .chart-table-container{display: flex;align-items: center;justify-content: space-between;}
-.chart-section{width: 55%;background-color: #022351;}
+.card-container{display: flex;justify-content: space-between;margin-bottom: 30px;}
+.select-card{width: fit-content;display: flex;flex-direction: column;width: 20%;}
+.container{margin:40px auto;max-width: 1600px;}
+.current-info{ width: 100%;max-width: 500px;}
+.condition-card{width: 40%;margin-left: 20px;display: flex;flex-direction: column;align-items: center;}
+.info-condition-div{display: flex;width: 700px;}
+// mat-card{}
+.weather-table{width: 90%;margin: 30px auto;}
+@media (max-width:1399px) { }
+@media (max-width:1199px) { 
+    .card-container{flex-direction: column;align-items: center;}
+    .info-condition-div{margin-top: 20px;}
+    .current-info{ width: 100%;max-width: 400px;}
+.condition-card{width: 100%;max-width: 400px;}
+.select-card{width: 100%;max-width: 400px;}
+.chart-table-container{  flex-direction: column;}
+.weather-table{margin-top: 30px;}
+
+}
+@media (max-width:991px) { }
+@media (max-width:767px) { 
+.info-condition-div{display: flex;width: inherit;flex-direction: column;align-items: center;margin-top: 20px;}
+.condition-card{width: 100%;margin-top: 20px;max-width: 400px;margin-left: 0;}
+
+
+}
+@media (max-width:575px) { }

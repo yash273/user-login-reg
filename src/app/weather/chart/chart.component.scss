@@ -1,2 +1,14 @@
 canvas{background-color: aqua;height: 100px;width: 100px;}
-google-chart{height: 800px; width: 800px;}
+google-chart{height: 700px; width: 700px;    }
+@media (max-width:1399px) { 
+google-chart{height: 650px; width: 650px;}
+
+}
+@media (max-width:1199px) { 
+
+}
+@media (max-width:991px) { }
+@media (max-width:767px) { 
+    google-chart{height: 550px; width: 550px;}
+}
+@media (max-width:575px) { }

@@ -31,14 +31,7 @@ export class EditComponent implements OnInit {
 
   ngOnInit(): void {
     this.prevdata = this.userService.getdata(this.id)
-    this.editForm = this.formBuilder.group({
-      name: [this.prevdata.name, [Validators.required, Validators.pattern(nameRegx)]],
-      email: [this.prevdata.email, [Validators.required, Validators.pattern(emailRegx)]],
-      type: [this.prevdata.type, [Validators.required]],
-      pass: [this.prevdata.pass, [Validators.required, Validators.pattern(passRegx)]],
-      mob: [this.prevdata.mob, [Validators.pattern(mobRegx)]],
-      addresses: this.formBuilder.array([this.createAddressGroup()])
-    });
+    this.createEditFormGroup()
   }
 
   onSubmitEdit() {
@@ -49,9 +42,19 @@ export class EditComponent implements OnInit {
     return this.editForm.controls;
   }
 
-
   get addresses(): FormArray {
     return this.editForm.get('addresses') as FormArray;
+  }
+
+  createEditFormGroup(): FormGroup {
+    return this.editForm = this.formBuilder.group({
+      name: [this.prevdata.name, [Validators.required, Validators.pattern(nameRegx)]],
+      email: [this.prevdata.email, [Validators.required, Validators.pattern(emailRegx)]],
+      type: [this.prevdata.type, [Validators.required]],
+      pass: [this.prevdata.pass, [Validators.required, Validators.pattern(passRegx)]],
+      mob: [this.prevdata.mob, [Validators.pattern(mobRegx)]],
+      addresses: this.formBuilder.array([this.createAddressGroup()])
+    });
   }
 
   createAddressGroup(): FormGroup {
