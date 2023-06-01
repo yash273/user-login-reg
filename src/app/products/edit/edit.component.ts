@@ -16,7 +16,6 @@ export class EditComponent implements OnInit {
   availableFor!: FormGroup;
   pId!: number;
 
-
   constructor(
     private formBuilder: FormBuilder,
     private productService: ProductsService,
@@ -84,7 +83,6 @@ export class EditComponent implements OnInit {
   }
 
   onEditSubmit() {
-    debugger
     this.productService.saveEditedProduct(this.productForm.value, this.pId);
   }
 

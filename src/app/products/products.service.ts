@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Product } from '../interfaces/product';
 import { AlertService } from '../alerts/alert.service';
 import { Router } from '@angular/router';
+import { DeleteComponent } from './delete/delete.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +13,13 @@ export class ProductsService {
   constructor(
     private router: Router,
     private alertsService: AlertService,
+    private dialog: MatDialog
   ) { }
 
   newProductId(): number {
     const timestamp = new Date().getTime();
-    const randomNum = Math.floor(Math.random() * 1000000);
-    const uniqueProductId = timestamp * 1000000 + randomNum;
+    const randomNum = Math.floor(Math.random() * 1000);
+    const uniqueProductId = timestamp * 1000 + randomNum;
     return uniqueProductId;
   }
 
@@ -36,7 +39,6 @@ export class ProductsService {
       this.alertsService.showAlert('Product Added Successfully!', 'success')
     }
     this.router.navigate(['/products']);
-
   }
 
   saveEditedProduct(data: Product, pId: number) {
@@ -61,8 +63,13 @@ export class ProductsService {
   }
 
   openDelete(data: Product) {
-    console.log(data)
+    return this.dialog.open(DeleteComponent, {
+      width: '400px',
+      disableClose: true,
+      data: {
+        pId: data.pId,
+      }
+    });
   }
-
 
 }

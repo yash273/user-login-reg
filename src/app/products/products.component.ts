@@ -8,12 +8,17 @@ import { Product } from '../interfaces/product';
   styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent implements OnInit {
-  productList: any;
+
+  productList: [];
+  oldProducts: string | null;
+
 
   constructor(
     private productService: ProductsService,
   ) {
     this.productList = [];
+    this.oldProducts = localStorage.getItem('productData');
+
   }
 
   displayedColumns: string[] = ['Id', 'sku', 'name', 'description', 'category', 'price', 'isStock', 'availableFor', 'Action'];
@@ -28,8 +33,21 @@ export class ProductsComponent implements OnInit {
 
   delete(pId: number) {
     const thispIdIndex = this.productList.findIndex((a: Product) => a.pId == pId)
-    console.log(thispIdIndex)
     this.productService.openDelete(this.productList[thispIdIndex])
+      .afterClosed().subscribe((res: boolean) => {
+        if (res) {
+          const oldProducts = localStorage.getItem('productData');
+          if (oldProducts !== null) {
+            const productList = JSON.parse(oldProducts)
+            productList.splice(productList.findIndex((a: Product) => a.pId == pId), 1);
+            localStorage.setItem('productData', JSON.stringify(productList));
+          }
+          const records = localStorage.getItem('productData');
+          if (records !== null) {
+            this.productList = JSON.parse(records);
+          }
+        }
+      })
   }
 
 }
