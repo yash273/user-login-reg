@@ -14,7 +14,10 @@ export class UserService {
 
   loggedData: userObj | undefined | null;
 
-  constructor(private router: Router, private alertsService: AlertService, private dialog: MatDialog) { }
+  constructor(
+    private router: Router,
+    private alertsService: AlertService,
+    private dialog: MatDialog) { }
 
   // get logged user data
   public get userValue() {

@@ -17,7 +17,8 @@ export class ListComponent implements OnInit {
 
   displayedColumns: string[] = ['srNo', 'name', 'mobile', 'type', 'email', 'addresses', 'Action'];
 
-  constructor(private userService: UserService,
+  constructor(
+    private userService: UserService,
     private alertService: AlertService) {
     this.userList = [];
     this.currentUser = this.userService.userValue;

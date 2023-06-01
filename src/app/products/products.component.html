@@ -8,5 +8,100 @@
 </mat-toolbar>
 
 <mat-card>
-    hello
+    <div class="table-res">
+
+        <table mat-table [dataSource]="productList" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="Id">
+                <th mat-header-cell *matHeaderCellDef> Id </th>
+                <td mat-cell *matCellDef="let item"> {{item.pId}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let element">
+                    <div *ngFor="let item of element.products">
+                        {{ item.name }}
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef> Description </th>
+                <td mat-cell *matCellDef="let element">
+                    <div *ngFor="let item of element.products">
+                        {{ item.description }}
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="category">
+                <th mat-header-cell *matHeaderCellDef> Category </th>
+                <td mat-cell *matCellDef="let element">
+                    <div *ngFor="let item of element.products">
+                        {{ item.category }}
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="price">
+                <th mat-header-cell *matHeaderCellDef> Price </th>
+                <td mat-cell *matCellDef="let element">
+                    <div *ngFor="let item of element.products">
+                        {{ item.price }}
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="sku">
+                <th mat-header-cell *matHeaderCellDef> SKU </th>
+                <td mat-cell *matCellDef="let element">
+                    <div *ngFor="let item of element.products">
+                        {{ item.sku }}
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="isStock">
+                <th mat-header-cell *matHeaderCellDef> Stock Available</th>
+                <td mat-cell *matCellDef="let element">
+                    <div *ngFor="let item of element.products">
+                        {{ item.isStock }}
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="availableFor">
+                <th mat-header-cell *matHeaderCellDef> Available For </th>
+                <td mat-cell *matCellDef="let element">
+                    <div *ngFor="let item of element.products">
+                        <!-- <div *ngFor="let x of element.products.availableFor">
+                            {{ x.men}}
+                        </div> -->
+                        {{ item.availableFor | json}}
+
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Action">
+                <th mat-header-cell *matHeaderCellDef> Action </th>
+                <td mat-cell *matCellDef="let element">
+                    <!-- <div *ngFor="let item of element.products">
+                        <a [routerLink]="['/products/edit',element.pId,item.sku]"><mat-icon color="primary">edit</mat-icon></a>
+                        <a (click)="delete(element.id)"><mat-icon color="warn">delete</mat-icon></a>
+                    </div> -->
+                    <div>
+                        <button mat-icon-button [routerLink]="['/products/edit',element.pId]"><mat-icon color="accent">file_copy</mat-icon></button>
+                        <button mat-icon-button (click)="delete(element.pId)"><mat-icon color="warn">delete</mat-icon></button>
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+
+    </div>
 </mat-card>

@@ -1,9 +1,9 @@
 <mat-toolbar color="primary" class="mat-elevation-z6">
     <mat-toolbar-row>
-        <span>Add Products</span>
+        <span>Edit Products</span>
         <span class="example-spacer"></span>
-        <button mat-button mat-raised-button color="accent" routerLink="/home">Home</button>
-        <button mat-button mat-raised-button color="accent" routerLink="/products">Products</button>
+        <!-- <button mat-button mat-raised-button color="accent" routerLink="/home">Home</button>
+        <button mat-button mat-raised-button color="accent" routerLink="/products">Products</button> -->
     </mat-toolbar-row>
 </mat-toolbar>
 
@@ -14,7 +14,7 @@
     </mat-card-header>
 
     <mat-card-content>
-        <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="productForm" (ngSubmit)="onEditSubmit()">
             <div formArrayName="products">
                 <div *ngFor="let products of productControls.controls let i = index">
                     <div [formGroupName]="i">
