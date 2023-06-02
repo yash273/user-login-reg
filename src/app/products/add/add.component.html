@@ -77,23 +77,23 @@
                                     <mat-checkbox formControlName="men" color="primary"> Men</mat-checkbox>
                                     <mat-checkbox formControlName="women" color="accent">Women</mat-checkbox>
                                 </span>
-                                <!-- <mat-error *ngIf="!isAtLeastOneChecked()">Please select at least one option</mat-error> -->
                             </div>
                         </div>
 
-                        <button *ngIf="i > 0" mat-icon-button type="button" color="warn" (click)="removeProduct(i)">
-                            <mat-icon>remove_circle</mat-icon>
+                        <button class="remove-button" *ngIf="i > 0" mat-mini-fab type="button" color="warn" (click)="removeProduct(i)" title="remove Product">
+                            <mat-icon>delete_outline</mat-icon>
                         </button>
 
                     </div>
                 </div>
             </div>
-
-            <button mat-icon-button type="button" color="primary" [disabled]="productForm.invalid" (click)="addProduct()">
-                <mat-icon>control_point</mat-icon>
+            <button mat-mini-fab type="button" color="primary" [disabled]="productForm.invalid" (click)="addProduct()" title="Add Product">
+                <mat-icon>playlist_add</mat-icon>
             </button>
-            <button mat-raised-button type="submit" [disabled]="productForm.invalid">Submit</button>
-
+            <div class="action-div">
+                <button mat-raised-button color="primary" type="submit" [disabled]="productForm.invalid">Submit</button>
+                <button mat-raised-button color="accent" type="button" routerLink="/products">Cancel</button>
+            </div>
         </form>
     </mat-card-content>
 

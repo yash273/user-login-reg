@@ -13,10 +13,6 @@ const routes: Routes = [
     path: 'add',
     component: AddComponent
   },
-  // {
-  //   path: 'edit/:pId/:sku',
-  //   component: EditComponent
-  // },
   {
     path: 'edit/:pId',
     component: EditComponent

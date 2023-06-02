@@ -57,15 +57,4 @@ export class AddComponent implements OnInit {
   onSubmit() {
     this.productService.saveProduct(this.productForm.value);
   }
-
-  isAtLeastOneChecked(): boolean {
-    const availableFor = this.productForm.get('availableFor');
-    if (!availableFor) {
-      return false;
-    }
-    const availableForMen = availableFor.get('men')?.value;
-    const availableForWomen = availableFor.get('women')?.value;
-    return availableForMen || availableForWomen;
-  }
-
 }

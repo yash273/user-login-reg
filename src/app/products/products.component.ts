@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductsService } from './products.service';
 import { Product } from '../interfaces/product';
+import { AlertService } from '../alerts/alert.service';
 
 @Component({
   selector: 'app-products',
@@ -15,6 +16,7 @@ export class ProductsComponent implements OnInit {
 
   constructor(
     private productService: ProductsService,
+    private alertsService: AlertService
   ) {
     this.productList = [];
     this.oldProducts = localStorage.getItem('productData');
@@ -46,8 +48,16 @@ export class ProductsComponent implements OnInit {
           if (records !== null) {
             this.productList = JSON.parse(records);
           }
+          this.alertsService.showAlert('Product Deleted Successfully!', 'success')
         }
       })
+  }
+
+  truncate(text: string, maxLength: number) {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...';
+    }
+    return text;
   }
 
 }

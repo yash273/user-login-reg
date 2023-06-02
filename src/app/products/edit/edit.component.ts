@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { proNameRegx, proDescriptionRegx, proPriceRegx, proSkuRegx } from 'src/app/regex-rules/regex';
 import { ProductsService } from '../products.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Product } from 'src/app/interfaces/product';
 
 @Component({
@@ -19,8 +19,8 @@ export class EditComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private productService: ProductsService,
-    private router: Router,
     private route: ActivatedRoute,
+
   ) {
     this.route.params.subscribe((res) => {
       this.pId = parseInt(res['pId'], 10);
@@ -31,14 +31,14 @@ export class EditComponent implements OnInit {
     this.productForm = this.formBuilder.group({
       products: this.formBuilder.array([])
     });
-    this.fillProductData(this.productService.getProductData(this.pId))
+    this.populateProduct(this.productService.getProductData(this.pId))
   }
 
   get productControls() {
     return this.productForm.get('products') as FormArray;
   }
 
-  fillProductData(pData: Product) {
+  populateProduct(pData: Product) {
     pData.products.forEach(
       (item: any) => {
         this.productControls.push(
@@ -84,16 +84,6 @@ export class EditComponent implements OnInit {
 
   onEditSubmit() {
     this.productService.saveEditedProduct(this.productForm.value, this.pId);
-  }
-
-  isAtLeastOneChecked(): boolean {
-    const availableFor = this.productForm.get('availableFor');
-    if (!availableFor) {
-      return false;
-    }
-    const availableForMen = availableFor.get('men')?.value;
-    const availableForWomen = availableFor.get('women')?.value;
-    return availableForMen || availableForWomen;
   }
 
 }

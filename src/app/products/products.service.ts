@@ -49,6 +49,7 @@ export class ProductsService {
       data.pId = pId;
       productList.push(data)
       localStorage.setItem('productData', JSON.stringify(productList))
+      this.alertsService.showAlert('Product Saved Successfully!', 'success')
       this.router.navigate(['/products']);
     }
   }
