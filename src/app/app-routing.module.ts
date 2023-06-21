@@ -34,6 +34,11 @@ const routes: Routes = [
     canLoad: [AuthGuard]
   },
   {
+    path: 'chart',
+    loadChildren: () => import('./organization-chart/organization-chart.module').then(m => m.OrganizationChartModule),
+    canLoad: [AuthGuard]
+  },
+  {
     path: '**',
     redirectTo: '/login',
     pathMatch: 'full'
