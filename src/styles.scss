@@ -37,6 +37,47 @@ snack-bar-container{
 
 }
 
+.chart-container {
+    width: 100%;
+    height: calc(100% - 80PX);
+    overflow: auto;
+
+    svg{
+        height: calc( 100vh - 100px);
+        // height: 100%;
+        width: 100%;
+    }
+  }
+
+  .node rect {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+    width: 200px;
+    height: 120px;
+    margin: 10px;
+  }
+  
+  .node text {
+    font-size: 14px;
+  }
+//   .node span {
+//     font-size: 14px;
+//   }
+
+.node .expand-button{
+    fill: #25e7c7;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+  
+  .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 2px;
+  }
+
+
 @media (max-width : 700px) {
     .userreg-card{width: 100%;max-width: 400px;margin: 30px auto;}
 }

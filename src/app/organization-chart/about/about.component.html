@@ -5,3 +5,12 @@
         <button mat-button mat-raised-button color="accent" routerLink="/chart">Chart</button>
     </mat-toolbar-row>
 </mat-toolbar>
+<div>
+    <h2>About </h2>
+    <div>
+        <p>Name: {{ nodeData?.name }}</p>
+        <p>Designation: {{ nodeData?.designation }}</p>
+        <p>Experience: {{ nodeData?.experience }} years</p>
+        <p>Technology: {{ nodeData?.tech }}</p>
+    </div>
+</div>

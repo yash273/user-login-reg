@@ -9,7 +9,7 @@ const routes: Routes = [
     component: ChartComponent
   },
   {
-    path: 'about',
+    path: 'about/:id',
     component: AboutComponent
   }
 ];
