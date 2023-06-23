@@ -41,12 +41,10 @@ snack-bar-container{
     border: 1px solid red;
     padding: 10px;
     height: calc( 100vh - 100px);
-    width: -webkit-fill-available;
     overflow: auto;
-
     svg{
-        height: 2000px;
-        width: -webkit-fill-available;
+        height: calc( 100vh - 110px);
+        width: 100%;
     }
   }
   

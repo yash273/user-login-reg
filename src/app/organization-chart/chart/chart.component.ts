@@ -1,8 +1,7 @@
-import { Component, OnInit, ElementRef, ViewChild, OnChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, } from '@angular/core';
 import * as d3 from 'd3';
 import { cData } from '../chartData';
-import { ChartData } from 'src/app/interfaces/orgChart';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-chart',
@@ -29,6 +28,7 @@ export class ChartComponent implements OnInit {
   links: any;
   initialY!: number;
   initialX!: number;
+  zoom: any
 
 
   constructor(
@@ -41,9 +41,11 @@ export class ChartComponent implements OnInit {
 
   ngOnInit() {
     this.renderTreeChart()
+    this.initZoom();
   }
 
   renderTreeChart() {
+
 
     let element: any = this.chartContainer.nativeElement;
     this.width = element.offsetWidth - this.margin.left - this.margin.right;
@@ -58,7 +60,11 @@ export class ChartComponent implements OnInit {
 
     this.svg = d3.select(element).append('svg')
       .append("g")
-      .attr('transform', 'translate(' + this.margin.left + ',' + 1000 + ')');
+      .attr('transform', 'translate(' + 200 + ',' + 200 + ')');
+
+    this.zoom = d3.zoom()
+      .scaleExtent([0.25, 2])
+      .on('zoom', this.handleZoom);
 
     this.tree = d3.tree()
       .size([this.height / 2, this.width / 2])
@@ -87,6 +93,16 @@ export class ChartComponent implements OnInit {
 
   aboutNode = (event: any, d: any) => {
     this.router.navigate(['/chart/about', d.data.id]);
+  }
+
+  handleZoom = (e: any) => {
+    d3.select('svg g')
+      .attr('transform', e.transform);
+  }
+
+  initZoom() {
+    d3.select('svg')
+      .call(this.zoom);
   }
 
   updateChart(source: any) {
