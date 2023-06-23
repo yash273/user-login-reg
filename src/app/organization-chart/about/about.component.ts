@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { chartData } from '../chartData';
+import { cData } from '../chartData';
 import { ChartData } from 'src/app/interfaces/orgChart';
 
 @Component({
@@ -23,7 +23,7 @@ export class AboutComponent implements OnInit {
 
     this.route.params.subscribe((res) => {
       this.id = parseInt(res['id'], 10);
-      this.nodeData = this.findNodeDataById(chartData, this.id);
+      this.nodeData = this.findNodeDataById(cData, this.id);
     });
   }
 

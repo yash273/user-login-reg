@@ -1,6 +1,6 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, OnChanges } from '@angular/core';
 import * as d3 from 'd3';
-import { chartData } from '../chartData';
+import { cData } from '../chartData';
 import { ChartData } from 'src/app/interfaces/orgChart';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -11,11 +11,28 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ChartComponent implements OnInit {
 
+  root: any;
+  tree: any;
+  treeLayout: any;
+  svg: any;
+  treeData: any;
+  height!: number;
+  width!: number;
+  margin: any = { top: 200, bottom: 90, left: 100, right: 90 };
+  duration: number = 1000;
+  nodeWidth: number = 5;
+  nodeHeight: number = 5;
+  nodeRadius: number = 5;
+  horizontalSeparationBetweenNodes: number = 7;
+  verticalSeparationBetweenNodes: number = 5;
+  nodes!: any[];
+  links: any;
+  initialY!: number;
+  initialX!: number;
+
 
   constructor(
     private router: Router,
-
-
   ) {
 
   }
@@ -23,196 +40,169 @@ export class ChartComponent implements OnInit {
   @ViewChild('chartContainer', { static: true }) chartContainer: any
 
   ngOnInit() {
-
-    this.displayChart()
+    this.renderTreeChart()
   }
 
-  displayChart() {
-    const container = this.chartContainer?.nativeElement;
-    const self = this;
+  renderTreeChart() {
 
-    if (container) {
-      // Create an SVG element within the container
-      const svg = d3.select(container)
-        .append('svg')
-        .attr('width', '100%')
-        .attr('height', '100%')
-      // .style('margin-left', 100)
+    let element: any = this.chartContainer.nativeElement;
+    this.width = element.offsetWidth - this.margin.left - this.margin.right;
+    if (element.offsetHeight > 500) {
+      this.height = element.offsetHeight;
+    } else {
+      this.height = 500;
+    }
 
-      // Set the width and height of the chart
-      const width = container.offsetWidth - 200;
-      const height = container.offsetHeight;
+    this.initialX = this.width / 2;
+    this.initialY = this.height / 2;
 
-      // Define the tree layout
-      const treeLayout = d3.tree<ChartData>().size([height, width]);
+    this.svg = d3.select(element).append('svg')
+      .append("g")
+      .attr('transform', 'translate(' + this.margin.left + ',' + 1000 + ')');
 
-      const root = d3.hierarchy(chartData);
-      root.each((d: any) => {
-        d.x0 = d.x;
-        d.y0 = d.y;
+    this.tree = d3.tree()
+      .size([this.height / 2, this.width / 2])
+      .nodeSize([this.nodeWidth + this.horizontalSeparationBetweenNodes, this.nodeHeight + this.verticalSeparationBetweenNodes])
+      .separation((a, b) => { return a.parent == b.parent ? 15 : 20 });
+
+    // Assigns parent, children, height, depth
+    this.root = d3.hierarchy(cData, (d) => { return d.children; });
+    this.root.x0 = this.height;
+    this.root.y0 = 10;
+
+    this.updateChart(this.root);
+
+  }
+
+  click = (e: any, d: any) => {
+    if (d.children) {
+      d._children = d.children;
+      d.children = null;
+    } else {
+      d.children = d._children;
+      d._children = null;
+    }
+    this.updateChart(d);
+  }
+
+  aboutNode = (event: any, d: any) => {
+    this.router.navigate(['/chart/about', d.data.id]);
+  }
+
+  updateChart(source: any) {
+    let i = 0;
+    this.treeData = this.tree(this.root);
+    this.nodes = this.treeData.descendants();
+    this.links = this.treeData.descendants().slice(1);
+    this.nodes.forEach((d) => { d.y = d.depth * 300 });
+
+    let node = this.svg.selectAll('g.node')
+      .data(this.nodes, (d: any) => { return d.id || (d.id = ++i); });
+
+    let nodeEnter = node.enter().append('g')
+      .attr('class', 'node')
+      .attr('transform', (d: any) => {
+        return 'translate(' + source.y0 + ',' + source.x0 + ')';
+      })
+
+    nodeEnter.append('rect')
+      .on('click', this.aboutNode)
+      .style('cursor', 'pointer')
+      .attr('class', 'node')
+      .attr('x', -50)
+      .attr('y', -40)
+
+    nodeEnter.append('text')
+      .attr('y', -10)
+      .attr('x', -20)
+      .text((d: any) => `Name: ${d.data.name}`);
+
+    nodeEnter.append('text')
+      .attr('y', 20)
+      .attr('x', -20)
+      .text((d: any) => `${d.data.designation}`);
+
+    nodeEnter.filter((d: any) => d.children || d._children)
+      .append('circle')
+      .attr('class', 'expand-button')
+      .attr('r', 12)
+      .attr('cx', 150)
+      .attr('cy', 0)
+      .style('cursor', 'pointer')
+      .on('click', this.click);
+
+    nodeEnter.filter((d: any) => d.children || d._children)
+      .append('text')
+      .attr('class', 'add')
+      .attr('y', 5)
+      .attr('x', 143)
+      .text((d: any) => '➤')
+      .style('cursor', 'pointer')
+      .on('click', this.click);
+
+    let nodeUpdate = nodeEnter.merge(node);
+
+    nodeUpdate.transition()
+      .duration(this.duration)
+      .attr('transform', (d: any) => {
+        return 'translate(' + d.y + ',' + d.x + ')';
       });
 
-      // Create the hierarchy from the chart data
-      const nodes = d3.hierarchy(chartData);
+    const nodeExit = node.exit().transition()
+      .duration(this.duration)
+      .attr('transform', (d: any) => {
+        return 'translate(' + source.y + ',' + source.x + ')';
+      })
+      .remove();
 
-      // Generate the tree layout
-      const treeData = treeLayout(nodes);
+    const link = this.svg.selectAll('path.link')
+      .data(this.links, (d: any) => { return d.id; });
 
-      // Generate the links between nodes
-      const links = treeData.links();
+    let linkEnter = link.enter().insert('path', 'g')
+      .attr('class', 'link')
+      .style('fill', 'none')
+      .style('stroke', '#3F51B5')
+      .style('stroke-width', '3px')
+      .attr('d', function (d: any) {
+        let o = { x: source.x0, y: source.y0 };
+        return diagonal(o, o);
+      });
 
-      // Generate the descendants of the tree
-      const descendants = treeData.descendants();
+    let linkUpdate = linkEnter.merge(link);
 
-      // Create the links between nodes using SVG paths
-      const link = svg.selectAll('.link')
-        .data(links)
-        .enter()
-        .append('path')
-        .attr('class', 'link')
-        .attr('d', d => {
-          return diagonal(d)
-        });
+    linkUpdate.transition()
+      .duration(this.duration)
+      .attr('d', (d: any) => { return diagonal(d, d.parent); });
 
-      // Create the nodes as circles and add text labels
-      const node = svg.selectAll('.node')
-        .data(descendants)
+    let linkExit = link.exit().transition()
+      .duration(this.duration)
+      .attr('d', function (d: any) {
+        let o = { x: source.x, y: source.y };
+        return diagonal(o, o);
+      })
+      .remove();
 
-      const nodeEnter = node.enter().append('g')
-        .attr('class', 'node')
-        .attr('transform', (d: any) => `translate(${d.y},${d.x})`);
+    this.nodes.forEach((d) => {
+      d.x0 = d.x;
+      d.y0 = d.y;
+    });
 
-      nodeEnter.append('rect')
-        .on('click', aboutNode)
-        .attr('x', -50)
-        .attr('y', -50)
-        .classed('custom-node', true)
-
-      nodeEnter.append('text')
-        .attr('y', -25)
-        .attr('x', -30)
-        .text((d: any) => `Name: ${d.data.name}`);
-
-      nodeEnter.append('text')
-        .attr('y', 0)
-        .attr('x', -30)
-        .text((d: any) => `Designation: ${d.data.designation}`);
-
-      nodeEnter.append('text')
-        .attr('y', 25)
-        .attr('x', -30)
-        .text((d: any) => d.data.experience ? `Experience: ${d.data.experience} years` : 'Experience: Not Given');
-
-      nodeEnter.append('text')
-        .attr('y', 50)
-        .attr('x', -30)
-        .text((d: any) => `Technology: ${d.data.tech} `);
-
-      nodeEnter.filter((d: any) => d.children)
-        .append('circle')
-        .attr('class', 'expand-button')
-        .attr('r', 10)
-        .attr('cx', 150)
-        .attr('cy', 0)
-        .style('cursor', 'pointer')
-        .on('click', toggleCollapse);
-
-      function aboutNode(event: any, d: any) {
-        self.router.navigate(['/chart/about', d.data.id]);
-      }
-
-      function toggleCollapse(d: any) {
-        if (d.children) {
-          // Node is expanded, so collapse it
-          d._children = d.children;
-          d.children = null;
-        } else {
-          // Node is collapsed, so expand it
-          d.children = d._children;
-          d._children = null;
+    function diagonal(s: any, d: any) {
+      if (s.children && s.children.length > 1) {
+        const childNode = s.children.find((child: any) => child.data.id === d.data.id);
+        if (childNode) {
+          let path = `M ${s.y} ${s.x}
+                  L ${childNode.y} ${childNode.x}`;
+          return path;
         }
-        update(d);
       }
-
-
-      function update(source: any) {
-        node
-          .selectAll('.expand-button')
-          .style('display', (d: any) => (d.children ? 'block' : 'none'));
-      }
-      // function update(source: any) {
-      //   const link = svg.selectAll('.link')
-      //     .data(links);
-
-      //   link.enter()
-      //     .append('path')
-      //     .attr('class', 'link')
-      //     .join<SVGPathElement>('path')
-      //     .attr('d', (d: any) => diagonal(d));
-
-      //   link.exit().remove();
-
-      //   const node = svg.selectAll('.node')
-      //     .data(descendants, (d: any) => d.data.id);
-
-      //   const nodeEnter = node.enter().append('g')
-      //     .attr('class', 'node')
-      //     .attr('transform', (d: any) => `translate(${source.y0},${source.x0})`);
-
-      //   nodeEnter.append('rect')
-      //     .on('click', aboutNode)
-      //     .attr('x', -50)
-      //     .attr('y', -25)
-      //     .classed('custom-node', true);
-
-      //   nodeEnter.append('text')
-      //     .attr('y', '0')
-      //     .attr('x', -30)
-      //     .text((d: any) => `Name: ${d.data.name}`);
-
-      //   nodeEnter.append('text')
-      //     .attr('y', '1.5em')
-      //     .attr('x', -30)
-      //     .text((d: any) => `Designation: ${d.data.designation}`);
-
-      //   nodeEnter.append('text')
-      //     .attr('y', '3em')
-      //     .attr('x', -30)
-      //     .text((d: any) => d.data.experience ? `Experience: ${d.data.experience} years` : 'Experience: Not Given');
-
-      //   nodeEnter.append('text')
-      //     .attr('y', '4.5em')
-      //     .attr('x', -30)
-      //     .text((d: any) => `Technology: ${d.data.tech}`);
-
-      //   nodeEnter.filter((d: any) => d.children || d._children)
-      //     .append('circle')
-      //     .attr('class', 'expand-button')
-      //     .attr('r', 10)
-      //     .attr('cx', 150)
-      //     .attr('cy', 25)
-      //     .style('cursor', 'pointer')
-      //     .on('click', toggleCollapse);
-
-      //   const nodeMerge = node.merge(node);
-
-      //   nodeMerge
-      //     .transition()
-      //     .duration(500)
-      //     .attr('transform', (d: any) => `translate(${d.y},${d.x})`);
-
-      //   node.exit().remove();
-      // }
-
-
-      function diagonal(s: any) {
-        return `M ${s.source.y} ${s.source.x} 
-              C ${(s.source.y + s.target.y) / 2} ${s.source.x},
-                ${(s.source.y + s.target.y) / 2} ${s.target.x},
-                ${s.target.y} ${s.target.x}`;
-      }
+      let path = `M ${s.y} ${s.x}
+               L ${s.y} ${d.x}
+              L ${d.y} ${d.x}`
+      return path;
     }
   }
+
 
 }
 
