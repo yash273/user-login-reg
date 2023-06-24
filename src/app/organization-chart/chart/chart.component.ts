@@ -46,21 +46,15 @@ export class ChartComponent implements OnInit {
 
   renderTreeChart() {
 
-
     let element: any = this.chartContainer.nativeElement;
-    this.width = element.offsetWidth - this.margin.left - this.margin.right;
-    if (element.offsetHeight > 500) {
-      this.height = element.offsetHeight;
-    } else {
-      this.height = 500;
-    }
-
-    this.initialX = this.width / 2;
-    this.initialY = this.height / 2;
+    this.width = element.offsetWidth 
+    this.height = element.offsetHeight;
+    this.initialX = this.width / 4
+    this.initialY = (this.height - 100 ) / 2  ;
 
     this.svg = d3.select(element).append('svg')
       .append("g")
-      .attr('transform', 'translate(' + 200 + ',' + 200 + ')');
+      .attr('transform', 'translate(' + this.initialX + ',' + this.initialY + ')');
 
     this.zoom = d3.zoom()
       .scaleExtent([0.25, 2])
@@ -71,15 +65,30 @@ export class ChartComponent implements OnInit {
       .nodeSize([this.nodeWidth + this.horizontalSeparationBetweenNodes, this.nodeHeight + this.verticalSeparationBetweenNodes])
       .separation((a, b) => { return a.parent == b.parent ? 15 : 20 });
 
-    // Assigns parent, children, height, depth
     this.root = d3.hierarchy(cData, (d) => { return d.children; });
-    this.root.x0 = this.height;
-    this.root.y0 = 10;
+    this.root.x0 = this.initialX;
+    this.root.y0 = this.initialY;
+
+    if (this.root.children) {
+      this.root.children.forEach((child : any) => {
+        this.collapse(child);
+      });
+    }
 
     this.updateChart(this.root);
-
   }
 
+  collapse(node: any) {
+    // if (node.children) {
+    //   node._children = node.children;
+    //   node._children.forEach((child: any) => {
+    //     this.collapse(child);
+    //   });
+    //   node.children = null;
+    // }
+  }
+  
+  
   click = (e: any, d: any) => {
     if (d.children) {
       d._children = d.children;
@@ -96,10 +105,30 @@ export class ChartComponent implements OnInit {
   }
 
   handleZoom = (e: any) => {
-    d3.select('svg g')
-      .attr('transform', e.transform);
+    const initialTransform = e.transform;
+
+      d3.select('svg g')
+      .attr('transform', `translate(${this.initialX},${this.initialY}) scale(${initialTransform.k}) translate(${initialTransform.x},${initialTransform.y})`);
+    this.root.x0 = this.initialY - initialTransform.y / initialTransform.k;
+    this.root.y0 = this.initialX - initialTransform.x / initialTransform.k;
+  
+    this.updateChart(this.root);
   }
 
+  resetZoom() {
+    d3.select('svg')
+      .transition()
+      .duration(500)
+      .call(this.zoom.scaleTo, 1);
+  }
+
+  center() {
+    d3.select('svg')
+      .transition()
+      .duration(500)
+      .call(this.zoom.translateTo, 0.5 * this.width, 0.5 * this.height);
+  }
+  
   initZoom() {
     d3.select('svg')
       .call(this.zoom);
@@ -108,6 +137,7 @@ export class ChartComponent implements OnInit {
   updateChart(source: any) {
     let i = 0;
     this.treeData = this.tree(this.root);
+    
     this.nodes = this.treeData.descendants();
     this.links = this.treeData.descendants().slice(1);
     this.nodes.forEach((d) => { d.y = d.depth * 300 });
@@ -218,7 +248,6 @@ export class ChartComponent implements OnInit {
       return path;
     }
   }
-
 
 }
 

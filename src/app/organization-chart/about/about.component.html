@@ -2,20 +2,35 @@
     <mat-toolbar-row>
         <span>About</span>
         <span class="example-spacer"></span>
-        <button mat-button mat-raised-button color="accent" routerLink="/chart">Chart</button>
     </mat-toolbar-row>
 </mat-toolbar>
 
 <mat-card class="userreg-card mat-elevation-z3">
     <mat-card-header>
         <mat-card-title>Employee Details</mat-card-title>
-        <mat-card-subtitle>---</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <p>Name: {{ nodeData?.name }}</p>
-        <p>Designation: {{ nodeData?.designation }}</p>
-        <p>Experience: {{ nodeData?.experience }} years</p>
-        <p>Technology: {{ nodeData?.tech }}</p>
+        <div class="card-inner-div">
+            
+            <p>
+                <span>Name:</span> 
+                {{ nodeData?.name }}</p>
+            <p>
+                <span>Designation:</span> 
+                {{ nodeData?.designation }}</p>
+            <p>
+                <span>Experience:</span> 
+                {{ nodeData?.experience }} years</p>
+            <p>
+                <span>Technology:</span>
+                {{ nodeData?.tech }}</p>
+        </div>
+       
     </mat-card-content>
+    <button mat-mini-fab color="accent" routerLink="/chart">
+        <mat-icon>
+            arrow_back
+        </mat-icon>
+    </button>
 
 </mat-card>

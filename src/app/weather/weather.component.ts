@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { WeatherService } from './weather.service';
 import { AlertService } from '../alerts/alert.service';
@@ -28,7 +27,6 @@ export class WeatherComponent implements OnInit {
     this.weatherService.getWeather().subscribe(
       (res) => {
         this.data = res,
-          console.log(this.data);
         this.forecastData = this.data.forecast.forecastday,
           this.dataSource = new MatTableDataSource<any>(this.forecastData);
       },

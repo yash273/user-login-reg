@@ -2,11 +2,19 @@
     <mat-toolbar-row>
         <span>Chart</span>
         <span class="example-spacer"></span>
-        <button mat-button mat-raised-button color="accent" routerLink="about">About</button>
         <button mat-button mat-raised-button color="warn" routerLink="/home">Home</button>
     </mat-toolbar-row>
 </mat-toolbar>
 
 <div #chartContainer class="chart-container">
-
+    <button mat-mini-fab class="reset-zoom" (click)="resetZoom()" title="Reset Zoom">
+        <mat-icon>
+            youtube_searched_for
+        </mat-icon>
+    </button>
+    <button mat-mini-fab class="center" (click)="center()" title="Pan to center">
+        <mat-icon>
+            filter_center_focus
+        </mat-icon>
+    </button>
 </div>
