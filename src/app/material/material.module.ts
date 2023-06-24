@@ -15,40 +15,31 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
+const matModules = [
+  MatButtonModule,
+  MatIconModule,
+  MatCardModule,
+  MatFormFieldModule,
+  MatSelectModule,
+  MatInputModule,
+  MatTableModule,
+  MatSnackBarModule,
+  MatDialogModule,
+  MatPaginatorModule,
+  MatTabsModule,
+  MatRadioModule,
+  MatCheckboxModule,
+  MatToolbarModule,
+];
+
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    MatButtonModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatTableModule,
-    MatSnackBarModule,
-    MatDialogModule,
-    MatPaginatorModule,
-    MatTabsModule,
-    MatRadioModule,
-    MatCheckboxModule
+    matModules
   ],
   exports: [
-    MatButtonModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatTableModule,
-    MatSnackBarModule,
-    MatDialogModule,
-    MatPaginatorModule,
-    MatTabsModule,
-    MatRadioModule,
-    MatCheckboxModule
+    matModules
   ]
 })
 export class MaterialModule { }
