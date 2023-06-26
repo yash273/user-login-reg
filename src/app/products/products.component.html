@@ -76,7 +76,7 @@
                     <th mat-header-cell *matHeaderCellDef>Available For</th>
                     <td mat-cell *matCellDef="let element">
                         <div *ngFor="let item of element.products">
-                            {{ item.availableFor.men ? (item.availableFor.women ? 'Male and Female' : 'Only Male') : (item.availableFor.women ? 'Only Female' : 'None') }}
+                            {{ item.availableFor.men ? (item.availableFor.women ? 'Unisex' : 'Only Male') : (item.availableFor.women ? 'Only Female' : 'None') }}
                         </div>
                     </td>
                 </ng-container>

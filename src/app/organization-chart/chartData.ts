@@ -33,7 +33,49 @@ export const cData: ChartData = {
                                     name: 'Jacob',
                                     designation: 'Developer 12',
                                     tech: 'technology',
-                                    experience: 3
+                                    experience: 3,
+                                    children: [
+                                        {
+                                            name: 'Ava',
+                                            designation: 'Team Lead 3',
+                                            tech: 'technology',
+                                            experience: 8,
+                                            children: [
+                                                {
+                                                    name: 'Olivia',
+                                                    designation: 'Developer 21',
+                                                    tech: 'technology',
+                                                    experience: 2,
+                                                    children: [
+                                                        {
+                                                            name: 'Ava',
+                                                            designation: 'Team Lead 3',
+                                                            tech: 'technology',
+                                                            experience: 8
+                                                        },
+                                                        {
+                                                            name: 'William',
+                                                            designation: 'Team Lead 4',
+                                                            tech: 'technology',
+                                                            experience: 6
+                                                        },
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            name: 'William',
+                                            designation: 'Team Lead 4',
+                                            tech: 'technology',
+                                            experience: 6
+                                        },
+                                        {
+                                            name: 'Ava',
+                                            designation: 'Team Lead 3',
+                                            tech: 'technology',
+                                            experience: 8,
+                                        }
+                                    ]
                                 }
                             ]
                         },
@@ -151,7 +193,7 @@ export const cData: ChartData = {
 // assigning unique id
 let idCounter = 1;
 function assignUniqueIds(data: ChartData) {
-    data.id = idCounter++; 
+    data.id = idCounter++;
     if (data.children) {
         data.children.forEach((child: ChartData) => {
             assignUniqueIds(child);

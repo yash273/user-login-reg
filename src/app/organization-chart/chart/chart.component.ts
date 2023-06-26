@@ -17,7 +17,6 @@ export class ChartComponent implements OnInit {
   treeData: any;
   height!: number;
   width!: number;
-  margin: any = { top: 200, bottom: 90, left: 100, right: 90 };
   duration: number = 1000;
   nodeWidth: number = 5;
   nodeHeight: number = 5;
@@ -40,24 +39,24 @@ export class ChartComponent implements OnInit {
   @ViewChild('chartContainer', { static: true }) chartContainer: any
 
   ngOnInit() {
-    this.renderTreeChart()
+    this.renderChart()
     this.initZoom();
   }
 
-  renderTreeChart() {
+  renderChart() {
 
     let element: any = this.chartContainer.nativeElement;
-    this.width = element.offsetWidth 
+    this.width = element.offsetWidth
     this.height = element.offsetHeight;
     this.initialX = this.width / 4
-    this.initialY = (this.height - 100 ) / 2  ;
+    this.initialY = (this.height - 100) / 2;
 
     this.svg = d3.select(element).append('svg')
       .append("g")
       .attr('transform', 'translate(' + this.initialX + ',' + this.initialY + ')');
 
     this.zoom = d3.zoom()
-      .scaleExtent([0.25, 2])
+      .scaleExtent([0.5, 2])
       .on('zoom', this.handleZoom);
 
     this.tree = d3.tree()
@@ -70,7 +69,7 @@ export class ChartComponent implements OnInit {
     this.root.y0 = this.initialY;
 
     if (this.root.children) {
-      this.root.children.forEach((child : any) => {
+      this.root.children.forEach((child: any) => {
         this.collapse(child);
       });
     }
@@ -79,16 +78,15 @@ export class ChartComponent implements OnInit {
   }
 
   collapse(node: any) {
-    // if (node.children) {
-    //   node._children = node.children;
-    //   node._children.forEach((child: any) => {
-    //     this.collapse(child);
-    //   });
-    //   node.children = null;
-    // }
+    if (node.children) {
+      node._children = node.children;
+      node._children.forEach((child: any) => {
+        this.collapse(child);
+      });
+      node.children = null;
+    }
   }
-  
-  
+
   click = (e: any, d: any) => {
     if (d.children) {
       d._children = d.children;
@@ -107,43 +105,43 @@ export class ChartComponent implements OnInit {
   handleZoom = (e: any) => {
     const initialTransform = e.transform;
 
-      d3.select('svg g')
+    d3.select('svg g')
       .attr('transform', `translate(${this.initialX},${this.initialY}) scale(${initialTransform.k}) translate(${initialTransform.x},${initialTransform.y})`);
     this.root.x0 = this.initialY - initialTransform.y / initialTransform.k;
     this.root.y0 = this.initialX - initialTransform.x / initialTransform.k;
-  
+
     this.updateChart(this.root);
   }
 
   resetZoom() {
     d3.select('svg')
       .transition()
-      .duration(500)
+      .duration(750)
       .call(this.zoom.scaleTo, 1);
   }
 
   center() {
     d3.select('svg')
       .transition()
-      .duration(500)
+      .duration(750)
       .call(this.zoom.translateTo, 0.5 * this.width, 0.5 * this.height);
   }
-  
+
   initZoom() {
     d3.select('svg')
       .call(this.zoom);
   }
 
   updateChart(source: any) {
-    let i = 0;
+
     this.treeData = this.tree(this.root);
-    
+
     this.nodes = this.treeData.descendants();
     this.links = this.treeData.descendants().slice(1);
+
     this.nodes.forEach((d) => { d.y = d.depth * 300 });
 
-    let node = this.svg.selectAll('g.node')
-      .data(this.nodes, (d: any) => { return d.id || (d.id = ++i); });
+    const node = this.svg.selectAll('g.node').data(this.nodes, (d: any) => d.id || (d.id = d.data.id));
 
     let nodeEnter = node.enter().append('g')
       .attr('class', 'node')
@@ -161,12 +159,28 @@ export class ChartComponent implements OnInit {
     nodeEnter.append('text')
       .attr('y', -10)
       .attr('x', -20)
-      .text((d: any) => `Name: ${d.data.name}`);
+      .text((d: any) => {
+        const ename = d.data.name;
+        if (ename.length > 15) {
+          const name = ename.slice(0, 15) + '...'
+          return `${name}`
+        } else {
+          return `${ename}`
+        }
+      });
 
     nodeEnter.append('text')
       .attr('y', 20)
       .attr('x', -20)
-      .text((d: any) => `${d.data.designation}`);
+      .text((d: any) => {
+        const edes = d.data.designation;
+        if (edes.length > 15) {
+          const des = edes.slice(0, 15) + '...'
+          return `${des}`
+        } else {
+          return `${edes}`
+        }
+      });
 
     nodeEnter.filter((d: any) => d.children || d._children)
       .append('circle')
@@ -180,9 +194,11 @@ export class ChartComponent implements OnInit {
     nodeEnter.filter((d: any) => d.children || d._children)
       .append('text')
       .attr('class', 'add')
-      .attr('y', 5)
+      .attr('y', 9)
       .attr('x', 143)
-      .text((d: any) => '➤')
+      .text((d: any) => (d._children ? '+' : '-'))
+      .attr('dx', (d: any) => (d._children ? '0' : '3'))
+      .style('font-size', (d: any) => (d._children ? '26' : '32'))
       .style('cursor', 'pointer')
       .on('click', this.click);
 
@@ -193,6 +209,12 @@ export class ChartComponent implements OnInit {
       .attr('transform', (d: any) => {
         return 'translate(' + d.y + ',' + d.x + ')';
       });
+
+    nodeUpdate
+      .select('.add')
+      .text((d: any) => (d._children ? '+' : '-'))
+      .attr('dx', (d: any) => (d._children ? '0' : '3'))
+      .style('font-size', (d: any) => (d._children ? '26' : '32'));
 
     const nodeExit = node.exit().transition()
       .duration(this.duration)
@@ -247,6 +269,7 @@ export class ChartComponent implements OnInit {
               L ${d.y} ${d.x}`
       return path;
     }
+
   }
 
 }
