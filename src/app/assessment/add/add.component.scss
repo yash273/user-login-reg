@@ -8,9 +8,16 @@
             .lower-section{background-color:azure;display: flex;padding: 8px;
                 .category{width: 20%;padding: 8px;display: flex;flex-direction: column;align-items: flex-start;}
                 .assessment{width: 20%; border-left: 1px solid gray; border-right: 1px solid gray;padding: 8px;display: flex;flex-direction: column;align-items: flex-start;}
-                .assessment-details{width: 60%;padding: 8px;display: flex;flex-direction: column;align-items: flex-start;}
+                .assessment-details{width: 60%;padding: 8px;display: flex;flex-direction: column;align-items: flex-start;
+                    > span{display: flex;flex-direction:row;justify-content: space-between;width: 100%;
+                        label{width: 100%;max-width: 150px;display: flex;align-items: center;font-weight: 500;}
+                        .error-span{width: 100%;max-width: 150px;}
+                    }
+                }
             }
-        }}}
+        }
+    }
+}
 .form-field-span{display: flex;flex-direction: column;
     &.body-reg{margin-left: 30px;}
 }
@@ -18,9 +25,11 @@
 .template-body{display: flex;justify-content:flex-start;}
 .meas-span{display: flex;justify-content: flex-start;
     mat-form-field{width: 100%; max-width: 100px;
-     &:first-child{margin-right: 20px;}}
-
+     &:first-child{margin-right: 20px;}
+    }
 }
 .meas-span:hover .remove-schedule{display: block;}
-
+.vr{width: 100px;
+    &:first-child{margin-right: 20px;}
+}
   

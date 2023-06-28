@@ -16,7 +16,9 @@ export class AddComponent implements OnInit {
   types!: string[];
   units!: string[];
   selectedType!: string | null
-  measurement = measurements
+  measurement = measurements;
+  measureType : boolean = false;
+  assessmentDetailsControl: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -97,6 +99,8 @@ export class AddComponent implements OnInit {
   }
 
   getAssessmentDetailsControls(assmIndex: number): FormArray {
+    const AssmDetailsArray = this.getAssessmentControls(this.currentCategoryIndex).at(assmIndex).get('AssmDetails');
+    this.assessmentDetailsControl = AssmDetailsArray?.value[0];
     return this.getAssessmentControls(this.currentCategoryIndex).at(assmIndex).get('AssmDetails') as FormArray;
   }
 
@@ -118,7 +122,8 @@ export class AddComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.assessmentForm.value)
+    console.log(this.assessmentForm.value);
+    console.log(this.assessmentDetailsControl)
   }
 
   setCurrentCategoryIndex(index: number) {

@@ -124,54 +124,83 @@
 
                                             <ng-container *ngFor="let assessment of getAssessmentDetailsControls(currentAssessmentIndex).controls; let k = index">
                                                 <ng-container [formGroupName]="k">
-                                                    <label>Type</label>
 
-                                                    <mat-form-field appearance="fill">
-                                                        <mat-select formControlName="type" name="type" (selectionChange)="onTypeSelectionChange()" [(value)]="selectedType">
-                                                            <mat-option *ngFor="let type of types" [value]="type">
-                                                                {{type}}
-                                                            </mat-option>
-                                                        </mat-select>
-                                                    </mat-form-field>
+                                                    <span>
+                                                        <label>Type</label>
+                                                        <mat-form-field appearance="fill">
+                                                            <mat-select formControlName="type" name="type" (selectionChange)="onTypeSelectionChange()" [(value)]="selectedType">
+                                                                <mat-option *ngFor="let type of types" [value]="type">
+                                                                    {{type}}
+                                                                </mat-option>
+                                                            </mat-select>
+                                                        </mat-form-field>
+                                                        <span class="error-span"></span>
+                                                    </span>
 
                                                     <ng-container *ngIf="selectedType">
-                                                        <label>Unit</label>
 
-                                                        <mat-form-field appearance="fill">
-                                                            <mat-select formControlName="unit" name="unit">
-                                                                <mat-option *ngFor="let unit of units" [value]="unit">
-                                                                    {{unit}}
-                                                                </mat-option>
-                                                            </mat-select>
-                                                        </mat-form-field>
+                                                        <span>
+                                                            <label>Unit</label>
+                                                            <mat-form-field appearance="fill">
+                                                                <mat-select formControlName="unit" name="unit">
+                                                                    <mat-option *ngFor="let unit of units" [value]="unit">
+                                                                        {{unit}}
+                                                                    </mat-option>
+                                                                </mat-select>
+                                                            </mat-form-field>
+                                                            <span class="error-span"></span>
+                                                        </span>
 
-                                                        <label>Value Range</label>
-                                                        <mat-form-field appearance="fill">
-                                                            <input matInput placeholder="From" formControlName="rangeFrom">
-                                                        </mat-form-field>
-                                                        <mat-form-field appearance="fill">
-                                                            <input matInput placeholder="To" formControlName="rangeTo">
-                                                        </mat-form-field>
+                                                        <span>
+                                                            <label>Value Range</label>
+                                                            <span>
+                                                                <mat-form-field appearance="fill" class="vr">
+                                                                    <input matInput placeholder="From" formControlName="rangeFrom">
+                                                                </mat-form-field>
+                                                                <mat-form-field appearance="fill" class="vr">
+                                                                    <input matInput placeholder="To" formControlName="rangeTo">
+                                                                </mat-form-field>
+                                                            </span>
+                                                            <span class="error-span"></span>
+                                                        </span>
 
-                                                        <label>Measurement type</label>
+                                                        <span>
+                                                            <label>Measurement type</label>
+                                                            <mat-slide-toggle formControlName="measureType">Side comparison</mat-slide-toggle>
+                                                            <span class="error-span"></span>
+                                                        </span>
 
-                                                        <mat-slide-toggle formControlName="measureType">Side comparison</mat-slide-toggle>
+                                                        <span>
+                                                            <label>Measuring Region</label>
+                                                            <mat-form-field appearance="fill">
+                                                                <textarea matInput placeholder="Description here..." formControlName="measureRegion"></textarea>
+                                                            </mat-form-field>
+                                                            <span class="error-span"></span>
+                                                        </span>
 
-                                                        <label>Measuring Region</label>
-                                                        <mat-form-field appearance="fill">
-                                                            <textarea matInput placeholder="Description here..." formControlName="measureRegion"></textarea>
-                                                        </mat-form-field>
+                                                        <span>
+                                                            <label>Measurements</label>
+                                                            <mat-form-field appearance="fill">
+                                                                <mat-select formControlName="measurements" name="measurements" multiple>
+                                                                    <mat-option *ngFor="let measurement of measurement" [value]="measurement">
+                                                                        {{measurement}}
+                                                                    </mat-option>
+                                                                </mat-select>
+                                                            </mat-form-field>
+                                                            <span class="error-span"></span>
+                                                        </span>
 
-                                                        <label>Measurements</label>
-                                                        <mat-form-field appearance="fill">
-                                                            <mat-select formControlName="measurements" name="measurements" multiple>
-                                                                <mat-option *ngFor="let measurement of measurement" [value]="measurement">
-                                                                    {{measurement}}
-                                                                </mat-option>
-                                                            </mat-select>
-                                                        </mat-form-field>
-
-
+                                                        <ng-container *ngIf="assessmentDetailsControl.measureType == true">
+                                                        <span>
+                                                            <label>Goals</label>
+                                                            <div>hii</div>
+                                                        </span>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="assessmentDetailsControl.measureType == false">
+                                                        <span>
+                                                            <label>Goals</label>
+                                                        </span>
+                                                    </ng-container>
 
                                                     </ng-container>
 
