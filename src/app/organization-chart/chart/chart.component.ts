@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, } from '@angular/core';
 import * as d3 from 'd3';
-import { cData } from '../chartData';
+import { cData } from '../../const/chartData';
 import { Router } from '@angular/router';
 
 @Component({

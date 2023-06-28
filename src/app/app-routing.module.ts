@@ -39,6 +39,11 @@ const routes: Routes = [
     canLoad: [AuthGuard]
   },
   {
+    path: 'assessment',
+    loadChildren: () => import('./assessment/assessment.module').then(m => m.AssessmentModule),
+    canLoad: [AuthGuard]
+  },
+  {
     path: '**',
     redirectTo: '/login',
     pathMatch: 'full'

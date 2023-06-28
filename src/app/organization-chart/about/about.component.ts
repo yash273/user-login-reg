@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cData } from '../chartData';
+import { cData } from '../../const/chartData';
 import { ChartData } from 'src/app/interfaces/orgChart';
 
 @Component({

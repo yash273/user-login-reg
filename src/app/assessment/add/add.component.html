@@ -1,0 +1,200 @@
+<mat-toolbar color="primary" class="mat-elevation-z6">
+    <mat-toolbar-row>
+        <span>Create Assessment</span>
+        <span class="example-spacer"></span>
+        <button mat-raised-button color="warn" routerLink="/home">Home</button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="form-container">
+    <mat-card>
+        <mat-card-title>
+            <span class="card-title">
+                Create
+            </span></mat-card-title>
+
+        <mat-card-content>
+            <form [formGroup]="assessmentForm" (ngSubmit)="onSubmit()">
+
+                <div class="upper-section">
+
+                    <div class="description">
+
+                        <div class="template-body">
+                            <span class="form-field-span">
+                                <label>Assessment Template</label>
+                                <mat-form-field appearance="fill">
+                                    <input matInput placeholder="First Name" formControlName="template">
+                                    <mat-error *ngIf="assessmentform.template.errors?.required">this is required</mat-error>
+                                </mat-form-field>
+                            </span>
+
+                            <span class="form-field-span body-reg">
+                                <label>Body region:</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-select formControlName="bodyRegion" name="bodyRegion">
+                                        <mat-option *ngFor="let br of bodyRegion" [value]="br">
+                                            {{br}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="assessmentform.bodyRegion.errors?.required">this is required</mat-error>
+
+                                </mat-form-field>
+                            </span>
+                        </div>
+
+                        <span class="form-field-span">
+                            <label>Description</label>
+                            <mat-form-field appearance="fill">
+                                <textarea matInput placeholder="Description here..." formControlName="description"></textarea>
+                                <mat-error *ngIf="assessmentform.description.errors?.required">this is required</mat-error>
+
+                            </mat-form-field>
+                        </span>
+
+                    </div>
+
+                    <div class="measurements" formArrayName="measurements">
+                        Patient Measurements
+                        <ng-container *ngFor="let measurements of measurementsControls.controls; let i = index">
+                            <ng-container [formGroupName]="i">
+                                <span class="meas-span">
+                                    <mat-form-field appearance="fill">
+                                        <input matInput placeholder="about" formControlName="about">
+                                    </mat-form-field>
+                                    <mat-form-field appearance="fill">
+                                        <input matInput placeholder="time" formControlName="time">
+                                    </mat-form-field>
+                                    <button class="remove-schedule" *ngIf="i > 0" mat-icon-button type="button" color="warn" (click)="removeMeasurement(i)" title="remove Schedule">
+                                        <mat-icon>delete_outline</mat-icon>
+                                    </button>
+                                </span>
+                            </ng-container>
+                        </ng-container>
+                        <button mat-flat-button type="button" color="primary" (click)="addMeasurement()" title="Add Product">
+                            <mat-icon>playlist_add</mat-icon>
+                            Add Schedules
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="lower-section">
+                    <ng-container formArrayName="category">
+
+
+                        <div class="category">
+                            Category
+                            <ng-container *ngFor="let category of categoryControls.controls; let i = index">
+                                <ng-container [formGroupName]="i">
+                                    <mat-form-field appearance="fill">
+                                        <input matInput placeholder="Category" formControlName="catName" (blur)="handleCatBlur(i)">
+                                    </mat-form-field>
+                                </ng-container>
+                            </ng-container>
+                            <button mat-flat-button type="button" color="primary" (click)="addCategory()" title="Add Product">
+                                <mat-icon>playlist_add</mat-icon>
+                            </button>
+                        </div>
+                        <ng-container [formGroupName]="currentCategoryIndex">
+
+                            <ng-container formArrayName="assessment">
+                                <div class="assessment">
+                                    Assessment
+                                    <ng-container *ngFor="let assessment of getAssessmentControls(currentCategoryIndex).controls; let j = index">
+                                        <ng-container [formGroupName]="j">
+                                            <mat-form-field appearance="fill">
+                                                <input matInput placeholder="Assessment" formControlName="AssmName" (blur)="handleAssmBlur(j)">
+                                            </mat-form-field>
+                                        </ng-container>
+                                    </ng-container>
+                                    <button mat-flat-button type="button" color="primary" (click)="addAssessment(currentCategoryIndex)" title="Add Product">
+                                        <mat-icon>playlist_add</mat-icon>
+                                    </button>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                        <div class="assessment-details">
+                            Assessment Details
+                            <ng-container [formGroupName]="currentCategoryIndex">
+                                <ng-container formArrayName="assessment">
+
+                                    <ng-container [formGroupName]="currentAssessmentIndex">
+                                        <ng-container formGroupName="AssmDetails">
+
+                                            <ng-container *ngFor="let assessment of getAssessmentDetailsControls(currentAssessmentIndex).controls; let k = index">
+                                                <ng-container [formGroupName]="k">
+                                                    <label>Type</label>
+
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-select formControlName="type" name="type" (selectionChange)="onTypeSelectionChange()" [(value)]="selectedType">
+                                                            <mat-option *ngFor="let type of types" [value]="type">
+                                                                {{type}}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+
+                                                    <ng-container *ngIf="selectedType">
+                                                        <label>Unit</label>
+
+                                                        <mat-form-field appearance="fill">
+                                                            <mat-select formControlName="unit" name="unit">
+                                                                <mat-option *ngFor="let unit of units" [value]="unit">
+                                                                    {{unit}}
+                                                                </mat-option>
+                                                            </mat-select>
+                                                        </mat-form-field>
+
+                                                        <label>Value Range</label>
+                                                        <mat-form-field appearance="fill">
+                                                            <input matInput placeholder="From" formControlName="rangeFrom">
+                                                        </mat-form-field>
+                                                        <mat-form-field appearance="fill">
+                                                            <input matInput placeholder="To" formControlName="rangeTo">
+                                                        </mat-form-field>
+
+                                                        <label>Measurement type</label>
+
+                                                        <mat-slide-toggle formControlName="measureType">Side comparison</mat-slide-toggle>
+
+                                                        <label>Measuring Region</label>
+                                                        <mat-form-field appearance="fill">
+                                                            <textarea matInput placeholder="Description here..." formControlName="measureRegion"></textarea>
+                                                        </mat-form-field>
+
+                                                        <label>Measurements</label>
+                                                        <mat-form-field appearance="fill">
+                                                            <mat-select formControlName="measurements" name="measurements" multiple>
+                                                                <mat-option *ngFor="let measurement of measurement" [value]="measurement">
+                                                                    {{measurement}}
+                                                                </mat-option>
+                                                            </mat-select>
+                                                        </mat-form-field>
+
+
+
+                                                    </ng-container>
+
+                                                </ng-container>
+                                            </ng-container>
+
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+
+
+
+                </div>
+
+
+
+
+                <button mat-button color="warn" type="button">Cancel</button>
+                <button mat-raised-button color="primary" type="submit">Save</button>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>
