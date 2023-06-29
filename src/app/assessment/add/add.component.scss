@@ -1,5 +1,5 @@
 .form-container{ display: flex; height: calc(100vh - 80px);
-    mat-card{margin: auto;width: 80%;overflow: auto;height: calc(100vh - 160px);
+    mat-card{margin: auto;width: 100%;max-width: 1120px;overflow: auto;height: calc(100vh - 160px);
         mat-card-content{
             .upper-section{background-color: antiquewhite;display: flex;justify-content: space-between;padding: 8px;
                 .description{width: 70%;padding: 8px;}
@@ -11,7 +11,7 @@
                 .assessment-details{width: 60%;padding: 8px;display: flex;flex-direction: column;align-items: flex-start;
                     > span{display: flex;flex-direction:row;justify-content: space-between;width: 100%;
                         label{width: 100%;max-width: 150px;display: flex;align-items: center;font-weight: 500;}
-                        .error-span{width: 100%;max-width: 150px;}
+                        .error-span{width: 100%;max-width: 150px; display: flex;align-items: center;}
                     }
                 }
             }
@@ -32,4 +32,9 @@
 .vr{width: 100px;
     &:first-child{margin-right: 20px;}
 }
-  
+.goal-inputs{width: 100px;
+    &:first-child{margin-right: 20px;width: 200px;}}
+  .goal-label{width: 100%;max-width: 150px;display: flex;align-items: center;font-weight: 500;}
+  .w-410{width: 100%;max-width: 410px;}
+.add-icon{font-size: 40px;}
+.d-none{display: none !important}

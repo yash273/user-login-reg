@@ -32,5 +32,25 @@ export const measurements = [
     'Error Rate',
     'Difference',
     'Comparison'
+]
 
+export const goals = [
+    'Equal to',
+    'Less than',
+    'Greater than',
+    'Less than or Equal to',
+    'Greater than or Equal to',
+    'in between',
+    'not in between'
+]
+
+export const routine = [
+    'Daily',
+    'Sun',
+    'Mon',
+    'Tues',
+    'Wed',
+    'Thu',
+    'Fri',
+    'Sat'
 ]
