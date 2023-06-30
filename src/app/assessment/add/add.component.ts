@@ -8,7 +8,7 @@ import { numRegx } from 'src/app/regex-rules/regex';
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.scss']
 })
-export class AddComponent implements OnInit, DoCheck {
+export class AddComponent implements OnInit {
 
   assessmentForm !: FormGroup;
   bodyRegion = bodyRegion;
@@ -40,14 +40,6 @@ export class AddComponent implements OnInit, DoCheck {
 
     this.createAssessment();
     this.types = this.getType();
-
-
-  }
-
-  ngDoCheck(): void {
-    // this.createAssessment();
-
-
   }
 
   createAssessment() {
@@ -120,7 +112,6 @@ export class AddComponent implements OnInit, DoCheck {
       routine: ['', [Validators.required]],
       times: ['', [Validators.required]]
     },
-      // { validators: this.rangeValidator() }
     );
   }
 
@@ -199,20 +190,10 @@ export class AddComponent implements OnInit, DoCheck {
   removeAssessment(currentCategoryIndex: number, index: number) {
     this.getAssessmentControls(currentCategoryIndex).removeAt(index);
     this.currentAssessmentIndex = 0;
-
-
   }
 
 
-  onSubmit() {
-    if (this.assessmentForm.invalid) {
-      alert(this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeFrom')?.value)
-    } else {
-      console.log(this.assessmentForm.value);
 
-    }
-    console.log()
-  }
 
   setCurrentCategoryIndex(index: number) {
     this.currentCategoryIndex = index;
@@ -239,27 +220,9 @@ export class AddComponent implements OnInit, DoCheck {
     if (assmNameValue && this.getAssessmentControls(this.currentCategoryIndex).at(index)?.dirty) {
       this.setCurrentAssessmentIndex(index);
       this.assmDetailsDisplay = true;
-      // this.rangeFromValue = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeFrom')?.value;
-      // this.rangeToValue = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeTo')?.value
-
-      // this.rangeFromValue = this.fromValue()
-      // this.rangeToValue = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeTo')?.value
-
     }
   }
 
-  // fromValue(): number {
-  //   const rangeFromControl = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeFrom');
-
-  //   rangeFromControl?.valueChanges.subscribe(rangeFromValue => {
-  //     updateRange(rangeFromValue);
-  //   });
-  //   let x: number = 0
-  //   function updateRange(rangeFromValue: number) {
-  //     return this.x = rangeFromValue
-  //   }
-
-  // }
 
   getType() {
     return Object.keys(type)
@@ -275,40 +238,17 @@ export class AddComponent implements OnInit, DoCheck {
     this.prevAssmIndex = i;
     console.log(i);
     this.currentAssmDetailIndex = k;
-
+    console.log(k, ':k')
   }
 
+  // submit
+  onSubmit() {
+    if (this.assessmentForm.invalid) {
+      alert('invalid')
+    } else {
+      console.log(this.assessmentForm.value);
 
-  // rangeValidator(): ValidatorFn {
-  //   return (control: AbstractControl): { [key: string]: any } | null => {
-  //     const rangeFromControl = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeFrom');
-  //     const rangeToControl = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeTo');
-
-  //     // Subscribe to value changes of rangeFrom control
-  //     rangeFromControl?.valueChanges.subscribe(rangeFromValue => {
-  //       updateRangeValidation(rangeFromValue, rangeToControl?.value);
-  //     });
-
-  //     // Subscribe to value changes of rangeTo control
-  //     rangeToControl?.valueChanges.subscribe(rangeToValue => {
-  //       updateRangeValidation(rangeFromControl?.value, rangeToValue);
-  //     });
-
-  //     // Initial validation
-  //     updateRangeValidation(rangeFromControl?.value, rangeToControl?.value);
-
-  //     function updateRangeValidation(rangeFromValue: number | null, rangeToValue: number | null) {
-  //       // Check if rangeTo is greater than rangeFrom
-  //       if (rangeFromValue !== null && rangeToValue !== null && rangeToValue <= rangeFromValue) {
-  //         rangeToControl?.setErrors({ rangeError: true });
-  //       } else {
-  //         rangeToControl?.setErrors(null);
-  //       }
-  //     }
-
-  //     // Return validation result
-  //     return rangeToControl?.errors ? { rangeError: true } : null;
-  //   };
-  // }
-
+    }
+    console.log(this.assessmentform.measurements.get('time')?.value)
+  }
 }

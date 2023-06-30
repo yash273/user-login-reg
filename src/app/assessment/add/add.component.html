@@ -61,11 +61,16 @@
                                 <span class="meas-span">
                                     <mat-form-field appearance="fill">
                                         <input matInput placeholder="about" formControlName="about">
-                                        <mat-error *ngIf="assessmentForm.get('measurements.' + i + '.about')?.errors?.required">this is required</mat-error>
+                                        <mat-error *ngIf="measurements.get('about')?.errors?.required">this is required</mat-error>
                                     </mat-form-field>
+
                                     <mat-form-field appearance="fill">
-                                        <input matInput placeholder="time" formControlName="time">
+                                        <input matInput placeholder="time" formControlName="time" [ngxTimepicker]="toggleTimepicker" readonly>
                                         <mat-error *ngIf="assessmentForm.get('measurements.' + i + '.time')?.errors?.required">this is required</mat-error>
+                                        <span matSuffix>
+                                            <ngx-material-timepicker-toggle [for]="toggleTimepicker"></ngx-material-timepicker-toggle>
+                                            <ngx-material-timepicker #toggleTimepicker></ngx-material-timepicker>
+                                        </span>
                                     </mat-form-field>
                                     <button class="remove-schedule" *ngIf="i > 0" mat-icon-button type="button" color="warn" (click)="removeMeasurement(i)" title="remove Schedule">
                                         <mat-icon>delete_outline</mat-icon>
@@ -105,8 +110,8 @@
                             </button>
                         </div>
                         <ng-container [formGroupName]="currentCategoryIndex">
-
                             <ng-container formArrayName="assessment">
+
                                 <div class="assessment">
                                     Assessment
                                     <span [ngClass]="{'d-none': assmDisplay == false}">
@@ -128,6 +133,7 @@
                                         <button mat-icon-button type="button" color="primary" (click)="addAssessment(currentCategoryIndex)" title="Add Product" [disabled]="assessmentForm.get('category')?.invalid">
                                             <mat-icon class="add-icon">add</mat-icon>
                                         </button>
+                                        {{currentCategoryIndex}}
                                     </span>
                                 </div>
                             </ng-container>
@@ -151,9 +157,11 @@
                                                                     {{type}}
                                                                 </mat-option>
                                                             </mat-select>
-                                                            <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.type')?.errors?.required">this is required</mat-error>
+                                                            <mat-error *ngIf="assessment.get('type')?.errors?.required">this is required</mat-error>
                                                         </mat-form-field>
-                                                        <span class="error-span"></span>
+                                                        <span class="error-span">
+                                                            {{currentAssessmentIndex}}///{{k}}
+                                                        </span>
                                                     </span>
 
                                                     <ng-container *ngIf="selectedType">
@@ -165,7 +173,7 @@
                                                                         {{unit}}
                                                                     </mat-option>
                                                                 </mat-select>
-                                                                <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.unit')?.errors?.required">this is required</mat-error>
+                                                                <mat-error *ngIf="assessment.get('unit')?.errors?.required">this is required</mat-error>
                                                             </mat-form-field>
                                                             <span class="error-span"></span>
                                                         </span>
@@ -175,23 +183,23 @@
                                                             <span>
                                                                 <mat-form-field appearance="fill" class="vr">
                                                                     <input matInput type="number" placeholder="From" formControlName="rangeFrom">
-                                                                    <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.rangeFrom')?.errors?.required">this is required</mat-error>
-                                                                    <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.rangeFrom')?.errors?.pattern">Enter valid value</mat-error>
-                                                                    <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.rangeFrom')?.errors?.min">Minimum must be 10</mat-error>
-                                                                    <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.rangeFrom')?.errors?.max">Maximmum must be 999</mat-error>
+                                                                    <mat-error *ngIf="assessment.get('rangeFrom')?.errors?.required">this is required</mat-error>
+                                                                    <mat-error *ngIf="assessment.get('rangeFrom')?.errors?.pattern">Enter valid value</mat-error>
+                                                                    <mat-error *ngIf="assessment.get('rangeFrom')?.errors?.min">Minimum must be 10</mat-error>
+                                                                    <mat-error *ngIf="assessment.get('rangeFrom')?.errors?.max">Maximmum must be 999</mat-error>
                                                                 </mat-form-field>
                                                                 <mat-form-field appearance="fill" class="vr">
                                                                     <input matInput type="number" placeholder="To" formControlName="rangeTo">
-                                                                    <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.rangeTo')?.errors?.required">this is required</mat-error>
-                                                                    <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.rangeTo')?.errors?.pattern">Enter valid value</mat-error>
-                                                                    <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.rangeTo')?.errors?.min">Range error: To value must be greater than From value</mat-error>
-                                                                    <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.rangeTo')?.errors?.max">Maximmum must be 999</mat-error>
+                                                                    <mat-error *ngIf="assessment.get('rangeTo')?.errors?.required">this is required</mat-error>
+                                                                    <mat-error *ngIf="assessment.get('rangeTo')?.errors?.pattern">Enter valid value</mat-error>
+                                                                    <mat-error *ngIf="assessment.get('rangeTo')?.errors?.min">Range error: To value must be greater than From value</mat-error>
+                                                                    <mat-error *ngIf="assessment.get('rangeTo')?.errors?.max">Maximmum must be 999</mat-error>
 
                                                                 </mat-form-field>
                                                             </span>
                                                             <span class="error-span">
-                                                                {{assessmentForm.get(categoryToAssmDetailsPath + k + '.rangeFrom')?.value}} //
-                                                                {{assessmentForm.get(categoryToAssmDetailsPath + k + '.rangeTo')?.value}}
+                                                                {{assessment.get('rangeFrom')?.value}} //
+                                                                {{assessment.get('rangeTo')?.value}}
                                                             </span>
                                                         </span>
 
@@ -205,7 +213,7 @@
                                                             <label>Measuring Region</label>
                                                             <mat-form-field appearance="fill">
                                                                 <textarea matInput placeholder="Description here..." formControlName="measureRegion"></textarea>
-                                                                <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.measureRegion')?.errors?.required">this is required</mat-error>
+                                                                <mat-error *ngIf="assessment.get('measureRegion')?.errors?.required">this is required</mat-error>
                                                             </mat-form-field>
                                                             <span class="error-span"></span>
                                                         </span>
@@ -216,7 +224,7 @@
                                                                 <label>Reference Region</label>
                                                                 <mat-form-field appearance="fill">
                                                                     <textarea matInput placeholder="Description Ref here..." formControlName="refRegion"></textarea>
-                                                                    <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.refRegion')?.errors?.required">this is required</mat-error>
+                                                                    <mat-error *ngIf="assessment.get('refRegion')?.errors?.required">this is required</mat-error>
                                                                 </mat-form-field>
                                                                 <span class="error-span"></span>
                                                             </span>
@@ -232,7 +240,7 @@
                                                                             {{measurement}}
                                                                         </mat-option>
                                                                     </mat-select>
-                                                                    <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.measurements')?.errors?.required">this is required</mat-error>
+                                                                    <mat-error *ngIf="assessment.get('measurements')?.errors?.required">this is required</mat-error>
                                                                 </mat-form-field>
                                                             </ng-container>
 
@@ -243,7 +251,7 @@
                                                                             {{measurement}}
                                                                         </mat-option>
                                                                     </mat-select>
-                                                                    <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.measurements')?.errors?.required">this is required</mat-error>
+                                                                    <mat-error *ngIf="assessment.get('measurements')?.errors?.required">this is required</mat-error>
                                                                 </mat-form-field>
                                                             </ng-container>
                                                             <span class="error-span"></span>
@@ -267,12 +275,12 @@
                                                                                         {{selection}}
                                                                                     </mat-option>
                                                                                 </mat-select>
-                                                                                <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.goals.simple.selection')?.errors?.required">this is required</mat-error>
+                                                                                <mat-error *ngIf="assessment.get('goals.simple.selection')?.errors?.required">this is required</mat-error>
                                                                             </mat-form-field>
 
                                                                             <mat-form-field appearance="fill" class="goal-inputs">
                                                                                 <input matInput placeholder="value" formControlName="value">
-                                                                                <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.goals.simple.value')?.errors?.required">this is required</mat-error>
+                                                                                <mat-error *ngIf="assessment.get('goals.simple.value')?.errors?.required">this is required</mat-error>
                                                                             </mat-form-field>
                                                                         </span>
                                                                         <span class="error-span">
@@ -298,12 +306,12 @@
                                                                                         {{selection}}
                                                                                     </mat-option>
                                                                                 </mat-select>
-                                                                                <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.goals.errorRate.selection')?.errors?.required">this is required</mat-error>
+                                                                                <mat-error *ngIf="assessment.get('goals.errorRate.selection')?.errors?.required">this is required</mat-error>
                                                                             </mat-form-field>
 
                                                                             <mat-form-field appearance="fill" class="goal-inputs">
                                                                                 <input matInput placeholder="value" formControlName="value">
-                                                                                <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.goals.errorRate.value')?.errors?.required">this is required</mat-error>
+                                                                                <mat-error *ngIf="assessment.get('goals.errorRate.value')?.errors?.required">this is required</mat-error>
                                                                             </mat-form-field>
                                                                         </span>
                                                                         <span class="error-span"></span>
@@ -326,12 +334,12 @@
                                                                                         {{selection}}
                                                                                     </mat-option>
                                                                                 </mat-select>
-                                                                                <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.goals.difference.selection')?.errors?.required">this is required</mat-error>
+                                                                                <mat-error *ngIf="assessment.get('goals.difference.selection')?.errors?.required">this is required</mat-error>
                                                                             </mat-form-field>
 
                                                                             <mat-form-field appearance="fill" class="goal-inputs">
                                                                                 <input matInput placeholder="value" formControlName="value">
-                                                                                <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.goals.difference.value')?.errors?.required">this is required</mat-error>
+                                                                                <mat-error *ngIf="assessment.get('goals.difference.value')?.errors?.required">this is required</mat-error>
                                                                             </mat-form-field>
                                                                         </span>
                                                                         <span class="error-span"></span>
@@ -353,12 +361,12 @@
                                                                                         {{selection}}
                                                                                     </mat-option>
                                                                                 </mat-select>
-                                                                                <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.goals.comparison.selection')?.errors?.required">this is required</mat-error>
+                                                                                <mat-error *ngIf="assessment.get('goals.comparison.selection')?.errors?.required">this is required</mat-error>
                                                                             </mat-form-field>
 
                                                                             <mat-form-field appearance="fill" class="goal-inputs">
                                                                                 <input matInput placeholder="value" formControlName="value">
-                                                                                <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.goals.comparison.value')?.errors?.required">this is required</mat-error>
+                                                                                <mat-error *ngIf="assessment.get('goals.comparison.value')?.errors?.required">this is required</mat-error>
                                                                             </mat-form-field>
                                                                         </span>
                                                                         <span class="error-span"></span>
@@ -367,13 +375,7 @@
                                                                 </ng-container>
                                                             </span>
                                                         </ng-container>
-
-
-
-
                                                     </ng-container>
-                                                    <!-- <span [ngClass]="{'d-none': !(selectedType && prevAssmIndex == currentAssessmentIndex)}"> -->
-
                                                     <span [ngClass]="{'d-none': selectedType == null}">
                                                         <label>Routine</label>
 
@@ -383,7 +385,7 @@
                                                                     {{day}}
                                                                 </mat-option>
                                                             </mat-select>
-                                                            <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.routine')?.errors?.required">this is required</mat-error>
+                                                            <mat-error *ngIf="assessment.get('routine')?.errors?.required">this is required</mat-error>
                                                         </mat-form-field>
 
                                                     </span>
@@ -399,7 +401,7 @@
                                                                         {{pm.about + ' ' + pm.time}}
                                                                     </mat-option>
                                                                 </mat-select>
-                                                                <mat-error *ngIf="assessmentForm.get(categoryToAssmDetailsPath + k + '.times')?.errors?.required">this is required</mat-error>
+                                                                <mat-error *ngIf="assessment.get('times')?.errors?.required">this is required</mat-error>
                                                             </mat-form-field>
                                                         </span>
                                                     </ng-container>
