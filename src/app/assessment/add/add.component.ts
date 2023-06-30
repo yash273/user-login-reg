@@ -1,5 +1,6 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 import { bodyRegion, goals, measurements, routine, type } from 'src/app/const/assessment';
 import { numRegx } from 'src/app/regex-rules/regex';
 
@@ -30,7 +31,21 @@ export class AddComponent implements OnInit {
   categoryToAssessmentPath: string = 'category.' + this.currentCategoryIndex + '.assessment.';
   categoryToAssmDetailsPath: string = this.categoryToAssessmentPath + this.currentAssessmentIndex + '.AssmDetails.';
   rangeFromValue: number = 10
-  rangeToValue: number = 11
+  rangeToValue: number = 11;
+  customTheme: NgxMaterialTimepickerTheme = {
+    container: {
+      bodyBackgroundColor: '#eceef8',
+      buttonColor: '#324191'
+    },
+    dial: {
+      dialBackgroundColor: '#324191',
+    },
+    clockFace: {
+      clockFaceBackgroundColor: '#b2b9e1',
+      clockHandColor: '#26316d',
+      clockFaceTimeInactiveColor: '#fff'
+    }
+  };
 
   constructor(
     private formBuilder: FormBuilder,
@@ -94,7 +109,7 @@ export class AddComponent implements OnInit {
       goals: this.formBuilder.group({
         simple: this.formBuilder.group({
           selection: ['', [Validators.required]],
-          value: ['', [Validators.required]]
+          value: ['', [Validators.required, Validators.pattern(numRegx),]]
         }),
         errorRate: this.formBuilder.group({
           selection: [''],
@@ -251,4 +266,5 @@ export class AddComponent implements OnInit {
     }
     console.log(this.assessmentform.measurements.get('time')?.value)
   }
+
 }

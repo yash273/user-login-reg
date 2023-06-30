@@ -69,13 +69,14 @@
                                         <mat-error *ngIf="assessmentForm.get('measurements.' + i + '.time')?.errors?.required">this is required</mat-error>
                                         <span matSuffix>
                                             <ngx-material-timepicker-toggle [for]="toggleTimepicker"></ngx-material-timepicker-toggle>
-                                            <ngx-material-timepicker #toggleTimepicker></ngx-material-timepicker>
+                                            <ngx-material-timepicker #toggleTimepicker [theme]="customTheme"></ngx-material-timepicker>
                                         </span>
                                     </mat-form-field>
                                     <button class="remove-schedule" *ngIf="i > 0" mat-icon-button type="button" color="warn" (click)="removeMeasurement(i)" title="remove Schedule">
                                         <mat-icon>delete_outline</mat-icon>
                                     </button>
                                 </span>
+
                             </ng-container>
                         </ng-container>
                         <button mat-flat-button type="button" color="primary" (click)="addMeasurement()" title="Add Product" [disabled]="assessmentForm.get('measurements')?.invalid">
@@ -279,8 +280,9 @@
                                                                             </mat-form-field>
 
                                                                             <mat-form-field appearance="fill" class="goal-inputs">
-                                                                                <input matInput placeholder="value" formControlName="value">
+                                                                                <input matInput type="number" placeholder="value" formControlName="value">
                                                                                 <mat-error *ngIf="assessment.get('goals.simple.value')?.errors?.required">this is required</mat-error>
+                                                                                <mat-error *ngIf="assessment.get('goals.simple.value')?.errors?.pattern">Enter Valid Input</mat-error>
                                                                             </mat-form-field>
                                                                         </span>
                                                                         <span class="error-span">
@@ -398,7 +400,7 @@
                                                             <mat-form-field appearance="fill" class="w-410">
                                                                 <mat-select formControlName="times" name="times" multiple>
                                                                     <mat-option *ngFor="let pm of patiantMeasurements" [value]="pm">
-                                                                        {{pm.about + ' ' + pm.time}}
+                                                                        {{pm.about + ' : ' + pm.time}}
                                                                     </mat-option>
                                                                 </mat-select>
                                                                 <mat-error *ngIf="assessment.get('times')?.errors?.required">this is required</mat-error>
