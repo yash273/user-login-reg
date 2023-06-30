@@ -1,5 +1,5 @@
 .form-container{ display: flex; height: calc(100vh - 80px);
-    mat-card{margin: auto;width: 100%;max-width: 1120px;overflow: auto;height: calc(100vh - 160px);
+    mat-card{margin: auto;width: 100%;max-width: 1150px;overflow: auto;height: calc(100vh - 160px);
         mat-card-content{
             .upper-section{background-color: antiquewhite;display: flex;justify-content: space-between;padding: 8px;
                 .description{width: 70%;padding: 8px;}
@@ -7,7 +7,8 @@
             }
             .lower-section{background-color:azure;display: flex;padding: 8px;
                 .category{width: 20%;padding: 8px;display: flex;flex-direction: column;align-items: flex-start;}
-                .assessment{width: 20%; border-left: 1px solid gray; border-right: 1px solid gray;padding: 8px;display: flex;flex-direction: column;align-items: flex-start;}
+                .assessment{width: 20%; border-left: 1px solid gray; border-right: 1px solid gray;padding: 8px;display: flex;flex-direction: column;align-items: flex-start;
+                    >span{width: 100%;}}
                 .assessment-details{width: 60%;padding: 8px;display: flex;flex-direction: column;align-items: flex-start;
                     > span{display: flex;flex-direction:row;justify-content: space-between;width: 100%;
                         label{width: 100%;max-width: 150px;display: flex;align-items: center;font-weight: 500;}
@@ -22,6 +23,7 @@
     &.body-reg{margin-left: 30px;}
 }
 .remove-schedule{display: none;}
+
 .template-body{display: flex;justify-content:flex-start;}
 .meas-span{display: flex;justify-content: flex-start;
     mat-form-field{width: 100%; max-width: 100px;
@@ -38,3 +40,14 @@
   .w-410{width: 100%;max-width: 410px;}
 .add-icon{font-size: 40px;}
 .d-none{display: none !important}
+
+.remove-category{display: none;}
+.remove-assessment{display: none;}
+.category-span{display: flex;width:100%;
+    mat-form-field{width: 100%;max-width: 170px;}
+    &:hover .remove-category{display: block;};
+}
+.assessment-span{display: flex;
+    mat-form-field{width: 100%;max-width: 170px;}
+    &:hover .remove-assessment{display: block;}
+}

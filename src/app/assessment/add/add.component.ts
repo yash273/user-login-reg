@@ -1,18 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, DoCheck, OnInit } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { bodyRegion, goals, measurements, routine, type } from 'src/app/const/assessment';
+import { numRegx } from 'src/app/regex-rules/regex';
 
 @Component({
   selector: 'app-add',
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.scss']
 })
-export class AddComponent implements OnInit {
+export class AddComponent implements OnInit, DoCheck {
 
   assessmentForm !: FormGroup;
   bodyRegion = bodyRegion;
   currentCategoryIndex: number = 0;
   currentAssessmentIndex: number = 0;
+  currentAssmDetailIndex: number = 0;
   types!: string[];
   units!: string[];
   selectedType!: string | null
@@ -24,7 +26,11 @@ export class AddComponent implements OnInit {
   patiantMeasurements: any;
   assmDetailsDisplay: boolean = false;
   assmDisplay: boolean = false;
-  prevAssmIndex: number = 0
+  prevAssmIndex: number = 0;
+  categoryToAssessmentPath: string = 'category.' + this.currentCategoryIndex + '.assessment.';
+  categoryToAssmDetailsPath: string = this.categoryToAssessmentPath + this.currentAssessmentIndex + '.AssmDetails.';
+  rangeFromValue: number = 10
+  rangeToValue: number = 11
 
   constructor(
     private formBuilder: FormBuilder,
@@ -34,6 +40,12 @@ export class AddComponent implements OnInit {
 
     this.createAssessment();
     this.types = this.getType();
+
+
+  }
+
+  ngDoCheck(): void {
+    // this.createAssessment();
 
 
   }
@@ -81,16 +93,16 @@ export class AddComponent implements OnInit {
     return this.formBuilder.group({
       type: ['', [Validators.required]],
       unit: ['', [Validators.required]],
-      rangeFrom: ['', [Validators.required]],
-      rangeTo: ['', [Validators.required]],
+      rangeFrom: [10, [Validators.required, Validators.pattern(numRegx), Validators.min(10), Validators.max(999)]],
+      rangeTo: [10, [Validators.required, Validators.pattern(numRegx), Validators.min(this.rangeFromValue), Validators.max(999)]],
       measureType: [false, [Validators.required]],
       measureRegion: ['', [Validators.required]],
       refRegion: [''],
       measurements: ['', [Validators.required]],
       goals: this.formBuilder.group({
         simple: this.formBuilder.group({
-          selection: [''],
-          value: ['']
+          selection: ['', [Validators.required]],
+          value: ['', [Validators.required]]
         }),
         errorRate: this.formBuilder.group({
           selection: [''],
@@ -106,10 +118,12 @@ export class AddComponent implements OnInit {
         })
       }),
       routine: ['', [Validators.required]],
-      times: ['', [Validators.required]],
-
-    })
+      times: ['', [Validators.required]]
+    },
+      // { validators: this.rangeValidator() }
+    );
   }
+
 
   categoryValid(index: number) {
     const isTempValid = this.assessmentForm.get('template')?.valid;
@@ -119,10 +133,12 @@ export class AddComponent implements OnInit {
 
     if (isTempValid && isBRValid && isDescValid && isMeasValid) {
       this.categoryControls.at(index).get('catName')?.enable();
+      this.assessmentForm.get(this.categoryToAssessmentPath + index + '.AssmName')?.enable();
       return true
     }
     else {
       this.categoryControls.at(index).get('catName')?.disable();
+      this.assessmentForm.get(this.categoryToAssessmentPath + index + '.AssmName')?.disable();
       return true
     }
   }
@@ -182,12 +198,20 @@ export class AddComponent implements OnInit {
 
   removeAssessment(currentCategoryIndex: number, index: number) {
     this.getAssessmentControls(currentCategoryIndex).removeAt(index);
-    this.currentAssessmentIndex = 0
+    this.currentAssessmentIndex = 0;
+
+
   }
 
 
   onSubmit() {
-    console.log(this.assessmentForm.value);
+    if (this.assessmentForm.invalid) {
+      alert(this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeFrom')?.value)
+    } else {
+      console.log(this.assessmentForm.value);
+
+    }
+    console.log()
   }
 
   setCurrentCategoryIndex(index: number) {
@@ -215,9 +239,27 @@ export class AddComponent implements OnInit {
     if (assmNameValue && this.getAssessmentControls(this.currentCategoryIndex).at(index)?.dirty) {
       this.setCurrentAssessmentIndex(index);
       this.assmDetailsDisplay = true;
+      // this.rangeFromValue = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeFrom')?.value;
+      // this.rangeToValue = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeTo')?.value
+
+      // this.rangeFromValue = this.fromValue()
+      // this.rangeToValue = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeTo')?.value
 
     }
   }
+
+  // fromValue(): number {
+  //   const rangeFromControl = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeFrom');
+
+  //   rangeFromControl?.valueChanges.subscribe(rangeFromValue => {
+  //     updateRange(rangeFromValue);
+  //   });
+  //   let x: number = 0
+  //   function updateRange(rangeFromValue: number) {
+  //     return this.x = rangeFromValue
+  //   }
+
+  // }
 
   getType() {
     return Object.keys(type)
@@ -227,11 +269,46 @@ export class AddComponent implements OnInit {
     return type[sType]
   }
 
-  onTypeSelectionChange(i: number) {
+  onTypeSelectionChange(i: number, k: number) {
     this.units = this.getUnitByTypes(this.selectedType);
-    console.log(this.selectedType)
-    this.prevAssmIndex = i
-    console.log(i)
+    console.log(this.selectedType);
+    this.prevAssmIndex = i;
+    console.log(i);
+    this.currentAssmDetailIndex = k;
 
   }
+
+
+  // rangeValidator(): ValidatorFn {
+  //   return (control: AbstractControl): { [key: string]: any } | null => {
+  //     const rangeFromControl = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeFrom');
+  //     const rangeToControl = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeTo');
+
+  //     // Subscribe to value changes of rangeFrom control
+  //     rangeFromControl?.valueChanges.subscribe(rangeFromValue => {
+  //       updateRangeValidation(rangeFromValue, rangeToControl?.value);
+  //     });
+
+  //     // Subscribe to value changes of rangeTo control
+  //     rangeToControl?.valueChanges.subscribe(rangeToValue => {
+  //       updateRangeValidation(rangeFromControl?.value, rangeToValue);
+  //     });
+
+  //     // Initial validation
+  //     updateRangeValidation(rangeFromControl?.value, rangeToControl?.value);
+
+  //     function updateRangeValidation(rangeFromValue: number | null, rangeToValue: number | null) {
+  //       // Check if rangeTo is greater than rangeFrom
+  //       if (rangeFromValue !== null && rangeToValue !== null && rangeToValue <= rangeFromValue) {
+  //         rangeToControl?.setErrors({ rangeError: true });
+  //       } else {
+  //         rangeToControl?.setErrors(null);
+  //       }
+  //     }
+
+  //     // Return validation result
+  //     return rangeToControl?.errors ? { rangeError: true } : null;
+  //   };
+  // }
+
 }
