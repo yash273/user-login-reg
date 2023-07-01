@@ -105,7 +105,7 @@ export class AddComponent implements OnInit {
       measureType: [false, [Validators.required]],
       measureRegion: ['', [Validators.required]],
       refRegion: [''],
-      measurements: ['', [Validators.required]],
+      measurements: [[this.measurements[0]], [Validators.required]],
       goals: this.formBuilder.group({
         simple: this.formBuilder.group({
           selection: ['', [Validators.required]],
@@ -267,4 +267,22 @@ export class AddComponent implements OnInit {
     console.log(this.assessmentform.measurements.get('time')?.value)
   }
 
+  // show selected measurement in mat-select-trigger
+  getSelectedMeasurementsText(): string {
+    const selectedMeasurements = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.measurements')?.value;
+    const totalOptions = this.measurements.length;
+  if (selectedMeasurements.length === totalOptions) {
+    return 'All selected';
+  }
+  return selectedMeasurements.join(', '); 
+  }
+
+  getSelectedMeasurementsTextForTwo(): string {
+    const selectedMeasurements = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.measurements')?.value;
+  if (selectedMeasurements.length > 1) {
+    return 'All selected';
+  }
+  return selectedMeasurements
+  }
+  
 }

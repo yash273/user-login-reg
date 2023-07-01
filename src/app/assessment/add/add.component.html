@@ -11,7 +11,8 @@
         <mat-card-title>
             <span class="card-title">
                 Create
-            </span></mat-card-title>
+            </span>
+        </mat-card-title>
 
         <mat-card-content>
             <form [formGroup]="assessmentForm" (ngSubmit)="onSubmit()">
@@ -21,6 +22,7 @@
                     <div class="description">
 
                         <div class="template-body">
+
                             <span class="form-field-span">
                                 <label>Assessment Template</label>
                                 <mat-form-field appearance="fill">
@@ -38,9 +40,9 @@
                                         </mat-option>
                                     </mat-select>
                                     <mat-error *ngIf="assessmentform.bodyRegion.errors?.required">this is required</mat-error>
-
                                 </mat-form-field>
                             </span>
+
                         </div>
 
                         <span class="form-field-span">
@@ -58,7 +60,9 @@
                         Patient Measurements
                         <ng-container *ngFor="let measurements of measurementsControls.controls; let i = index">
                             <ng-container [formGroupName]="i">
+
                                 <span class="meas-span">
+
                                     <mat-form-field appearance="fill">
                                         <input matInput placeholder="about" formControlName="about">
                                         <mat-error *ngIf="measurements.get('about')?.errors?.required">this is required</mat-error>
@@ -75,6 +79,7 @@
                                     <button class="remove-schedule" *ngIf="i > 0" mat-icon-button type="button" color="warn" (click)="removeMeasurement(i)" title="remove Schedule">
                                         <mat-icon>delete_outline</mat-icon>
                                     </button>
+
                                 </span>
 
                             </ng-container>
@@ -237,6 +242,9 @@
                                                             <ng-container *ngIf="assessmentDetailsControl.measureType == true">
                                                                 <mat-form-field appearance="fill">
                                                                     <mat-select formControlName="measurements" name="measurements" multiple>
+                                                                        <mat-select-trigger>
+                                                                            {{ getSelectedMeasurementsText() }}
+                                                                          </mat-select-trigger>
                                                                         <mat-option *ngFor="let measurement of measurements" [value]="measurement">
                                                                             {{measurement}}
                                                                         </mat-option>
@@ -248,6 +256,9 @@
                                                             <ng-container *ngIf="assessmentDetailsControl.measureType == false">
                                                                 <mat-form-field appearance="fill">
                                                                     <mat-select formControlName="measurements" name="measurements" multiple>
+                                                                        <mat-select-trigger>
+                                                                            {{ getSelectedMeasurementsTextForTwo() }}
+                                                                          </mat-select-trigger>
                                                                         <mat-option *ngFor="let measurement of measurements.slice(0, 2)" [value]="measurement">
                                                                             {{measurement}}
                                                                         </mat-option>
