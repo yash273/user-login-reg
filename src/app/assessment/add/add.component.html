@@ -188,7 +188,7 @@
                                                             <label>Value Range</label>
                                                             <span>
                                                                 <mat-form-field appearance="fill" class="vr">
-                                                                    <input matInput type="number" placeholder="From" formControlName="rangeFrom">
+                                                                    <input matInput type="number" placeholder="From" formControlName="rangeFrom" (blur)="setMinRangeTo()">
                                                                     <mat-error *ngIf="assessment.get('rangeFrom')?.errors?.required">this is required</mat-error>
                                                                     <mat-error *ngIf="assessment.get('rangeFrom')?.errors?.pattern">Enter valid value</mat-error>
                                                                     <mat-error *ngIf="assessment.get('rangeFrom')?.errors?.min">Minimum must be 10</mat-error>
@@ -198,7 +198,7 @@
                                                                     <input matInput type="number" placeholder="To" formControlName="rangeTo">
                                                                     <mat-error *ngIf="assessment.get('rangeTo')?.errors?.required">this is required</mat-error>
                                                                     <mat-error *ngIf="assessment.get('rangeTo')?.errors?.pattern">Enter valid value</mat-error>
-                                                                    <mat-error *ngIf="assessment.get('rangeTo')?.errors?.min">Range error: To value must be greater than From value</mat-error>
+                                                                    <mat-error *ngIf="assessment.get('rangeTo')?.errors?.min">Range error: Value must be greater than {{assessment.get('rangeFrom')?.value}}</mat-error>
                                                                     <mat-error *ngIf="assessment.get('rangeTo')?.errors?.max">Maximmum must be 999</mat-error>
 
                                                                 </mat-form-field>
@@ -438,6 +438,9 @@
 
                 <button mat-button color="warn" type="button">Cancel</button>
                 <button mat-raised-button color="primary" type="submit">Save</button>
+                <button mat-raised-button color="primary" type="button" (click)="setValidation()">set validation</button>
+
+                <button mat-raised-button color="primary" type="button" (click)="removeValidation()">remove validation</button>
             </form>
         </mat-card-content>
     </mat-card>

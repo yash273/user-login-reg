@@ -30,7 +30,6 @@ export class AddComponent implements OnInit {
   prevAssmIndex: number = 0;
   categoryToAssessmentPath: string = 'category.' + this.currentCategoryIndex + '.assessment.';
   categoryToAssmDetailsPath: string = this.categoryToAssessmentPath + this.currentAssessmentIndex + '.AssmDetails.';
-  rangeFromValue: number = 10
   rangeToValue: number = 11;
   customTheme: NgxMaterialTimepickerTheme = {
     container: {
@@ -100,8 +99,8 @@ export class AddComponent implements OnInit {
     return this.formBuilder.group({
       type: ['', [Validators.required]],
       unit: ['', [Validators.required]],
-      rangeFrom: [10, [Validators.required, Validators.pattern(numRegx), Validators.min(10), Validators.max(999)]],
-      rangeTo: [10, [Validators.required, Validators.pattern(numRegx), Validators.min(this.rangeFromValue), Validators.max(999)]],
+      rangeFrom: ['', [Validators.required, Validators.pattern(numRegx), Validators.min(10), Validators.max(999)]],
+      rangeTo: ['', [Validators.required, Validators.pattern(numRegx), Validators.max(999)]],
       measureType: [false, [Validators.required]],
       measureRegion: ['', [Validators.required]],
       refRegion: [''],
@@ -262,9 +261,7 @@ export class AddComponent implements OnInit {
       alert('invalid')
     } else {
       console.log(this.assessmentForm.value);
-
     }
-    console.log(this.assessmentform.measurements.get('time')?.value)
   }
 
   // show selected measurement in mat-select-trigger
@@ -284,5 +281,25 @@ export class AddComponent implements OnInit {
   }
   return selectedMeasurements
   }
+
+  setValidation(){
+    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.selection')?.setValidators([Validators.required]);
+    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.selection')?.updateValueAndValidity();
+    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.value')?.setValidators([Validators.required]);
+    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.value')?.updateValueAndValidity();
+
+  }
   
+  removeValidation(){
+    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.selection')?.setValidators(null);
+    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.selection')?.updateValueAndValidity();
+    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.value')?.setValidators(null);
+    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.value')?.updateValueAndValidity();
+  }
+
+  setMinRangeTo(){
+    const rangeFromValue: number = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeFrom')?.value;
+    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeTo')?.setValidators([Validators.min(rangeFromValue + 1)])
+    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeTo')?.updateValueAndValidity();
+  }
 }
