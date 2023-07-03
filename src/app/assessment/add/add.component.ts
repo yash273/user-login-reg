@@ -1,8 +1,11 @@
-import { Component, DoCheck, OnInit } from '@angular/core';
+import { Component, DoCheck, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 import { bodyRegion, goals, measurements, routine, type } from 'src/app/const/assessment';
 import { numRegx } from 'src/app/regex-rules/regex';
+import { AssessmentService } from '../assessment.service';
+import { ChartConfiguration, ChartEvent, ChartType } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-add',
@@ -46,8 +49,11 @@ export class AddComponent implements OnInit {
     }
   };
 
+  newData = [65, 59, 80, 81, 56, 55, 40];
+
   constructor(
     private formBuilder: FormBuilder,
+    private assmService: AssessmentService
   ) { }
 
   ngOnInit(): void {
@@ -58,9 +64,9 @@ export class AddComponent implements OnInit {
 
   createAssessment() {
     this.assessmentForm = this.formBuilder.group({
-      template: ['', [Validators.required]],
+      template: ['test', [Validators.required]],
       bodyRegion: ['', [Validators.required]],
-      description: ['', [Validators.required]],
+      description: ['test', [Validators.required]],
       measurements: this.formBuilder.array([
         this.createMeasurement()
       ]),
@@ -72,7 +78,7 @@ export class AddComponent implements OnInit {
 
   createMeasurement() {
     return this.formBuilder.group({
-      about: ['', [Validators.required]],
+      about: ['test', [Validators.required]],
       time: ['', [Validators.required]]
     })
   }
@@ -89,15 +95,17 @@ export class AddComponent implements OnInit {
   createAssessments() {
     return this.formBuilder.group({
       AssmName: ['', [Validators.required]],
-      AssmDetails: this.formBuilder.array([
-        this.createAssmDetails()
-      ])
+      AssmDetails:
+        this.formBuilder.array([
+          this.createAssmDetails()
+        ])
     })
   }
 
   createAssmDetails() {
     return this.formBuilder.group({
       type: ['', [Validators.required]],
+      isPatientAssessment: [false, [Validators.required]],
       unit: ['', [Validators.required]],
       rangeFrom: ['', [Validators.required, Validators.pattern(numRegx), Validators.min(10), Validators.max(999)]],
       rangeTo: ['', [Validators.required, Validators.pattern(numRegx), Validators.max(999)]],
@@ -206,9 +214,6 @@ export class AddComponent implements OnInit {
     this.currentAssessmentIndex = 0;
   }
 
-
-
-
   setCurrentCategoryIndex(index: number) {
     this.currentCategoryIndex = index;
     console.log("catIndex:", this.currentCategoryIndex)
@@ -234,6 +239,7 @@ export class AddComponent implements OnInit {
     if (assmNameValue && this.getAssessmentControls(this.currentCategoryIndex).at(index)?.dirty) {
       this.setCurrentAssessmentIndex(index);
       this.assmDetailsDisplay = true;
+      this.disableRoutineTime();
     }
   }
 
@@ -253,6 +259,8 @@ export class AddComponent implements OnInit {
     console.log(i);
     this.currentAssmDetailIndex = k;
     console.log(k, ':k')
+    this.setGoalsValidations();
+    this.disableRoutineTime();
   }
 
   // submit
@@ -260,7 +268,8 @@ export class AddComponent implements OnInit {
     if (this.assessmentForm.invalid) {
       alert('invalid')
     } else {
-      console.log(this.assessmentForm.value);
+      this.assmService.submit(this.assessmentForm);
+
     }
   }
 
@@ -268,38 +277,226 @@ export class AddComponent implements OnInit {
   getSelectedMeasurementsText(): string {
     const selectedMeasurements = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.measurements')?.value;
     const totalOptions = this.measurements.length;
-  if (selectedMeasurements.length === totalOptions) {
-    return 'All selected';
-  }
-  return selectedMeasurements.join(', '); 
+    if (selectedMeasurements.length === totalOptions) {
+      return 'All selected';
+    }
+    return selectedMeasurements.join(', ');
   }
 
   getSelectedMeasurementsTextForTwo(): string {
     const selectedMeasurements = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.measurements')?.value;
-  if (selectedMeasurements.length > 1) {
-    return 'All selected';
-  }
-  return selectedMeasurements
-  }
-
-  setValidation(){
-    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.selection')?.setValidators([Validators.required]);
-    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.selection')?.updateValueAndValidity();
-    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.value')?.setValidators([Validators.required]);
-    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.value')?.updateValueAndValidity();
-
-  }
-  
-  removeValidation(){
-    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.selection')?.setValidators(null);
-    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.selection')?.updateValueAndValidity();
-    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.value')?.setValidators(null);
-    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.value')?.updateValueAndValidity();
+    if (selectedMeasurements.length > 1) {
+      return 'All selected';
+    }
+    return selectedMeasurements
   }
 
-  setMinRangeTo(){
+  setMinRangeTo() {
     const rangeFromValue: number = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeFrom')?.value;
-    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeTo')?.setValidators([Validators.min(rangeFromValue + 1)])
+    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeTo')?.setValidators([Validators.min(rangeFromValue + 1), Validators.required, Validators.pattern(numRegx), Validators.max(999)])
     this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeTo')?.updateValueAndValidity();
+  }
+
+  rangeValidator(): ValidatorFn {
+
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const minValue = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeFrom')?.value;
+      const maxValue = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeTo')?.value;
+      const value = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.simple.value')?.value;
+      if (value !== null && (isNaN(value) || value < minValue || value > maxValue)) {
+        return { range: true };
+      }
+      return null;
+    };
+  }
+
+
+  setRangeValidator() {
+    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.simple.value')?.setValidators([Validators.required, Validators.pattern(numRegx), this.rangeValidator()])
+    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.simple.value')?.updateValueAndValidity();
+  }
+
+  setRefRegionValidation() {
+    if (this.assessmentDetailsControl.measureType == false) {
+      this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.refRegion')?.setValidators([Validators.required]);
+      this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.refRegion')?.updateValueAndValidity();
+      return true
+    } else {
+      this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.refRegion')?.setValidators(null);
+      this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.refRegion')?.updateValueAndValidity();
+      // this.setGoalsValidations()
+      return false
+    }
+  }
+
+  setValidatorsAndValue(controlPath: string, validators: ValidatorFn[] | null, value: any, clearValue: boolean): void {
+    const control = this.assessmentForm.get(controlPath);
+    if (control) {
+      control.setValidators(validators);
+      if (clearValue) {
+        control.setValue(value);
+      }
+      control.updateValueAndValidity();
+    }
+  }
+
+  setGoalsValidations() {
+
+    const value = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.measurements')?.value;
+
+    // Clear validators and values for all controls
+    this.setValidatorsAndValue(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.selection', null, '', true);
+    this.setValidatorsAndValue(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.value', null, '', true);
+    this.setValidatorsAndValue(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.difference.selection', null, '', true);
+    this.setValidatorsAndValue(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.difference.value', null, '', true);
+    this.setValidatorsAndValue(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.comparison.selection', null, '', true);
+    this.setValidatorsAndValue(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.comparison.value', null, '', true);
+
+    if (value.includes('Error Rate')) {
+      // Set validators without setting the value
+      this.setValidatorsAndValue(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.selection', [Validators.required], '', false);
+      this.setValidatorsAndValue(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.errorRate.value', [Validators.required, Validators.pattern(numRegx)], '', false);
+    }
+    if (value.includes('Difference')) {
+      // Set validators without setting the value
+      this.setValidatorsAndValue(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.difference.selection', [Validators.required], '', false);
+      this.setValidatorsAndValue(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.difference.value', [Validators.required, Validators.pattern(numRegx), this.rangeValidatorDiff()], '', false);
+    }
+    if (value.includes('Comparison')) {
+      // Set validators without setting the value
+      this.setValidatorsAndValue(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.comparison.selection', [Validators.required], '', false);
+      this.setValidatorsAndValue(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.comparison.value', [Validators.required, Validators.pattern(numRegx)], '', false);
+    }
+  }
+
+  isPatientAssessment() {
+    // debugger
+    const value = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.isPatientAssessment')?.value;
+    if (value == true) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  rangeValidatorDiff(): ValidatorFn {
+
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const minValue = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeFrom')?.value;
+      const maxValue = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.rangeTo')?.value;
+      const value = this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.goals.difference.value')?.value;
+      if (value !== null && (isNaN(value) || value < minValue || value > maxValue)) {
+        return { range: true };
+      }
+      return null;
+    };
+  }
+
+  disableRoutineTime() {
+    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.routine')?.disable();
+    this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.times')?.disable();
+    if (this.selectedType) {
+      this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.routine')?.enable();
+      this.assessmentForm.get(this.categoryToAssmDetailsPath + this.currentAssmDetailIndex + '.times')?.enable();
+    }
+  }
+
+  openGraph() {
+    // this.assmService.openGraph(this.assessmentForm);
+    if (this.assessmentForm.invalid) {
+      alert('invalid ongraph')
+    } else {
+
+    }
+  }
+
+
+
+  public lineChartType: ChartType = 'line';
+  public lineChartData: ChartConfiguration['data'] = {
+    datasets: [
+      {
+        data: this.newData,
+        label: 'Series A',
+        backgroundColor: 'rgba(148,159,177,0.2)',
+        borderColor: 'rgba(148,159,177,1)',
+        pointBackgroundColor: 'rgba(148,159,177,1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(148,159,177,0.8)',
+        fill: 'origin',
+      },
+      {
+        data: [28, 48, 40, 19, 86, 27, 90],
+        label: 'Series B',
+        backgroundColor: 'rgba(77,83,96,0.2)',
+        borderColor: 'rgba(77,83,96,1)',
+        pointBackgroundColor: 'rgba(77,83,96,1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(77,83,96,1)',
+        fill: 'origin',
+      },
+      {
+        data: [180, 480, 770, 90, 1000, 270, 400],
+        label: 'Series C',
+        yAxisID: 'y1',
+        backgroundColor: 'rgba(255,0,0,0.3)',
+        borderColor: 'red',
+        pointBackgroundColor: 'rgba(148,159,177,1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(148,159,177,0.8)',
+        fill: 'origin',
+      },
+      {
+        data: [50, 40, 60, 70, 45, 55, 30],
+        label: 'New Dataset',
+        backgroundColor: 'rgba(123,45,67,0.2)',
+        borderColor: 'rgba(123,45,67,1)',
+        pointBackgroundColor: 'rgba(123,45,67,1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(123,45,67,0.8)',
+        fill: 'origin',
+      }
+    ],
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July']
+  };
+
+
+
+  // @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+  // public chartClicked({ event, active }: { event?: ChartEvent, active?: {}[] }): void {
+  //   console.log(event, active);
+  // }
+
+  // public chartHovered({ event, active }: { event?: ChartEvent, active?: {}[] }): void {
+  //   console.log(event, active);
+  // }
+
+  public lineChartOptions: ChartConfiguration['options'] = {
+    elements: {
+      line: {
+        tension: 0.5
+      }
+    },
+    scales: {
+      // We use this empty structure as a placeholder for dynamic theming.
+      y:
+      {
+        position: 'left',
+      },
+      y1: {
+        position: 'right',
+        grid: {
+          color: 'rgba(255,0,0,0.3)',
+        },
+        ticks: {
+          color: 'red'
+        }
+      }
+    },
+
   }
 }

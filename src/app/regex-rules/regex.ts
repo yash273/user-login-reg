@@ -12,4 +12,4 @@ export const proDescriptionRegx: RegExp = /^[\w\s.,!@#$%^&*()-]+$/u
 export const proPriceRegx: RegExp = /^\d+(\.\d+)?$/
 export const proSkuRegx: RegExp = /^[A-Za-z0-9]+$/
 // assesment-crud
-export const numRegx: RegExp = /^\d+$/
+export const numRegx: RegExp = /^[0-9]+$/

@@ -5,7 +5,7 @@ import { AssessmentRoutingModule } from './assessment-routing.module';
 import { MaterialModule } from '../material/material.module'
 import { AddComponent } from './add/add.component';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -15,7 +15,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     MaterialModule,
     AssessmentRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgChartsModule
   ]
 })
 export class AssessmentModule { }

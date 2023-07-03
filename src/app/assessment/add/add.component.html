@@ -124,16 +124,27 @@
                                         <ng-container *ngFor="let assessment of getAssessmentControls(currentCategoryIndex).controls; let j = index">
                                             <ng-container [formGroupName]="j">
                                                 <span class="assessment-span">
-                                                    <mat-form-field appearance="fill">
-                                                        <input matInput placeholder="Assessment" formControlName="AssmName" (blur)="handleAssmBlur(j)">
-                                                        <mat-error *ngIf="assessmentForm.get(categoryToAssessmentPath + j + '.AssmName')?.errors?.required">this is required</mat-error>
-                                                        <mat-icon class="ic-edit" matSuffix>mode_edit</mat-icon>
+                                                    <span class="patient-span">
+                                                        <mat-icon *ngIf="isPatientAssessment() && j == currentAssessmentIndex">
+                                                            account_circle
+                                                        </mat-icon>
+                                                    </span>
+                                                    <span class="input-span">
+                                                        <mat-form-field appearance="fill">
+                                                            <input matInput placeholder="Assessment" formControlName="AssmName" (blur)="handleAssmBlur(j)">
+                                                            <mat-error *ngIf="assessmentForm.get(categoryToAssessmentPath + j + '.AssmName')?.errors?.required">this is required</mat-error>
+                                                            <mat-icon class="ic-edit" matSuffix>mode_edit</mat-icon>
 
-                                                    </mat-form-field>
-                                                    <button class="remove-assessment" *ngIf="j > 0" mat-icon-button type="button" color="warn" (click)="removeAssessment(currentCategoryIndex,j)" title="remove Schedule">
-                                                        <mat-icon>delete_outline</mat-icon>
-                                                    </button>
+                                                        </mat-form-field>
+                                                    </span>
+                                                    <span class="remove-span">
+
+                                                        <button class="remove-assessment" *ngIf="j > 0" mat-icon-button type="button" color="warn" (click)="removeAssessment(currentCategoryIndex,j)" title="remove Schedule">
+                                                            <mat-icon>delete_outline</mat-icon>
+                                                        </button>
+                                                    </span>
                                                 </span>
+                                                {{j}} /////{{currentAssessmentIndex}}
                                             </ng-container>
                                         </ng-container>
                                         <button mat-icon-button type="button" color="primary" (click)="addAssessment(currentCategoryIndex)" title="Add Product" [disabled]="assessmentForm.get('category')?.invalid">
@@ -166,7 +177,8 @@
                                                             <mat-error *ngIf="assessment.get('type')?.errors?.required">this is required</mat-error>
                                                         </mat-form-field>
                                                         <span class="error-span">
-                                                            {{currentAssessmentIndex}}///{{k}}
+                                                            {{currentAssessmentIndex}}
+                                                            <mat-slide-toggle formControlName="isPatientAssessment" (change)="isPatientAssessment()" color="primary"> Patient Assessment</mat-slide-toggle>
                                                         </span>
                                                     </span>
 
@@ -188,7 +200,7 @@
                                                             <label>Value Range</label>
                                                             <span>
                                                                 <mat-form-field appearance="fill" class="vr">
-                                                                    <input matInput type="number" placeholder="From" formControlName="rangeFrom" (blur)="setMinRangeTo()">
+                                                                    <input matInput type="number" placeholder="From" formControlName="rangeFrom" (keyup)="setMinRangeTo()">
                                                                     <mat-error *ngIf="assessment.get('rangeFrom')?.errors?.required">this is required</mat-error>
                                                                     <mat-error *ngIf="assessment.get('rangeFrom')?.errors?.pattern">Enter valid value</mat-error>
                                                                     <mat-error *ngIf="assessment.get('rangeFrom')?.errors?.min">Minimum must be 10</mat-error>
@@ -211,7 +223,9 @@
 
                                                         <span>
                                                             <label>Measurement type</label>
-                                                            <mat-slide-toggle formControlName="measureType">Side comparison</mat-slide-toggle>
+                                                            <!-- <mat-slide-toggle formControlName="measureType">Side comparison</mat-slide-toggle> -->
+                                                            <mat-slide-toggle formControlName="measureType" (change)="setRefRegionValidation()">Side comparison</mat-slide-toggle>
+
                                                             <span class="error-span"></span>
                                                         </span>
 
@@ -241,10 +255,10 @@
                                                             <label>Measurements</label>
                                                             <ng-container *ngIf="assessmentDetailsControl.measureType == true">
                                                                 <mat-form-field appearance="fill">
-                                                                    <mat-select formControlName="measurements" name="measurements" multiple>
+                                                                    <mat-select formControlName="measurements" name="measurements" multiple (selectionChange)="setGoalsValidations()">
                                                                         <mat-select-trigger>
                                                                             {{ getSelectedMeasurementsText() }}
-                                                                          </mat-select-trigger>
+                                                                        </mat-select-trigger>
                                                                         <mat-option *ngFor="let measurement of measurements" [value]="measurement">
                                                                             {{measurement}}
                                                                         </mat-option>
@@ -255,10 +269,10 @@
 
                                                             <ng-container *ngIf="assessmentDetailsControl.measureType == false">
                                                                 <mat-form-field appearance="fill">
-                                                                    <mat-select formControlName="measurements" name="measurements" multiple>
+                                                                    <mat-select formControlName="measurements" name="measurements" multiple (selectionChange)="setGoalsValidations()">
                                                                         <mat-select-trigger>
                                                                             {{ getSelectedMeasurementsTextForTwo() }}
-                                                                          </mat-select-trigger>
+                                                                        </mat-select-trigger>
                                                                         <mat-option *ngFor="let measurement of measurements.slice(0, 2)" [value]="measurement">
                                                                             {{measurement}}
                                                                         </mat-option>
@@ -282,7 +296,7 @@
 
                                                                         <span>
                                                                             <mat-form-field appearance="fill" class="goal-inputs">
-                                                                                <mat-select formControlName="selection" name="selection">
+                                                                                <mat-select formControlName="selection" name="selection" (selectionChange)=" setRangeValidator()">
                                                                                     <mat-option *ngFor="let selection of goalsSelect" [value]="selection">
                                                                                         {{selection}}
                                                                                     </mat-option>
@@ -294,6 +308,8 @@
                                                                                 <input matInput type="number" placeholder="value" formControlName="value">
                                                                                 <mat-error *ngIf="assessment.get('goals.simple.value')?.errors?.required">this is required</mat-error>
                                                                                 <mat-error *ngIf="assessment.get('goals.simple.value')?.errors?.pattern">Enter Valid Input</mat-error>
+                                                                                <mat-error *ngIf="assessment.get('goals.simple.value')?.errors?.range">please Enter Number between {{assessment.get('rangeFrom')?.value}} and
+                                                                                    {{assessment.get('rangeTo')?.value}}</mat-error>
                                                                             </mat-form-field>
                                                                         </span>
                                                                         <span class="error-span">
@@ -325,9 +341,13 @@
                                                                             <mat-form-field appearance="fill" class="goal-inputs">
                                                                                 <input matInput placeholder="value" formControlName="value">
                                                                                 <mat-error *ngIf="assessment.get('goals.errorRate.value')?.errors?.required">this is required</mat-error>
+                                                                                <mat-error *ngIf="assessment.get('goals.errorRate.value')?.errors?.pattern">Enter Valid Input</mat-error>
+
                                                                             </mat-form-field>
                                                                         </span>
-                                                                        <span class="error-span"></span>
+                                                                        <span class="error-span">
+                                                                            % Error Rate
+                                                                        </span>
 
                                                                     </ng-container>
 
@@ -336,7 +356,7 @@
                                                             <span>
                                                                 <ng-container formGroupName="difference">
 
-                                                                    <ng-container *ngIf="assessmentDetailsControl.measurements.includes('Difference')">
+                                                                    <ng-container *ngIf="assessmentDetailsControl.measurements.includes('Difference') && !setRefRegionValidation()">
 
                                                                         <label></label>
 
@@ -353,9 +373,15 @@
                                                                             <mat-form-field appearance="fill" class="goal-inputs">
                                                                                 <input matInput placeholder="value" formControlName="value">
                                                                                 <mat-error *ngIf="assessment.get('goals.difference.value')?.errors?.required">this is required</mat-error>
+                                                                                <mat-error *ngIf="assessment.get('goals.difference.value')?.errors?.pattern">Enter Valid Input</mat-error>
+                                                                                <mat-error *ngIf="assessment.get('goals.difference.value')?.errors?.range">please Enter Number between {{assessment.get('rangeFrom')?.value}} and
+                                                                                    {{assessment.get('rangeTo')?.value}}
+                                                                                </mat-error>
                                                                             </mat-form-field>
                                                                         </span>
-                                                                        <span class="error-span"></span>
+                                                                        <span class="error-span">
+                                                                            {{assessmentDetailsControl.unit}}. ( Difference to the reference region )
+                                                                        </span>
 
                                                                     </ng-container>
                                                                 </ng-container>
@@ -363,7 +389,7 @@
                                                             <span>
                                                                 <ng-container formGroupName="comparison">
 
-                                                                    <ng-container *ngIf="assessmentDetailsControl.measurements.includes('Comparison')">
+                                                                    <ng-container *ngIf="assessmentDetailsControl.measurements.includes('Comparison') && !setRefRegionValidation()">
 
                                                                         <label></label>
 
@@ -380,16 +406,20 @@
                                                                             <mat-form-field appearance="fill" class="goal-inputs">
                                                                                 <input matInput placeholder="value" formControlName="value">
                                                                                 <mat-error *ngIf="assessment.get('goals.comparison.value')?.errors?.required">this is required</mat-error>
+                                                                                <mat-error *ngIf="assessment.get('goals.comparison.value')?.errors?.pattern">Enter Valid Input</mat-error>
                                                                             </mat-form-field>
                                                                         </span>
-                                                                        <span class="error-span"></span>
+                                                                        <span class="error-span">
+                                                                            % of Reference Region
+                                                                        </span>
 
                                                                     </ng-container>
                                                                 </ng-container>
                                                             </span>
                                                         </ng-container>
                                                     </ng-container>
-                                                    <span [ngClass]="{'d-none': selectedType == null}">
+                                                    <span [ngClass]="{'d-none': assmDetailsDisplay == false}">
+
                                                         <label>Routine</label>
 
                                                         <mat-form-field appearance="fill" class="w-410">
@@ -400,23 +430,30 @@
                                                             </mat-select>
                                                             <mat-error *ngIf="assessment.get('routine')?.errors?.required">this is required</mat-error>
                                                         </mat-form-field>
-
                                                     </span>
 
                                                     <ng-container *ngIf="assessmentForm.get('measurements')?.valid">
 
-                                                        <span [ngClass]="{'d-none': selectedType == null}">
+                                                        <span [ngClass]="{'d-none': assmDetailsDisplay == false}">
+
                                                             <label>Times</label>
 
                                                             <mat-form-field appearance="fill" class="w-410">
-                                                                <mat-select formControlName="times" name="times" multiple>
+                                                                <mat-select formControlName="times" name="times" multiple (selectionChange)="openGraph()">
                                                                     <mat-option *ngFor="let pm of patiantMeasurements" [value]="pm">
-                                                                        {{pm.about + ' : ' + pm.time}}
+                                                                        {{pm.about + ' (' + pm.time + ')'}}
                                                                     </mat-option>
                                                                 </mat-select>
                                                                 <mat-error *ngIf="assessment.get('times')?.errors?.required">this is required</mat-error>
                                                             </mat-form-field>
                                                         </span>
+
+                                                        <canvas baseChart class="chart" [data]="lineChartData" [options]="lineChartOptions" [type]="lineChartType">
+
+                                                            <!-- (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)" -->
+                                                        </canvas>
+
+                                                        <!-- <button mat-button (click)="updateData()" type="button">ud</button> -->
                                                     </ng-container>
 
                                                 </ng-container>
@@ -438,9 +475,7 @@
 
                 <button mat-button color="warn" type="button">Cancel</button>
                 <button mat-raised-button color="primary" type="submit">Save</button>
-                <button mat-raised-button color="primary" type="button" (click)="setValidation()">set validation</button>
 
-                <button mat-raised-button color="primary" type="button" (click)="removeValidation()">remove validation</button>
             </form>
         </mat-card-content>
     </mat-card>
