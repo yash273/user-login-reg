@@ -6,6 +6,7 @@ import { numRegx } from 'src/app/regex-rules/regex';
 import { AssessmentService } from '../assessment.service';
 import { ChartConfiguration, ChartEvent, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add',
@@ -49,11 +50,12 @@ export class AddComponent implements OnInit {
     }
   };
 
-  newData = [65, 59, 80, 81, 56, 55, 40];
+  newData! : number[]
 
   constructor(
     private formBuilder: FormBuilder,
-    private assmService: AssessmentService
+    private assmService: AssessmentService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -269,7 +271,7 @@ export class AddComponent implements OnInit {
       alert('invalid')
     } else {
       this.assmService.submit(this.assessmentForm);
-
+      this.router.navigate(['/assessment/list']);
     }
   }
 
@@ -463,6 +465,7 @@ export class AddComponent implements OnInit {
     ],
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July']
   };
+
 
 
 

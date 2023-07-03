@@ -6,10 +6,12 @@ import { MaterialModule } from '../material/material.module'
 import { AddComponent } from './add/add.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
+import { ListComponent } from './list/list.component';
 
 @NgModule({
   declarations: [
-    AddComponent
+    AddComponent,
+    ListComponent
   ],
   imports: [
     CommonModule,
