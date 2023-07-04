@@ -45,7 +45,6 @@ export const goals = [
 ]
 
 export const routine = [
-    'Daily',
     'Sun',
     'Mon',
     'Tues',

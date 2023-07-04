@@ -1,20 +1,9 @@
 <p>list works!</p>
 <ng-container *ngFor="let item of assmList">
-    <pre>{{assmList | json}}</pre>
-<!-- </pre> -->
-
-    <hr>
-    {{oldAssm.description}}
-    <!-- {{item  | json}} -->
-    <hr>
-    <hr>
-    <hr>
-    <hr>
-    <hr>
-    <hr>
-    <hr>
-    <hr>
-    <hr>
-    <hr>
+    <!-- <ng-container *ngFor="let x of item">
+        {{x }}
+    </ng-container> -->
+    <pre>{{assmList[0] | json}}</pre>
+    <!-- </pre> -->
 
 </ng-container>

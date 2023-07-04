@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { FormsModule } from '@angular/forms';
 import { AssessmentRoutingModule } from './assessment-routing.module';
 import { MaterialModule } from '../material/material.module'
 import { AddComponent } from './add/add.component';
@@ -18,7 +18,8 @@ import { ListComponent } from './list/list.component';
     MaterialModule,
     AssessmentRoutingModule,
     ReactiveFormsModule,
-    NgChartsModule
+    NgChartsModule,
+    FormsModule
   ]
 })
 export class AssessmentModule { }

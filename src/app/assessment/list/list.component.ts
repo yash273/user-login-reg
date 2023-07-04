@@ -9,15 +9,15 @@ import { AssessmentService } from '../assessment.service';
 })
 export class ListComponent implements OnInit {
 
- 
-  assmList: [];
+
+  assmList: any
 
   oldAssm!: any;
 
   constructor(
     private assmService: AssessmentService,
     private router: Router
-  ) { 
+  ) {
     this.assmList = [];
   }
 

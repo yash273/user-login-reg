@@ -132,7 +132,7 @@
                                                     <span class="input-span">
                                                         <mat-form-field appearance="fill">
                                                             <input matInput placeholder="Assessment" formControlName="AssmName" (blur)="handleAssmBlur(j)">
-                                                            <mat-error *ngIf="assessmentForm.get(categoryToAssessmentPath + j + '.AssmName')?.errors?.required">this is required</mat-error>
+                                                            <mat-error *ngIf="assessmentForm.get('category.' + currentCategoryIndex + '.assessment.' + j + '.AssmName')?.errors?.required">this is required</mat-error>
                                                             <mat-icon class="ic-edit" matSuffix>mode_edit</mat-icon>
 
                                                         </mat-form-field>
@@ -144,7 +144,7 @@
                                                         </button>
                                                     </span>
                                                 </span>
-                                                {{j}} /////{{currentAssessmentIndex}}
+
                                             </ng-container>
                                         </ng-container>
                                         <button mat-icon-button type="button" color="primary" (click)="addAssessment(currentCategoryIndex)" title="Add Product" [disabled]="assessmentForm.get('category')?.invalid">
@@ -215,15 +215,11 @@
 
                                                                 </mat-form-field>
                                                             </span>
-                                                            <span class="error-span">
-                                                                {{assessment.get('rangeFrom')?.value}} //
-                                                                {{assessment.get('rangeTo')?.value}}
-                                                            </span>
+                                                            <span class="error-span"></span>
                                                         </span>
 
                                                         <span>
                                                             <label>Measurement type</label>
-                                                            <!-- <mat-slide-toggle formControlName="measureType">Side comparison</mat-slide-toggle> -->
                                                             <mat-slide-toggle formControlName="measureType" (change)="setRefRegionValidation()">Side comparison</mat-slide-toggle>
 
                                                             <span class="error-span"></span>
@@ -286,7 +282,6 @@
                                                         <ng-container formGroupName="goals">
                                                             <label class="goal-label">Goals</label>
 
-
                                                             <span>
                                                                 <ng-container formGroupName="simple">
 
@@ -305,7 +300,7 @@
                                                                             </mat-form-field>
 
                                                                             <mat-form-field appearance="fill" class="goal-inputs">
-                                                                                <input matInput type="number" placeholder="value" formControlName="value">
+                                                                                <input matInput type="number" placeholder="value" formControlName="value" (blur)="openGraph()">
                                                                                 <mat-error *ngIf="assessment.get('goals.simple.value')?.errors?.required">this is required</mat-error>
                                                                                 <mat-error *ngIf="assessment.get('goals.simple.value')?.errors?.pattern">Enter Valid Input</mat-error>
                                                                                 <mat-error *ngIf="assessment.get('goals.simple.value')?.errors?.range">please Enter Number between {{assessment.get('rangeFrom')?.value}} and
@@ -339,7 +334,7 @@
                                                                             </mat-form-field>
 
                                                                             <mat-form-field appearance="fill" class="goal-inputs">
-                                                                                <input matInput placeholder="value" formControlName="value">
+                                                                                <input matInput placeholder="value" formControlName="value" type="number" (blur)="openGraph()">
                                                                                 <mat-error *ngIf="assessment.get('goals.errorRate.value')?.errors?.required">this is required</mat-error>
                                                                                 <mat-error *ngIf="assessment.get('goals.errorRate.value')?.errors?.pattern">Enter Valid Input</mat-error>
 
@@ -371,7 +366,7 @@
                                                                             </mat-form-field>
 
                                                                             <mat-form-field appearance="fill" class="goal-inputs">
-                                                                                <input matInput placeholder="value" formControlName="value">
+                                                                                <input matInput placeholder="value" formControlName="value" type="number" (blur)="openGraph()">
                                                                                 <mat-error *ngIf="assessment.get('goals.difference.value')?.errors?.required">this is required</mat-error>
                                                                                 <mat-error *ngIf="assessment.get('goals.difference.value')?.errors?.pattern">Enter Valid Input</mat-error>
                                                                                 <mat-error *ngIf="assessment.get('goals.difference.value')?.errors?.range">please Enter Number between {{assessment.get('rangeFrom')?.value}} and
@@ -404,7 +399,7 @@
                                                                             </mat-form-field>
 
                                                                             <mat-form-field appearance="fill" class="goal-inputs">
-                                                                                <input matInput placeholder="value" formControlName="value">
+                                                                                <input matInput placeholder="value" formControlName="value" type="number" (blur)="openGraph()">
                                                                                 <mat-error *ngIf="assessment.get('goals.comparison.value')?.errors?.required">this is required</mat-error>
                                                                                 <mat-error *ngIf="assessment.get('goals.comparison.value')?.errors?.pattern">Enter Valid Input</mat-error>
                                                                             </mat-form-field>
@@ -423,8 +418,11 @@
                                                         <label>Routine</label>
 
                                                         <mat-form-field appearance="fill" class="w-410">
-                                                            <mat-select formControlName="routine" name="routine" multiple>
-                                                                <mat-option *ngFor="let day of routine" [value]="day">
+                                                            <mat-select formControlName="routine" name="routine" multiple (selectionChange)="openGraph()" #select>
+                                                                <div class="select-all">
+                                                                    <mat-checkbox [(ngModel)]="allSelected" [ngModelOptions]="{standalone: true}" (change)="toggleAllSelection()">Daily</mat-checkbox>
+                                                                </div>
+                                                                <mat-option *ngFor="let day of routine" [value]="day" (click)="optionClick()">
                                                                     {{day}}
                                                                 </mat-option>
                                                             </mat-select>
@@ -448,12 +446,9 @@
                                                             </mat-form-field>
                                                         </span>
 
-                                                        <canvas baseChart class="chart" [data]="lineChartData" [options]="lineChartOptions" [type]="lineChartType">
-
-                                                            <!-- (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)" -->
-                                                        </canvas>
-
-                                                        <!-- <button mat-button (click)="updateData()" type="button">ud</button> -->
+                                                        <div class="chart-container1">
+                                                            <canvas id="MyChart">{{ chart }}</canvas>
+                                                        </div>
                                                     </ng-container>
 
                                                 </ng-container>
@@ -465,17 +460,9 @@
                             </ng-container>
                         </div>
                     </ng-container>
-
-
-
                 </div>
-
-
-
-
                 <button mat-button color="warn" type="button">Cancel</button>
                 <button mat-raised-button color="primary" type="submit">Save</button>
-
             </form>
         </mat-card-content>
     </mat-card>
