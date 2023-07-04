@@ -65,9 +65,9 @@ export class AddComponent implements OnInit {
 
   createAssessment() {
     this.assessmentForm = this.formBuilder.group({
-      template: ['test', [Validators.required]],
+      template: ['', [Validators.required]],
       bodyRegion: ['', [Validators.required]],
-      description: ['test', [Validators.required]],
+      description: ['', [Validators.required]],
       measurements: this.formBuilder.array([
         this.createMeasurement()
       ]),
@@ -79,7 +79,7 @@ export class AddComponent implements OnInit {
 
   createMeasurement() {
     return this.formBuilder.group({
-      about: ['test', [Validators.required]],
+      about: ['', [Validators.required]],
       time: ['', [Validators.required]]
     })
   }
@@ -263,16 +263,6 @@ export class AddComponent implements OnInit {
     console.log(k, ':k')
     this.setGoalsValidations();
     this.disableRoutineTime();
-  }
-
-  // submit
-  onSubmit() {
-    if (this.assessmentForm.invalid) {
-      alert('invalid')
-    } else {
-      this.assmService.submit(this.assessmentForm);
-      // this.router.navigate(['/assessment/list']);
-    }
   }
 
   // show selected measurement in mat-select-trigger
@@ -483,4 +473,16 @@ export class AddComponent implements OnInit {
     });
     this.allSelected = newStatus;
   }
+
+
+  // submit
+  onSubmit() {
+    if (this.assessmentForm.invalid) {
+      alert('invalid')
+    } else {
+      this.assmService.saveData(this.assessmentForm.value);
+      this.router.navigate(['/assessment/list']);
+    }
+  }
+
 }

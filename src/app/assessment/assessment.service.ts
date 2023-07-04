@@ -14,26 +14,35 @@ export class AssessmentService {
     private alertsService: AlertService,
   ) { }
 
-  submit(dataForm: FormGroup) {
-    console.log(dataForm.value);
-    this.saveData(dataForm.value);
-  }
-
-  openGraph(dataForm: FormGroup) {
-    console.log(dataForm.value, ":og")
+  newAssmDataId(): number {
+    const timestamp = new Date().getTime();
+    const randomNum = Math.floor(Math.random() * 1000);
+    const AssmDataId = timestamp * 1000 + randomNum;
+    return AssmDataId;
   }
   saveData(data: AssessmentData) {
     const oldAssm = localStorage.getItem('AssmData');
+    const latestAssmDatatId = this.newAssmDataId();
+    data.aId = latestAssmDatatId;
 
     if (oldAssm !== null) {
       const assmList = JSON.parse(oldAssm);
       assmList.push(data);
       localStorage.setItem('AssmData', JSON.stringify(assmList));
-      this.alertsService.showAlert('Product Added Successfully!', 'success')
+      this.alertsService.showAlert('Assesment Added Successfully!', 'success')
     } else {
-      const productArr = [data];
-      localStorage.setItem('AssmData', JSON.stringify(productArr));
-      this.alertsService.showAlert('Product Added Successfully!', 'success')
+      const assmArr = [data];
+      localStorage.setItem('AssmData', JSON.stringify(assmArr));
+      this.alertsService.showAlert('Assesment Added Successfully!', 'success')
+    }
+  }
+
+  getAssmData(id: number) {
+    const oldAssmData = localStorage.getItem('AssmData');
+    if (oldAssmData !== null) {
+      const assmList = JSON.parse(oldAssmData);
+      const aIdIndex = assmList.findIndex((p: any) => p.aId == id);
+      return assmList[aIdIndex]
     }
   }
 }

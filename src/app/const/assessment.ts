@@ -40,8 +40,6 @@ export const goals = [
     'Greater than',
     'Less than or Equal to',
     'Greater than or Equal to',
-    'in between',
-    'not in between'
 ]
 
 export const routine = [

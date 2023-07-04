@@ -21,6 +21,9 @@ export class ListComponent implements OnInit {
     this.assmList = [];
   }
 
+  displayedColumns: string[] = ['Id', 'description', 'category', 'assessment', 'Action'];
+
+
   ngOnInit(): void {
     this.oldAssm = localStorage.getItem('AssmData');
 

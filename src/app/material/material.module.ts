@@ -16,6 +16,8 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { MatExpansionModule } from '@angular/material/expansion'
+
 const matModules = [
   MatButtonModule,
   MatIconModule,
@@ -32,7 +34,8 @@ const matModules = [
   MatCheckboxModule,
   MatToolbarModule,
   MatSlideToggleModule,
-  NgxMaterialTimepickerModule
+  NgxMaterialTimepickerModule,
+  MatExpansionModule
 ];
 
 @NgModule({

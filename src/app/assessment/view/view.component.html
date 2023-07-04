@@ -1,0 +1,76 @@
+<mat-toolbar color="primary" class="mat-elevation-z6">
+    <mat-toolbar-row>
+        <span>View Assessment</span>
+        <span class="example-spacer"></span>
+        <button mat-button mat-raised-button color="accent" routerLink="/home">Home</button>
+        <button mat-button mat-raised-button color="accent" routerLink="/assessment/list">List</button>
+    </mat-toolbar-row>
+</mat-toolbar>
+<mat-card>
+    {{aId}}
+    {{data.description}}
+
+    <div class="acc-title mat-elevation-z2">
+        <span>Name</span>
+        <span>Unit</span>
+        <span>Measurement Type</span>
+        <span>Simple</span>
+        <span>Error Rate</span>
+        <span>Difference</span>
+        <span>Comparison</span>
+        <span>Status</span>
+        <span></span>
+    </div>
+    <mat-accordion class="example-headers-align" multi>
+        <mat-expansion-panel *ngFor="let item of data.category; let c = index">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{item.catName}}
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-container *ngFor="let data of item.assessment; let a = index">
+
+                <ng-container *ngFor="let chunk of data.AssmDetails; let i = index">
+
+                    <div class="assmDetails-div">
+                        <span>{{data.AssmName}}
+                            <ng-container *ngIf="chunk.isPatientAssessment == true">
+                                <mat-icon>account_circle</mat-icon>
+                            </ng-container>
+                        </span>
+                        <span>{{chunk.unit}}</span>
+                        <span>{{chunk.measureType}}</span>
+                        <span>{{chunk.goals.simple.selection}}
+                            <!-- <mat-icon [ngSwitch]="chunk.goals.simple.selection">
+                                <ng-container *ngSwitchCase="condition1">
+                                    icon1
+                                </ng-container>
+                                <ng-container *ngSwitchCase="condition2">
+                                    icon2
+                                </ng-container>
+                                <ng-container *ngSwitchCase="condition3">
+                                    icon3
+                                </ng-container>
+                                <ng-container *ngSwitchCase="condition4">
+                                    icon4
+                                </ng-container>
+                                <ng-container *ngSwitchDefault>
+                                    icon5
+                                </ng-container>
+                            </mat-icon> -->
+
+                            <!-- <mat-icon>{{ condition1 ? 'icon1' : condition2 ? 'icon2' : condition3 ? 'icon3' : condition4 ? 'icon4' : 'icon5' }}</mat-icon> -->
+                            {{chunk.goals.simple.value}}</span>
+                        <span>{{chunk.goals.errorRate.selection}} {{chunk.goals.errorRate.value}}</span>
+                        <span>{{chunk.goals.difference.selection}} {{chunk.goals.difference.value}}</span>
+                        <span>{{chunk.goals.comparison.selection}} {{chunk.goals.comparison.value}}</span>
+                        <span><mat-slide-toggle color="primary"></mat-slide-toggle></span>
+                        <span><mat-icon>multiline_chart</mat-icon></span>
+                    </div>
+
+                </ng-container>
+            </ng-container>
+        </mat-expansion-panel>
+    </mat-accordion>
+
+</mat-card>

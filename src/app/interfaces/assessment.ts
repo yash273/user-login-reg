@@ -1,4 +1,6 @@
 export interface AssessmentData {
+    aId: number;
+    // AssmData: {
     bodyRegion: string;
     description: string;
     template: string;
@@ -19,31 +21,32 @@ export interface AssessmentData {
                 measureType: boolean;
                 measureRegion: string;
                 isPatientAssessment: boolean;
-                times: Array<{
-                    about: string;
-                    time: string;
-                }>;
                 measurements: string[];
                 routine: string[];
                 goals: {
                     comparison: {
                         selection: string;
                         value: string;
-                    }  ,
+                    },
                     simple: {
                         selection: string;
                         value: string;
-                    }  ,
+                    },
                     errorRate: {
                         selection: string;
                         value: string;
-                    }  ,
+                    },
                     difference: {
                         selection: string;
                         value: string;
-                    }    
-                }
+                    }
+                };
+                times: Array<{
+                    about: string;
+                    time: string;
+                }>;
             }>;
         }>;
     }>
+    // }
 }
