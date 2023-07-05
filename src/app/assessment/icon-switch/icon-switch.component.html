@@ -1,0 +1,20 @@
+<mat-icon [ngSwitch]="selection">
+    <ng-container *ngSwitchCase="'Greater than or Equal to'">
+        last_page
+    </ng-container>
+    <ng-container *ngSwitchCase="'Less than or Equal to'">
+        first_page
+    </ng-container>
+    <ng-container *ngSwitchCase="'Greater than'">
+        navigate_next
+    </ng-container>
+    <ng-container *ngSwitchCase="'Less than'">
+        navigate_before
+    </ng-container>
+    <ng-container *ngSwitchCase="'Equal to'">
+        menu
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+
+    </ng-container>
+</mat-icon>

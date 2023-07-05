@@ -102,7 +102,7 @@ export class AddComponent implements OnInit {
         ])
     })
   }
-
+  chartData: any
   createAssmDetails() {
     return this.formBuilder.group({
       type: ['', [Validators.required]],
@@ -133,10 +133,109 @@ export class AddComponent implements OnInit {
         })
       }),
       routine: ['', [Validators.required]],
-      times: ['', [Validators.required]]
+      times: ['', [Validators.required]],
+      chartData: ['']
     },
     );
   }
+
+  patchFormValues() {
+    const newValues = {
+      template: 'New Template Value',
+      bodyRegion: ['New Body Region Value'],
+      description: 'New Description Value',
+      measurements: [
+        {
+          about: 'New Measurement About',
+          time: 'New Measurement Time'
+        }
+      ],
+      category: [
+        {
+          catName: 'New Category Name',
+          assessment: [
+            {
+              AssmName: 'New Assessment Name',
+              AssmDetails: [
+                {
+                  type: 'New Assessment Type',
+                  isPatientAssessment: false,
+                  unit: 'New Assessment Unit',
+                  rangeFrom: '',
+                  rangeTo: '',
+                  measureType: false,
+                  measureRegion: 'New Measurement Region',
+                  refRegion: '',
+                  measurements: ['New Measurement Value'],
+                  goals: {
+                    simple: {
+                      selection: 'New Selection Value',
+                      value: 'New Goal Value'
+                    },
+                    errorRate: {
+                      selection: '',
+                      value: ''
+                    },
+                    difference: {
+                      selection: '',
+                      value: ''
+                    },
+                    comparison: {
+                      selection: '',
+                      value: ''
+                    }
+                  },
+                  routine: 'New Routine Value',
+                  times: 'New Times Value',
+                  chartData: ''
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+
+    this.assessmentForm.patchValue({
+      template: newValues.template,
+      bodyRegion: newValues.bodyRegion,
+      description: newValues.description
+    });
+
+    const measurementsFormArray = this.assessmentForm.get(
+      'measurements'
+    ) as FormArray;
+    measurementsFormArray.clear();
+    newValues.measurements.forEach((measurement) => {
+      measurementsFormArray.push(this.createMeasurementp(measurement));
+    });
+
+    const categoryFormArray = this.assessmentForm.get(
+      'category'
+    ) as FormArray;
+    categoryFormArray.clear();
+    newValues.category.forEach((category) => {
+      categoryFormArray.push(this.createCategoryp(category));
+    });
+  }
+  createMeasurementp(measurement?: any) {
+    return this.formBuilder.group({
+      about: [measurement?.about || '', [Validators.required]],
+      time: [measurement?.time || '', [Validators.required]]
+    });
+  }
+  createCategoryp(category?: any) {
+    return this.formBuilder.group({
+      catName: [category?.catName || '', [Validators.required]],
+      assessment: this.formBuilder.array([
+        // this.createAssessments(category?.assessment[0])
+      ])
+    });
+  }
+
+
+  // Call the `patchFormValues()` function whenever you want to patch the new values
+
 
   categoryValid(index: number) {
     const isTempValid = this.assessmentForm.get('template')?.valid;
@@ -416,12 +515,18 @@ export class AddComponent implements OnInit {
           continue;
         }
 
+        // const data = this.generateRandomData(minRange, maxRange, labelsLength);
+        // const backgroundColor = i === numOfDatasets - 1 ? 'pink' : 'blue';
+
         const data = this.generateRandomData(minRange, maxRange, labelsLength);
-        const backgroundColor = i === numOfDatasets - 1 ? 'limegreen' : 'blue';
+        const backgroundColor = this.generateRandomColor(); // Generate a random background color
+        const borderColor = this.generateRandomColor(); // Generate a random line color
+
         datasets.push({
           label: label,
           data: data,
           backgroundColor: backgroundColor,
+          borderColor: borderColor
         });
       }
 
@@ -436,6 +541,8 @@ export class AddComponent implements OnInit {
         }
       });
 
+      this.assessmentForm.get('category.' + this.currentCategoryIndex + '.assessment.' + this.currentAssessmentIndex + '.AssmDetails.' + this.currentAssmDetailIndex + '.chartData')?.setValue(this.chart.data)
+      this.assessmentForm.get('category.' + this.currentCategoryIndex + '.assessment.' + this.currentAssessmentIndex + '.AssmDetails.' + this.currentAssmDetailIndex + '.chartData')?.updateValueAndValidity();
     }
   }
 
@@ -443,6 +550,20 @@ export class AddComponent implements OnInit {
   generateRandomNumber(min: number, max: number): number {
     return Math.random() * (max - min) + min;
   }
+
+  generateRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+  // ...
+
+
+
 
   // Generate random data within a given range
   generateRandomData(min: number, max: number, count: number): number[] {

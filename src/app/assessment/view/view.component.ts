@@ -25,10 +25,11 @@ export class ViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.data = this.assmService.getAssmData(this.aId);
-    console.log(this.data);
   }
 
   displayedColumns: string[] = ['assessment'];
 
-
+  show(data: any) {
+    this.assmService.openChart(data)
+  }
 }

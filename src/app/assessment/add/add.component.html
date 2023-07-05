@@ -36,7 +36,7 @@
                             <span class="form-field-span body-reg">
                                 <label>Body region:</label>
                                 <mat-form-field appearance="fill">
-                                    <mat-select formControlName="bodyRegion" name="bodyRegion">
+                                    <mat-select formControlName="bodyRegion" name="bodyRegion" multiple>
                                         <mat-option *ngFor="let br of bodyRegion" [value]="br">
                                             {{br}}
                                         </mat-option>
@@ -464,6 +464,7 @@
                     </ng-container>
                 </div>
                 <button mat-button color="warn" type="button">Cancel</button>
+                <button mat-button color="warn" type="button" (click)="patchFormValues()">patch</button>
                 <button mat-raised-button color="primary" type="submit">Save</button>
             </form>
         </mat-card-content>

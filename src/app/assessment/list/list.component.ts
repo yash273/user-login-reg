@@ -21,7 +21,7 @@ export class ListComponent implements OnInit {
     this.assmList = [];
   }
 
-  displayedColumns: string[] = ['Id', 'description', 'category', 'assessment', 'Action'];
+  displayedColumns: string[] = ['Id', 'description', 'category', 'Action'];
 
 
   ngOnInit(): void {
@@ -30,6 +30,13 @@ export class ListComponent implements OnInit {
     if (this.oldAssm !== null) {
       this.assmList = JSON.parse(this.oldAssm);
     }
+  }
+
+  truncate(text: string, maxLength: number) {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...';
+    }
+    return text;
   }
 
 }

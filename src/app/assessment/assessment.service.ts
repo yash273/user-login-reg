@@ -3,6 +3,8 @@ import { FormGroup } from '@angular/forms';
 import { AssessmentData } from '../interfaces/assessment';
 import { Router } from '@angular/router';
 import { AlertService } from '../alerts/alert.service';
+import { ShowChartComponent } from './show-chart/show-chart.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +14,7 @@ export class AssessmentService {
   constructor(
     private router: Router,
     private alertsService: AlertService,
+    private dialog: MatDialog
   ) { }
 
   newAssmDataId(): number {
@@ -44,5 +47,14 @@ export class AssessmentService {
       const aIdIndex = assmList.findIndex((p: any) => p.aId == id);
       return assmList[aIdIndex]
     }
+  }
+
+  openChart(data: any) {
+    return this.dialog.open(ShowChartComponent, {
+      width: '600px',
+      data: {
+        data
+      }
+    });
   }
 }

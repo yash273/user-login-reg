@@ -21,6 +21,7 @@ export interface AssessmentData {
                 measureType: boolean;
                 measureRegion: string;
                 isPatientAssessment: boolean;
+                chartData: any;
                 measurements: string[];
                 routine: string[];
                 goals: {

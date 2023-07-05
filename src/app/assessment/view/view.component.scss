@@ -1,28 +1,29 @@
 mat-card{width: 90%;margin: 30px auto;}
-.example-action-buttons {
-    padding-bottom: 20px;
-  }
-  
-  .example-headers-align .mat-expansion-panel-header-title,
-  .example-headers-align .mat-expansion-panel-header-description {
-    flex-basis: 0;
-  }
-  
-  .example-headers-align .mat-expansion-panel-header-description {
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .example-headers-align .mat-form-field + .mat-form-field {
-    margin-left: 8px;
-  }
-  .assmDetails-div{display: flex;justify-content: space-between;height: 48px;align-items: center;
+.example-action-buttons {padding-bottom: 20px;}
+.example-headers-align .mat-expansion-panel-header-title,.example-headers-align .mat-expansion-panel-header-description {flex-basis: 0;}
+.example-headers-align .mat-expansion-panel-header-description {justify-content: space-between;align-items: center;}
+.example-headers-align .mat-form-field + .mat-form-field {margin-left: 8px;}
+.assmDetails-div{display: flex;justify-content: space-between;height: 48px;align-items: center;
+    span{max-width: calc(100% / 10);width: 100%;display: flex;align-items: center;justify-content: center;
+        &:first-child{justify-content:start;}
+        &:last-child{justify-content:end;}
+    }}
+.acc-title{display: flex;justify-content: space-between;height: 48px;align-items: center;background-color: #f9fafb;width: calc(100% - 48px);padding: 0 24px;margin-bottom: 4px;font-size: 16px;
     span{max-width: calc(100% / 10);width: 100%;text-align: center;
         &:first-child{text-align:start;}
         &:last-child{text-align: end;}
     }}
-.acc-title{display: flex;justify-content: space-between;height: 48px;align-items: center;background-color: aliceblue;width: calc(100% - 48px);padding: 0 24px;margin-bottom: 4px;
-    span{max-width: calc(100% / 10);width: 100%;text-align: center;
-        &:first-child{text-align:start;}
-        &:last-child{text-align: end;}
-    }}
+    app-icon-switch{height: 24px;}
+
+    .mat-expanded .mat-expansion-panel-header{background: aliceblue;border-bottom: 2px solid rebeccapurple;}
+    mat-expansion-panel{margin-top: 8px;}
+
+    
+.upperdiv{display: flex;margin:10px 0 30px;min-height: 80px;
+  .description-div{width: 50%;background-color: #f5f5f5;padding: 10px;border: 1px solid #ddd;border-radius: 4px;font-family: Arial, sans-serif;font-size: 14px;line-height: 1.4;
+    >div{font-size: 18px;font-weight: 600;}}
+  .bodyRegion-div{margin-left: 40px;width: 20%;background-color:#fff4f4;padding: 10px; border: 1px solid #ddd;border-radius: 4px;font-family: Arial, sans-serif;font-size: 14px; line-height: 1.4;
+    >div{font-size: 18px;font-weight: 600;}}
+}
+mat-panel-title span{ color: #3F51B5;font-size: 18px;font-weight: 400;}
+.card-toolbar{background-color: #a554be; color: #f5f5f5;margin-bottom: 50px;}
