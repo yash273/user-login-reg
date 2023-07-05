@@ -4,10 +4,11 @@ import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 import { bodyRegion, goals, measurements, routine, type } from 'src/app/const/assessment';
 import { numRegx } from 'src/app/regex-rules/regex';
 import { AssessmentService } from '../assessment.service';
-import { Chart } from 'chart.js';
-import { Router } from '@angular/router';
+import { Chart, registerables } from 'chart.js';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
+import { AssessmentData } from 'src/app/interfaces/assessment';
 
 @Component({
   selector: 'app-add',
@@ -51,16 +52,25 @@ export class AddComponent implements OnInit {
       clockFaceTimeInactiveColor: '#fff'
     }
   };
+  aId!: number;
+  pData!: AssessmentData
 
   constructor(
     private formBuilder: FormBuilder,
     private assmService: AssessmentService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {
+    Chart.register(...registerables);
+    this.route.params.subscribe((res) => {
+      this.aId = parseInt(res['aId'], 10);
+    });
+  }
 
   ngOnInit(): void {
     this.createAssessment();
     this.types = this.getType();
+    this.pData = this.assmService.getAssmData(this.aId);
   }
 
   createAssessment() {
@@ -84,14 +94,35 @@ export class AddComponent implements OnInit {
     })
   }
 
-  createCategory() {
+  createCategory(category?: any) {
     return this.formBuilder.group({
-      catName: ['', [Validators.required]],
+      catName: [category?.catName || '', [Validators.required]],
       assessment: this.formBuilder.array([
         this.createAssessments()
       ])
     })
   }
+  // createCategory(category?: any) {
+  //   const categoryForm = this.formBuilder.group({
+  //     catName: [category?.catName || '', [Validators.required]],
+  //     assessment: this.formBuilder.array([])
+  //   });
+
+  //   const assessmentFormArray = categoryForm.get('assessment') as FormArray;
+  //   if (Array.isArray(category?.assessment) && category.assessment.length > 0) {
+  //     category.assessment.forEach((assessmentItem: any) => {
+  //       const assessmentFormGroup = this.createAssessments(assessmentItem);
+  //       assessmentFormArray.push(assessmentFormGroup);
+  //     });
+  //   } else {
+  //     const assessmentFormGroup = this.createAssessments();
+  //     assessmentFormArray.push(assessmentFormGroup);
+  //   }
+
+  //   return categoryForm;
+  // }
+
+
 
   createAssessments() {
     return this.formBuilder.group({
@@ -139,99 +170,42 @@ export class AddComponent implements OnInit {
     );
   }
 
-  patchFormValues() {
-    const newValues = {
-      template: 'New Template Value',
-      bodyRegion: ['New Body Region Value'],
-      description: 'New Description Value',
-      measurements: [
-        {
-          about: 'New Measurement About',
-          time: 'New Measurement Time'
-        }
-      ],
-      category: [
-        {
-          catName: 'New Category Name',
-          assessment: [
-            {
-              AssmName: 'New Assessment Name',
-              AssmDetails: [
-                {
-                  type: 'New Assessment Type',
-                  isPatientAssessment: false,
-                  unit: 'New Assessment Unit',
-                  rangeFrom: '',
-                  rangeTo: '',
-                  measureType: false,
-                  measureRegion: 'New Measurement Region',
-                  refRegion: '',
-                  measurements: ['New Measurement Value'],
-                  goals: {
-                    simple: {
-                      selection: 'New Selection Value',
-                      value: 'New Goal Value'
-                    },
-                    errorRate: {
-                      selection: '',
-                      value: ''
-                    },
-                    difference: {
-                      selection: '',
-                      value: ''
-                    },
-                    comparison: {
-                      selection: '',
-                      value: ''
-                    }
-                  },
-                  routine: 'New Routine Value',
-                  times: 'New Times Value',
-                  chartData: ''
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    };
+  // patchFormValues() {
+  //   const newValues = this.pData
 
-    this.assessmentForm.patchValue({
-      template: newValues.template,
-      bodyRegion: newValues.bodyRegion,
-      description: newValues.description
-    });
 
-    const measurementsFormArray = this.assessmentForm.get(
-      'measurements'
-    ) as FormArray;
-    measurementsFormArray.clear();
-    newValues.measurements.forEach((measurement) => {
-      measurementsFormArray.push(this.createMeasurementp(measurement));
-    });
+  //   this.assessmentForm.patchValue({
+  //     template: newValues.template,
+  //     bodyRegion: newValues.bodyRegion,
+  //     description: newValues.description
+  //   });
 
-    const categoryFormArray = this.assessmentForm.get(
-      'category'
-    ) as FormArray;
-    categoryFormArray.clear();
-    newValues.category.forEach((category) => {
-      categoryFormArray.push(this.createCategoryp(category));
-    });
-  }
-  createMeasurementp(measurement?: any) {
-    return this.formBuilder.group({
-      about: [measurement?.about || '', [Validators.required]],
-      time: [measurement?.time || '', [Validators.required]]
-    });
-  }
-  createCategoryp(category?: any) {
-    return this.formBuilder.group({
-      catName: [category?.catName || '', [Validators.required]],
-      assessment: this.formBuilder.array([
-        // this.createAssessments(category?.assessment[0])
-      ])
-    });
-  }
+  //   const measurementsFormArray = this.assessmentForm.get(
+  //     'measurements'
+  //   ) as FormArray;
+  //   measurementsFormArray.clear();
+  //   newValues.measurements.forEach((measurement) => {
+  //     measurementsFormArray.push(this.createMeasurement(measurement));
+  //   });
+
+  //   const categoryFormArray = this.assessmentForm.get(
+  //     'category'
+  //   ) as FormArray;
+  //   categoryFormArray.clear();
+  //   newValues.category.forEach((category) => {
+  //     categoryFormArray.push(this.createCategory(category));
+  //   });
+  // }
+
+  // createCategory(category?: any) {
+  //   return this.formBuilder.group({
+  //     catName: [category?.catName || '', [Validators.required]],
+  //     assessment: this.formBuilder.array([
+  //       this.createAssessments(category?.assessment)
+  //     ])
+  //   });
+  // }
+
 
 
   // Call the `patchFormValues()` function whenever you want to patch the new values
