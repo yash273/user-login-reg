@@ -21,10 +21,16 @@
     </mat-card-content>
 
     <mat-card-actions>
-        <button mat-raised-button color="accent" routerLink="/home/list">List of Users</button>
-        <button mat-raised-button color="accent" (click)="onView(user?.id)">My Details</button>
-        <button mat-raised-button color="primary" routerLink="/assessment/create">
-            <mat-icon>add</mat-icon>
-            Create Assessment</button>
+        <div>
+            <button mat-raised-button color="accent" routerLink="/home/list">List of Users</button>
+            <button mat-raised-button color="accent" (click)="onView(user?.id)">My Details</button>
+        </div>
+        <div>
+            <span>Assessment</span>
+            <button mat-raised-button color="primary" routerLink="/assessment/create">
+                <mat-icon>add</mat-icon>
+                Create</button>
+            <button mat-raised-button color="primary" routerLink="/assessment/list">List</button>
+        </div>
     </mat-card-actions>
 </mat-card>

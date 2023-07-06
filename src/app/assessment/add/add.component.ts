@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
 import { AssessmentData } from 'src/app/interfaces/assessment';
+import { AlertService } from 'src/app/alerts/alert.service';
 
 @Component({
   selector: 'app-add',
@@ -60,6 +61,7 @@ export class AddComponent implements OnInit {
     private assmService: AssessmentService,
     private router: Router,
     private route: ActivatedRoute,
+    private alertService: AlertService
   ) {
     Chart.register(...registerables);
     this.route.params.subscribe((res) => {
@@ -71,8 +73,11 @@ export class AddComponent implements OnInit {
     this.createAssessment();
     this.types = this.getType();
     this.pData = this.assmService.getAssmData(this.aId);
+    // this.patchs()
   }
-
+  // patchs() {
+  //   this.assessmentForm.patchValue({ ...this.pData })
+  // }
   createAssessment() {
     this.assessmentForm = this.formBuilder.group({
       template: ['', [Validators.required]],
@@ -102,27 +107,6 @@ export class AddComponent implements OnInit {
       ])
     })
   }
-  // createCategory(category?: any) {
-  //   const categoryForm = this.formBuilder.group({
-  //     catName: [category?.catName || '', [Validators.required]],
-  //     assessment: this.formBuilder.array([])
-  //   });
-
-  //   const assessmentFormArray = categoryForm.get('assessment') as FormArray;
-  //   if (Array.isArray(category?.assessment) && category.assessment.length > 0) {
-  //     category.assessment.forEach((assessmentItem: any) => {
-  //       const assessmentFormGroup = this.createAssessments(assessmentItem);
-  //       assessmentFormArray.push(assessmentFormGroup);
-  //     });
-  //   } else {
-  //     const assessmentFormGroup = this.createAssessments();
-  //     assessmentFormArray.push(assessmentFormGroup);
-  //   }
-
-  //   return categoryForm;
-  // }
-
-
 
   createAssessments() {
     return this.formBuilder.group({
@@ -573,7 +557,7 @@ export class AddComponent implements OnInit {
   // submit
   onSubmit() {
     if (this.assessmentForm.invalid) {
-      alert('invalid')
+      this.alertService.showAlert('Please fill required details', "error")
     } else {
       this.assmService.saveData(this.assessmentForm.value);
       this.router.navigate(['/assessment/list']);

@@ -9,6 +9,7 @@ import { bodyRegion, measurements, goals, routine, type } from 'src/app/const/as
 import { AssessmentData } from 'src/app/interfaces/assessment';
 import { numRegx } from 'src/app/regex-rules/regex';
 import { AssessmentService } from '../assessment.service';
+import { AlertService } from 'src/app/alerts/alert.service';
 
 @Component({
   selector: 'app-edit',
@@ -21,7 +22,7 @@ export class EditComponent implements OnInit {
   bodyRegion = bodyRegion;
   currentCategoryIndex: number = 0;
   currentAssessmentIndex: number = 0;
-  currentAssmDetailIndex: number = 0;
+  currentAssmDetailIndex: number | undefined = 0;
   types!: string[];
   units!: string[];
   selectedType!: string | null
@@ -33,9 +34,11 @@ export class EditComponent implements OnInit {
   patiantMeasurements: any;
   assmDetailsDisplay: boolean = false;
   assmDisplay: boolean = false;
-  prevAssmIndex: number = 0;
+  prevAssmIndex: number | undefined = 0;
   public chart: any;
   allSelected = false;
+  blurAssmDetail: boolean = false;
+  blurAssm: boolean = false;
   @ViewChild('select') select!: MatSelect;
 
   customTheme: NgxMaterialTimepickerTheme = {
@@ -58,20 +61,29 @@ export class EditComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private assmService: AssessmentService,
-    private router: Router,
+    private alertService: AlertService,
     private route: ActivatedRoute,
   ) {
     Chart.register(...registerables);
     this.route.params.subscribe((res) => {
-      this.aId = parseInt(res['aId'], 10);
-    });
+      this.aId = parseInt(res['aId'], 10)
+    })
   }
 
   ngOnInit(): void {
-    this.createAssessment();
-    this.types = this.getType();
     this.pData = this.assmService.getAssmData(this.aId);
-    this.patchFormValues();
+    this.createAssessment();
+
+    this.patchFormValues()
+    this.types = this.getType();
+    this.selectedType = this.assessmentForm.get('category.' + this.currentCategoryIndex + '.assessment.' + this.currentAssessmentIndex + '.AssmDetails.' + this.currentAssmDetailIndex + '.type')?.value;
+    this.getUnitByTypes(this.selectedType)
+    this.onTypeSelectionChange()
+    console.log(this.pData)
+
+    setTimeout(() => {
+      this.openGraphx();
+    });
   }
 
   createAssessment() {
@@ -89,10 +101,14 @@ export class EditComponent implements OnInit {
   }
 
   createMeasurement(measurement?: any) {
-    return this.formBuilder.group({
+    const mGroup = this.formBuilder.group({
       about: [measurement?.about || '', [Validators.required]],
       time: [measurement?.time || '', [Validators.required]]
-    })
+    });
+    const mData = this.pData.measurements
+    console.log(mData.length)
+
+    return mGroup
   }
 
   createCategory(category?: any) {
@@ -115,77 +131,115 @@ export class EditComponent implements OnInit {
     return categoryForm;
   }
 
+  chartData: any
+  patchFormValues() {
+    this.assmDisplay = true;
+    this.blurAssmDetail = true;
+    this.blurAssm = true;
 
+    const formData = this.pData
+    this.assessmentForm.patchValue({
+      template: formData.template,
+      bodyRegion: formData.bodyRegion,
+      description: formData.description
+    });
 
-  createAssessments(asm?: any) {
-    return this.formBuilder.group({
-      AssmName: [asm?.AssmName || '', [Validators.required]],
+    const measurementsArray = this.assessmentForm.get('measurements') as FormArray;
+    measurementsArray.clear();
+
+    formData.measurements.forEach(measurement => {
+      measurementsArray.push(this.formBuilder.group({
+        about: measurement.about,
+        time: measurement.time
+      }));
+    });
+
+    const categoryArray = this.assessmentForm.get('category') as FormArray;
+    categoryArray.clear();
+
+    formData.category.forEach(category => {
+      categoryArray.push(this.createCategoryx(category));
+    });
+  }
+
+  createCategoryx(category?: any) {
+    const categoryGroup = this.formBuilder.group({
+      catName: [category?.catName || '', [Validators.required]],
+      assessment: this.formBuilder.array([])
+    });
+
+    if (category && category.assessment) {
+      const assessmentArray = categoryGroup.get('assessment') as FormArray;
+      category.assessment.forEach((assessment: any) => {
+        assessmentArray.push(this.createAssessmentsx(assessment));
+      });
+    }
+    return categoryGroup;
+  }
+
+  createAssessments(assessment?: any) {
+    const assessmentsGroup = this.formBuilder.group({
+      AssmName: [assessment?.AssmName || '', [Validators.required]],
       AssmDetails:
         this.formBuilder.array([
-          this.createAssmDetails(asm?.AssmDetails[0])
+          this.createAssmDetails()
         ])
-    })
+    });
+    return assessmentsGroup;
   }
-  chartData: any
-  createAssmDetails(ad?: any) {
+
+  createAssessmentsx(assessment?: any) {
+    const assessmentsGroup = this.formBuilder.group({
+      AssmName: [assessment?.AssmName || '', [Validators.required]],
+      AssmDetails:
+        this.formBuilder.array([
+        ])
+    });
+
+    if (assessment && assessment.AssmDetails) {
+      const assmDetailsArray = assessmentsGroup.get('AssmDetails') as FormArray;
+      assessment.AssmDetails.forEach((assmDetail: any) => {
+        assmDetailsArray.push(this.createAssmDetails(assmDetail));
+      });
+    }
+    return assessmentsGroup;
+  }
+
+  createAssmDetails(assmDetail?: any) {
     return this.formBuilder.group({
-      type: [ad?.type || '', [Validators.required]],
-      isPatientAssessment: [ad?.isPatientAssessment || false, [Validators.required]],
-      unit: [ad?.unit || '', [Validators.required]],
-      rangeFrom: [ad?.rangeFrom || '', [Validators.required, Validators.pattern(numRegx), Validators.min(10), Validators.max(999)]],
-      rangeTo: [ad?.rangeTo || '', [Validators.required, Validators.pattern(numRegx), Validators.max(999)]],
-      measureType: [ad?.measureType || false, [Validators.required]],
-      measureRegion: [ad?.measureRegion || '', [Validators.required]],
-      refRegion: [ad?.refRegion || ''],
-      measurements: [ad?.measurements || [this.measurements[0]], [Validators.required]],
+      type: [assmDetail?.type || '', [Validators.required]],
+      isPatientAssessment: [assmDetail?.isPatientAssessment || false, [Validators.required]],
+      unit: [assmDetail?.unit || '', [Validators.required]],
+      rangeFrom: [assmDetail?.rangeFrom || '', [Validators.required, Validators.pattern(numRegx), Validators.min(10), Validators.max(999)]],
+      rangeTo: [assmDetail?.rangeTo || '', [Validators.required, Validators.pattern(numRegx), Validators.max(999)]],
+      measureType: [assmDetail?.measureType || false, [Validators.required]],
+      measureRegion: [assmDetail?.measureRegion || '', [Validators.required]],
+      refRegion: [assmDetail?.refRegion || ''],
+      measurements: [assmDetail?.measurements || [this.measurements[0]], [Validators.required]],
       goals: this.formBuilder.group({
         simple: this.formBuilder.group({
-          selection: [ad?.goals.simple.selection || '', [Validators.required]],
-          value: [ad?.goals.simple.value || '', [Validators.required, Validators.pattern(numRegx),]]
+          selection: [assmDetail?.goals?.simple?.selection || '', [Validators.required]],
+          value: [assmDetail?.goals?.simple?.value || '', [Validators.required, Validators.pattern(numRegx)]]
         }),
         errorRate: this.formBuilder.group({
-          selection: [ad?.goals.errorRate.selection || ''],
-          value: [ad?.goals.errorRate.value || '']
+          selection: [assmDetail?.goals?.errorRate?.selection || ''],
+          value: [assmDetail?.goals?.errorRate?.value || '']
         }),
         difference: this.formBuilder.group({
-          selection: [ad?.goals.difference.selection || ''],
-          value: [ad?.goals.difference.value || '']
+          selection: [assmDetail?.goals?.difference?.selection || ''],
+          value: [assmDetail?.goals?.difference?.value || '']
         }),
         comparison: this.formBuilder.group({
-          selection: [ad?.goals.comparison.selection || ''],
-          value: [ad?.goals.comparison.value || '']
+          selection: [assmDetail?.goals?.comparison?.selection || ''],
+          value: [assmDetail?.goals?.comparison?.value || '']
         })
       }),
-      routine: [ad?.routine || '', [Validators.required]],
-      times: ['', [Validators.required]],
-      chartData: [ad?.chartData || '']
-    },
-    );
+      routine: [assmDetail?.routine || '', [Validators.required]],
+      times: [assmDetail?.times.value || '', [Validators.required]],
+      chartData: [assmDetail?.chartData || '']
+    });
   }
 
-  patchFormValues() {
-    const newValues = this.pData
-
-    this.assessmentForm.patchValue({
-      template: newValues.template,
-      bodyRegion: newValues.bodyRegion,
-      description: newValues.description
-    });
-
-    const measurementsFormArray = this.assessmentForm.get('measurements') as FormArray;
-    measurementsFormArray.clear();
-    newValues.measurements.forEach((measurement) => {
-      measurementsFormArray.push(this.createMeasurement(measurement));
-    });
-
-    const categoryFormArray = this.assessmentForm.get('category') as FormArray;
-    categoryFormArray.clear();
-    newValues.category.forEach((category) => {
-      categoryFormArray.push(this.createCategory(category));
-    });
-
-    // this.openGraph()
-  }
 
   categoryValid(index: number) {
     const isTempValid = this.assessmentForm.get('template')?.valid;
@@ -222,18 +276,11 @@ export class EditComponent implements OnInit {
   }
 
   getAssessmentDetailsControls(assmIndex: number): FormArray {
-    if (assmIndex) {
-      const AssmDetailsArray = this.getAssessmentControls(this.currentCategoryIndex).at(assmIndex).get('AssmDetails');
-      this.assessmentDetailsControl = AssmDetailsArray?.value[0];
-      this.patiantMeasurements = this.assessmentForm.value.measurements;
-
-      return this.getAssessmentControls(this.currentCategoryIndex).at(assmIndex).get('AssmDetails') as FormArray;
-    }
-    const AssmDetailsArray = this.getAssessmentControls(this.currentCategoryIndex).at(0).get('AssmDetails');
+    const AssmDetailsArray = this.getAssessmentControls(this.currentCategoryIndex).at(assmIndex).get('AssmDetails');
     this.assessmentDetailsControl = AssmDetailsArray?.value[0];
     this.patiantMeasurements = this.assessmentForm.value.measurements;
 
-    return this.getAssessmentControls(this.currentCategoryIndex).at(0).get('AssmDetails') as FormArray;
+    return this.getAssessmentControls(this.currentCategoryIndex).at(assmIndex).get('AssmDetails') as FormArray;
   }
 
   removeMeasurement(i: number) {
@@ -276,45 +323,59 @@ export class EditComponent implements OnInit {
   }
 
   handleCatBlur(index: number): void {
+    this.blurAssm = false;
+
     const catNameValue = this.categoryControls.at(index)?.get('catName')?.value;
 
-    if (catNameValue && this.categoryControls.at(index)?.dirty) {
+    if (catNameValue && this.categoryControls.at(index)?.touched) {
       this.setCurrentCategoryIndex(index);
       this.assmDisplay = true;
+      this.onTypeSelectionChange();
+      setTimeout(() => {
+        this.openGraphx();
+      });
+
     }
   }
 
   handleAssmBlur(index: number): void {
-    const assmNameValue = this.getAssessmentControls(this.currentCategoryIndex).at(index)?.get('AssmName')?.value;
+    this.blurAssmDetail = false;
 
-    if (assmNameValue && this.getAssessmentControls(this.currentCategoryIndex).at(index)?.dirty) {
+    const assmNameValue = this.getAssessmentControls(this.currentCategoryIndex).at(index)?.get('AssmName')?.value;
+    if (assmNameValue && this.getAssessmentControls(this.currentCategoryIndex).at(index)?.touched) {
+      console.log(this.currentCategoryIndex)
       this.setCurrentAssessmentIndex(index);
       this.assmDetailsDisplay = true;
-      this.disableRoutineTime();
-      this.openGraph();
+      setTimeout(() => {
+        this.openGraphx();
+      });
     }
   }
 
   getType() {
+
     return Object.keys(type)
   }
 
   getUnitByTypes(sType: any) {
+
     return type[sType]
   }
 
-  onTypeSelectionChange(i: number, k: number) {
+  onTypeSelectionChange(i?: number, k?: number) {
+
+    const selectedType = this.assessmentForm.get('category.' + this.currentCategoryIndex + '.assessment.' + this.currentAssessmentIndex + '.AssmDetails.' + this.currentAssmDetailIndex + '.type')?.value;
+    this.selectedType = selectedType;
     this.units = this.getUnitByTypes(this.selectedType);
-    console.log(this.selectedType);
-    this.prevAssmIndex = i;
-    console.log(i);
-    this.currentAssmDetailIndex = k;
-    console.log(k, ':k')
-    this.setGoalsValidations();
-    this.disableRoutineTime();
+    if (i || k) {
+      this.prevAssmIndex = i;
+      this.currentAssmDetailIndex = k;
+      this.setGoalsValidations();
+      this.disableRoutineTime();
+    }
+
   }
 
-  // show selected measurement in mat-select-trigger
   getSelectedMeasurementsText(): string {
     const selectedMeasurements = this.assessmentForm.get('category.' + this.currentCategoryIndex + '.assessment.' + this.currentAssessmentIndex + '.AssmDetails.' + this.currentAssmDetailIndex + '.measurements')?.value;
     const totalOptions = this.measurements.length;
@@ -441,6 +502,21 @@ export class EditComponent implements OnInit {
     }
   }
 
+  openGraphx() {
+    if (this.chart) {
+      this.chart.clear();
+      this.chart.destroy();
+    }
+
+    this.chart = new Chart("MyChart", {
+      type: 'line',
+      data: this.assessmentForm.get('category.' + this.currentCategoryIndex + '.assessment.' + this.currentAssessmentIndex + '.AssmDetails.' + this.currentAssmDetailIndex + '.chartData')?.value,
+      options: {
+        aspectRatio: 2.5
+      }
+    });
+  }
+
   openGraph() {
 
     if (this.assessmentForm.invalid) {
@@ -466,12 +542,9 @@ export class EditComponent implements OnInit {
           continue;
         }
 
-        // const data = this.generateRandomData(minRange, maxRange, labelsLength);
-        // const backgroundColor = i === numOfDatasets - 1 ? 'pink' : 'blue';
-
         const data = this.generateRandomData(minRange, maxRange, labelsLength);
-        const backgroundColor = this.generateRandomColor(); // Generate a random background color
-        const borderColor = this.generateRandomColor(); // Generate a random line color
+        const backgroundColor = this.generateRandomColor();
+        const borderColor = this.generateRandomColor();
 
         datasets.push({
           label: label,
@@ -497,7 +570,6 @@ export class EditComponent implements OnInit {
     }
   }
 
-  // Generate a random number within a given range
   generateRandomNumber(min: number, max: number): number {
     return Math.random() * (max - min) + min;
   }
@@ -511,12 +583,6 @@ export class EditComponent implements OnInit {
     return color;
   }
 
-  // ...
-
-
-
-
-  // Generate random data within a given range
   generateRandomData(min: number, max: number, count: number): number[] {
     const data: number[] = [];
     for (let i = 0; i < count; i++) {
@@ -546,17 +612,14 @@ export class EditComponent implements OnInit {
     this.allSelected = newStatus;
   }
 
-
   // submit
   onSubmit() {
     if (this.assessmentForm.invalid) {
-      alert('invalid')
+      this.alertService.showAlert('Please fill required details', "error")
     } else {
-      alert('hello')
-      // this.assmService.saveData(this.assessmentForm.value);
-      // this.router.navigate(['/assessment/list']);
+      console.log(this.assessmentForm.value)
+      this.assmService.saveEditedAssmData(this.assessmentForm.value, this.aId)
     }
   }
-
 
 }

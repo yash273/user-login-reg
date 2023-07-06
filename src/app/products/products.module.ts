@@ -7,13 +7,14 @@ import { AddComponent } from './add/add.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditComponent } from './edit/edit.component';
 import { DeleteComponent } from './delete/delete.component';
-
+import { ProductsComponent } from './products.component';
 
 @NgModule({
   declarations: [
     AddComponent,
     EditComponent,
-    DeleteComponent
+    DeleteComponent,
+    ProductsComponent
   ],
   imports: [
     CommonModule,

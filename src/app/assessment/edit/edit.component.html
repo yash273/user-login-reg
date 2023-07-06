@@ -120,44 +120,44 @@
                         <ng-container [formGroupName]="currentCategoryIndex">
                             <ng-container formArrayName="assessment">
 
-                                <div class="assessment">
+                                <div class="assessment" [ngClass]="{'blurAssm': blurAssm == true}">
                                     Assessment
-                                    <!-- <span [ngClass]="{'d-none': assmDisplay == false}"> -->
-                                    <ng-container *ngFor="let assessment of getAssessmentControls(currentCategoryIndex).controls; let j = index">
-                                        <ng-container [formGroupName]="j">
-                                            <span class="assessment-span">
-                                                <span class="patient-span">
-                                                    <mat-icon *ngIf="isPatientAssessment() && j == currentAssessmentIndex">
-                                                        account_circle
-                                                    </mat-icon>
-                                                </span>
-                                                <span class="input-span">
-                                                    <mat-form-field appearance="fill">
-                                                        <input matInput placeholder="Assessment" formControlName="AssmName" (blur)="handleAssmBlur(j)">
-                                                        <mat-error *ngIf="assessmentForm.get('category.' + currentCategoryIndex + '.assessment.' + j + '.AssmName')?.errors?.required">this is required</mat-error>
-                                                        <mat-icon class="ic-edit" matSuffix>mode_edit</mat-icon>
+                                    <span [ngClass]="{'d-none': assmDisplay == false}">
+                                        <ng-container *ngFor="let assessment of getAssessmentControls(currentCategoryIndex).controls; let j = index">
+                                            <ng-container [formGroupName]="j">
+                                                <span class="assessment-span">
+                                                    <span class="patient-span">
+                                                        <mat-icon *ngIf="isPatientAssessment() && j == currentAssessmentIndex">
+                                                            account_circle
+                                                        </mat-icon>
+                                                    </span>
+                                                    <span class="input-span">
+                                                        <mat-form-field appearance="fill">
+                                                            <input matInput placeholder="Assessment" formControlName="AssmName" (blur)="handleAssmBlur(j)">
+                                                            <mat-error *ngIf="assessmentForm.get('category.' + currentCategoryIndex + '.assessment.' + j + '.AssmName')?.errors?.required">this is required</mat-error>
+                                                            <mat-icon class="ic-edit" matSuffix>mode_edit</mat-icon>
 
-                                                    </mat-form-field>
-                                                </span>
-                                                <span class="remove-span">
+                                                        </mat-form-field>
+                                                    </span>
+                                                    <span class="remove-span">
 
-                                                    <button class="remove-assessment" *ngIf="j > 0" mat-icon-button type="button" color="warn" (click)="removeAssessment(currentCategoryIndex,j)" title="remove Schedule">
-                                                        <mat-icon>delete_outline</mat-icon>
-                                                    </button>
+                                                        <button class="remove-assessment" *ngIf="j > 0" mat-icon-button type="button" color="warn" (click)="removeAssessment(currentCategoryIndex,j)" title="remove Schedule">
+                                                            <mat-icon>delete_outline</mat-icon>
+                                                        </button>
+                                                    </span>
                                                 </span>
-                                            </span>
 
+                                            </ng-container>
                                         </ng-container>
-                                    </ng-container>
-                                    <button mat-icon-button type="button" color="primary" (click)="addAssessment(currentCategoryIndex)" title="Add Product" [disabled]="assessmentForm.get('category')?.invalid">
-                                        <mat-icon class="add-icon">add</mat-icon>
-                                    </button>
-                                    {{currentCategoryIndex}}
-                                    <!-- </span> -->
+                                        <button mat-icon-button type="button" color="primary" (click)="addAssessment(currentCategoryIndex)" title="Add Product" [disabled]="assessmentForm.get('category')?.invalid">
+                                            <mat-icon class="add-icon">add</mat-icon>
+                                        </button>
+                                        {{currentCategoryIndex}}
+                                    </span>
                                 </div>
                             </ng-container>
                         </ng-container>
-                        <div class="assessment-details">
+                        <div class="assessment-details" [ngClass]="{'blurAssmDetail': blurAssmDetail == true}">
                             Assessment Details
                             <ng-container [formGroupName]="currentCategoryIndex">
                                 <ng-container formArrayName="assessment">
@@ -168,23 +168,21 @@
                                             <ng-container *ngFor="let assessment of getAssessmentDetailsControls(currentAssessmentIndex).controls; let k = index">
                                                 <ng-container [formGroupName]="k">
 
-                                                    <!-- <span [ngClass]="{'d-none': assmDetailsDisplay == false}"> -->
-                                                    <label>Type</label>
-                                                    <mat-form-field appearance="fill">
-                                                        <mat-select formControlName="type" name="type" (selectionChange)="onTypeSelectionChange(currentAssessmentIndex,k)" [(value)]="selectedType">
-                                                            <mat-option *ngFor="let type of types" [value]="type">
-                                                                {{type}}
-                                                            </mat-option>
-                                                        </mat-select>
-                                                        <mat-error *ngIf="assessment.get('type')?.errors?.required">this is required</mat-error>
-                                                    </mat-form-field>
-                                                    <span class="error-span">
-                                                        {{currentAssessmentIndex}}
-                                                        <mat-slide-toggle formControlName="isPatientAssessment" (change)="isPatientAssessment()" color="primary"> Patient Assessment</mat-slide-toggle>
+                                                    <span [ngClass]="{'d-none': assmDetailsDisplay == false}">
+                                                        <label>Type</label>
+                                                        <mat-form-field appearance="fill">
+                                                            <mat-select formControlName="type" name="type" (valueChange)="onTypeSelectionChange(currentAssessmentIndex,k)" (openedChange)="onTypeSelectionChange(currentAssessmentIndex,k)" [(value)]="selectedType">
+                                                                <mat-option *ngFor="let type of types" [value]="type">
+                                                                    {{type}}
+                                                                </mat-option>
+                                                            </mat-select>
+                                                            <mat-error *ngIf="assessment.get('type')?.errors?.required">this is required</mat-error>
+                                                        </mat-form-field>
+                                                        <span class="error-span">
+                                                            <mat-slide-toggle formControlName="isPatientAssessment" (change)="isPatientAssessment()" color="primary"> Patient Assessment</mat-slide-toggle>
+                                                        </span>
                                                     </span>
-                                                    <!-- </span> -->
 
-                                                    <!-- <ng-container *ngIf="selectedType"> -->
                                                     <span>
                                                         <label>Unit</label>
                                                         <mat-form-field appearance="fill">
@@ -414,39 +412,45 @@
                                                             </ng-container>
                                                         </span>
                                                     </ng-container>
-                                                    <!-- </ng-container> -->
-                                                    <!-- <span [ngClass]="{'d-none': assmDetailsDisplay == false}"> -->
-
-                                                    <label>Routine</label>
-
-                                                    <mat-form-field appearance="fill" class="w-410">
-                                                        <mat-select formControlName="routine" name="routine" multiple (selectionChange)="openGraph()" #select>
-                                                            <div class="select-all">
-                                                                <mat-checkbox [(ngModel)]="allSelected" [ngModelOptions]="{standalone: true}" (change)="toggleAllSelection()">Daily</mat-checkbox>
-                                                            </div>
-                                                            <mat-option *ngFor="let day of routine" [value]="day" (click)="optionClick()">
-                                                                {{day}}
-                                                            </mat-option>
-                                                        </mat-select>
-                                                        <mat-error *ngIf="assessment.get('routine')?.errors?.required">this is required</mat-error>
-                                                    </mat-form-field>
-                                                    <!-- </span> -->
-
-                                                    <ng-container *ngIf="assessmentForm.get('measurements')?.valid">
-
-                                                        <!-- <span [ngClass]="{'d-none': assmDetailsDisplay == false}"> -->
-
-                                                        <label>Times</label>
+                                                    <span>
+                                                        <label>Routine</label>
 
                                                         <mat-form-field appearance="fill" class="w-410">
-                                                            <mat-select formControlName="times" name="times" multiple (selectionChange)="openGraph()">
-                                                                <mat-option *ngFor="let pm of patiantMeasurements" [value]="pm">
-                                                                    {{pm.about + ' (' + pm.time + ')'}}
+                                                            <mat-select formControlName="routine" name="routine" multiple (selectionChange)="openGraph()" #select>
+                                                                <div class="select-all">
+                                                                    <mat-checkbox [(ngModel)]="allSelected" [ngModelOptions]="{standalone: true}" (change)="toggleAllSelection()">Daily</mat-checkbox>
+                                                                </div>
+                                                                <mat-option *ngFor="let day of routine" [value]="day" (click)="optionClick()">
+                                                                    {{day}}
                                                                 </mat-option>
                                                             </mat-select>
-                                                            <mat-error *ngIf="assessment.get('times')?.errors?.required">this is required</mat-error>
+                                                            <mat-error *ngIf="assessment.get('routine')?.errors?.required">this is required</mat-error>
                                                         </mat-form-field>
-                                                        <!-- </span> -->
+                                                    </span>
+                                                    <ng-container *ngIf="assessmentForm.get('measurements')?.valid">
+
+                                                        <span>
+
+                                                            <label>Times</label>
+
+                                                            <mat-form-field appearance="fill" class="w-410">
+                                                                <mat-select formControlName="times" name="times" multiple>
+                                                                    <mat-option *ngFor="let pm of patiantMeasurements" [value]="pm" (click)="openGraph()">
+                                                                        {{pm.about + ' (' + pm.time + ')'}}
+                                                                    </mat-option>
+                                                                </mat-select>
+                                                                <mat-error *ngIf="assessment.get('times')?.errors?.required">this is required</mat-error>
+                                                            </mat-form-field>
+                                                            <mat-form-field appearance="fill" class="w-410">
+                                                                <mat-select formControlName="times" name="times" multiple>
+                                                                    <mat-option *ngFor="let pm of patiantMeasurements" [value]="pm" (click)="openGraph()">
+                                                                        {{pm.about + ' (' + pm.time + ')'}}
+                                                                    </mat-option>
+                                                                </mat-select>
+                                                                <mat-error *ngIf="assessment.get('times')?.errors?.required">this is required</mat-error>
+                                                            </mat-form-field>
+                                                        </span>
+
 
                                                         <div class="chart-container1">
                                                             <canvas id="MyChart">{{ chart }}</canvas>
@@ -463,9 +467,10 @@
                         </div>
                     </ng-container>
                 </div>
-                <button mat-button color="warn" type="button">Cancel</button>
-                <button mat-button color="warn" type="button" (click)="patchFormValues()">patch</button>
-                <button mat-raised-button color="primary" type="submit">Save</button>
+                <div class="action-buttons">
+                    <button mat-button color="warn" type="button" routerLink="/assessment/list">Cancel</button>
+                    <button mat-raised-button color="primary" type="submit">Save</button>
+                </div>
             </form>
         </mat-card-content>
     </mat-card>

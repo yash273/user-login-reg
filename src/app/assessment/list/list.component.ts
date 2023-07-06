@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AssessmentService } from '../assessment.service';
+import { AssessmentData } from 'src/app/interfaces/assessment';
+import { AlertService } from 'src/app/alerts/alert.service';
 
 @Component({
   selector: 'app-list',
@@ -16,7 +18,7 @@ export class ListComponent implements OnInit {
 
   constructor(
     private assmService: AssessmentService,
-    private router: Router
+    private alertsService: AlertService
   ) {
     this.assmList = [];
   }
@@ -28,6 +30,7 @@ export class ListComponent implements OnInit {
     this.oldAssm = localStorage.getItem('AssmData');
 
     if (this.oldAssm !== null) {
+
       this.assmList = JSON.parse(this.oldAssm);
     }
   }

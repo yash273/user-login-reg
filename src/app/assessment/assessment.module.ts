@@ -17,7 +17,7 @@ import { EditComponent } from './edit/edit.component';
     ViewComponent,
     IconSwitchComponent,
     ShowChartComponent,
-    EditComponent
+    EditComponent,
   ],
   imports: [
     CommonModule,

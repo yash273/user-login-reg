@@ -6,8 +6,8 @@
                 .measurements{width: 30%;padding: 8px;border: 1px solid gray; border-radius: 5px;}
             }
             .lower-section{background-color:#fff4f4;;display: flex;padding: 8px;min-height: calc(100vh - 490px);
-                .category{width: 20%;padding: 8px;display: flex;flex-direction: column;align-items: flex-start;}
-                .assessment{width: 25%; border-left: 1px solid gray; border-right: 1px solid gray;padding: 8px;display: flex;flex-direction: column;align-items: flex-start;
+                .category{width: 20%;padding: 8px;display: flex;flex-direction: column;align-items: flex-start;position: sticky;top: 0;height: fit-content;}
+                .assessment{width: 25%; border-left: 1px solid gray; border-right: 1px solid gray;padding: 8px;display: flex;flex-direction: column;align-items: flex-start;position: sticky;top: 0;height: calc(100vh - 222px);
                     >span{width: 100%;}}
                 .assessment-details{width: 55%;padding: 8px;display: flex;flex-direction: column;align-items: flex-start;
                     > span{display: flex;flex-direction:row;justify-content: space-between;width: 100%;
@@ -60,3 +60,6 @@
 .select-all{
     margin: 5px 17px;
   } 
+
+
+  .blurAssmDetail,.blurAssm{ position: relative;filter: blur(15px);pointer-events: none;user-select: none;}

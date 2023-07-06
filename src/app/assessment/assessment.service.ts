@@ -57,4 +57,17 @@ export class AssessmentService {
       }
     });
   }
+
+  saveEditedAssmData(data: AssessmentData, aId: number) {
+    const oldAssmData = localStorage.getItem('AssmData');
+    if (oldAssmData != null) {
+      const assmList = JSON.parse(oldAssmData);
+      assmList.splice(assmList.findIndex((p: AssessmentData) => p.aId == aId), 1);
+      data.aId = aId;
+      assmList.push(data)
+      localStorage.setItem('AssmData', JSON.stringify(assmList))
+      this.alertsService.showAlert('Assesment Edited Successfully!', 'success')
+      this.router.navigate(['/assessment/list']);
+    }
+  }
 }

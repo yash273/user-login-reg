@@ -8,13 +8,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AlertComponent } from './alerts/alert.component';
 import { HttpClientModule } from '@angular/common/http';
 import { WeatherModule } from './weather/weather.module';
-import { ProductsComponent } from './products/products.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AlertComponent,
-    ProductsComponent,
   ],
   imports: [
     BrowserModule,
