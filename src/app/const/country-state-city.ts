@@ -1,0 +1,66 @@
+import { City, Country, State } from "../interfaces/country-state-city";
+
+export const countries: Country[] = [
+    { id: '1', name: 'United States' },
+    { id: '2', name: 'Canada' },
+    { id: '3', name: 'United Kingdom' },
+    { id: '4', name: 'India' },
+];
+
+
+export const states: State[] = [
+    { id: '1', name: 'Alabama', countryId: '1' },
+    { id: '2', name: 'Alaska', countryId: '1' },
+    { id: '3', name: 'Ontario', countryId: '2' },
+    { id: '4', name: 'Quebec', countryId: '2' },
+    { id: '5', name: 'England', countryId: '3' },
+    { id: '6', name: 'Andhra Pradesh', countryId: '4' },
+    { id: '7', name: 'Arunachal Pradesh', countryId: '4' },
+    { id: '8', name: 'Assam', countryId: '4' },
+    { id: '9', name: 'Bihar', countryId: '4' },
+    { id: '10', name: 'Chhattisgarh', countryId: '4' },
+    { id: '11', name: 'Goa', countryId: '4' },
+    { id: '12', name: 'Gujarat', countryId: '4' },
+    { id: '13', name: 'Haryana', countryId: '4' },
+    { id: '14', name: 'Himachal Pradesh', countryId: '4' },
+];
+
+
+export const cities: City[] = [
+    { id: '1', name: 'Montgomery', stateId: '1' },
+    { id: '2', name: 'Anchorage', stateId: '2' },
+    { id: '3', name: 'Toronto', stateId: '3' },
+    { id: '4', name: 'Montreal', stateId: '4' },
+    { id: '5', name: 'London', stateId: '5' },
+    { id: '6', name: 'Birmingham', stateId: '1' },
+    { id: '7', name: 'Juneau', stateId: '2' },
+    { id: '8', name: 'Ottawa', stateId: '3' },
+    { id: '9', name: 'Vancouver', stateId: '4' },
+    { id: '10', name: 'Manchester', stateId: '5' },
+    { id: '11', name: 'Huntsville', stateId: '1' },
+    { id: '12', name: 'Fairbanks', stateId: '2' },
+    { id: '13', name: 'Hamilton', stateId: '3' },
+    { id: '14', name: 'Quebec City', stateId: '4' },
+    { id: '15', name: 'Liverpool', stateId: '5' },
+    { id: '16', name: 'Mobile', stateId: '1' },
+    { id: '17', name: 'Sitka', stateId: '2' },
+    { id: '18', name: 'Kitchener', stateId: '3' },
+    { id: '19', name: 'Laval', stateId: '4' },
+    { id: '20', name: 'Bristol', stateId: '5' },
+    { id: '21', name: 'Hyderabad', stateId: '6' },
+    { id: '22', name: 'Visakhapatnam', stateId: '6' },
+    { id: '23', name: 'Itanagar', stateId: '7' },
+    { id: '24', name: 'Guwahati', stateId: '8' },
+    { id: '25', name: 'Patna', stateId: '9' },
+    { id: '26', name: 'Ranchi', stateId: '9' },
+    { id: '27', name: 'Raipur', stateId: '10' },
+    { id: '28', name: 'Bilaspur', stateId: '10' },
+    { id: '29', name: 'Panaji', stateId: '11' },
+    { id: '30', name: 'Vasco da Gama', stateId: '11' },
+    { id: '31', name: 'Ahmedabad', stateId: '12' },
+    { id: '32', name: 'Surat', stateId: '12' },
+    { id: '33', name: 'Gurugram', stateId: '13' },
+    { id: '34', name: 'Faridabad', stateId: '13' },
+    { id: '35', name: 'Shimla', stateId: '14' },
+    { id: '36', name: 'Mandi', stateId: '14' },
+];

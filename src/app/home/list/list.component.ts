@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user/user.service';
 import { userObj } from 'src/app/interfaces/user';
 import { AlertService } from 'src/app/alerts/alert.service';
+import { DataService } from 'src/app/shared/services/data.service';
 
 @Component({
   selector: 'app-userlist',
@@ -15,11 +16,12 @@ export class ListComponent implements OnInit {
   currentUser: userObj | null | undefined;
 
 
-  displayedColumns: string[] = ['srNo', 'name', 'mobile', 'type', 'email', 'addresses', 'Action'];
+  displayedColumns: string[] = ['srNo', 'name', 'mobile', 'type', 'email', 'addresses', 'country', 'state', 'city', 'Action'];
 
   constructor(
     private userService: UserService,
-    private alertService: AlertService) {
+    private alertService: AlertService,
+    private dataService: DataService) {
     this.userList = [];
     this.currentUser = this.userService.userValue;
   }
@@ -82,4 +84,13 @@ export class ListComponent implements OnInit {
     return address;
   }
 
+  getCountryName(countryId: string) {
+    return this.dataService.getCountryName(countryId)
+  }
+  getStateName(stateId: string) {
+    return this.dataService.getStateName(stateId)
+  }
+  getCityName(cityId: string) {
+    return this.dataService.getCityName(cityId)
+  }
 }

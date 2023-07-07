@@ -39,6 +39,8 @@ export class EditComponent implements OnInit {
   allSelected = false;
   blurAssmDetail: boolean = false;
   blurAssm: boolean = false;
+  xxx: any
+
   @ViewChild('select') select!: MatSelect;
 
   customTheme: NgxMaterialTimepickerTheme = {
@@ -74,16 +76,18 @@ export class EditComponent implements OnInit {
     this.pData = this.assmService.getAssmData(this.aId);
     this.createAssessment();
 
-    this.patchFormValues()
-    this.types = this.getType();
-    this.selectedType = this.assessmentForm.get('category.' + this.currentCategoryIndex + '.assessment.' + this.currentAssessmentIndex + '.AssmDetails.' + this.currentAssmDetailIndex + '.type')?.value;
-    this.getUnitByTypes(this.selectedType)
-    this.onTypeSelectionChange()
-    console.log(this.pData)
+    if (this.aId) {
+      this.patchFormValues()
+      this.types = this.getType();
+      this.selectedType = this.assessmentForm.get('category.' + this.currentCategoryIndex + '.assessment.' + this.currentAssessmentIndex + '.AssmDetails.' + this.currentAssmDetailIndex + '.type')?.value;
+      this.getUnitByTypes(this.selectedType)
+      this.onTypeSelectionChange()
+      setTimeout(() => {
+        this.openGraphx();
+      });
 
-    setTimeout(() => {
-      this.openGraphx();
-    });
+    }
+
   }
 
   createAssessment() {
@@ -105,8 +109,6 @@ export class EditComponent implements OnInit {
       about: [measurement?.about || '', [Validators.required]],
       time: [measurement?.time || '', [Validators.required]]
     });
-    const mData = this.pData.measurements
-    console.log(mData.length)
 
     return mGroup
   }
@@ -206,6 +208,8 @@ export class EditComponent implements OnInit {
   }
 
   createAssmDetails(assmDetail?: any) {
+
+
     return this.formBuilder.group({
       type: [assmDetail?.type || '', [Validators.required]],
       isPatientAssessment: [assmDetail?.isPatientAssessment || false, [Validators.required]],
@@ -235,7 +239,7 @@ export class EditComponent implements OnInit {
         })
       }),
       routine: [assmDetail?.routine || '', [Validators.required]],
-      times: [assmDetail?.times.value || '', [Validators.required]],
+      times: [assmDetail?.times || '', [Validators.required]],
       chartData: [assmDetail?.chartData || '']
     });
   }
@@ -314,12 +318,10 @@ export class EditComponent implements OnInit {
 
   setCurrentCategoryIndex(index: number) {
     this.currentCategoryIndex = index;
-    console.log("catIndex:", this.currentCategoryIndex)
   }
 
   setCurrentAssessmentIndex(index: number) {
     this.currentAssessmentIndex = index;
-    console.log("assmIndex", this.currentAssessmentIndex, "catIndex:", this.currentCategoryIndex)
   }
 
   handleCatBlur(index: number): void {
@@ -343,7 +345,6 @@ export class EditComponent implements OnInit {
 
     const assmNameValue = this.getAssessmentControls(this.currentCategoryIndex).at(index)?.get('AssmName')?.value;
     if (assmNameValue && this.getAssessmentControls(this.currentCategoryIndex).at(index)?.touched) {
-      console.log(this.currentCategoryIndex)
       this.setCurrentAssessmentIndex(index);
       this.assmDetailsDisplay = true;
       setTimeout(() => {
@@ -532,7 +533,6 @@ export class EditComponent implements OnInit {
       const labelsLength = labels.length;
       const minRange = this.assessmentForm.get('category.' + this.currentCategoryIndex + '.assessment.' + this.currentAssessmentIndex + '.AssmDetails.' + this.currentAssmDetailIndex + '.rangeFrom')?.value;
       const maxRange = this.assessmentForm.get('category.' + this.currentCategoryIndex + '.assessment.' + this.currentAssessmentIndex + '.AssmDetails.' + this.currentAssmDetailIndex + '.rangeTo')?.value;
-      console.log(minRange, ":minRange", "::", maxRange, ":maxRange")
 
       for (let i = 0; i < numOfDatasets; i++) {
         const label = measurements[i];
@@ -617,7 +617,6 @@ export class EditComponent implements OnInit {
     if (this.assessmentForm.invalid) {
       this.alertService.showAlert('Please fill required details', "error")
     } else {
-      console.log(this.assessmentForm.value)
       this.assmService.saveEditedAssmData(this.assessmentForm.value, this.aId)
     }
   }

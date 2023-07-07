@@ -441,14 +441,6 @@
                                                                 </mat-select>
                                                                 <mat-error *ngIf="assessment.get('times')?.errors?.required">this is required</mat-error>
                                                             </mat-form-field>
-                                                            <mat-form-field appearance="fill" class="w-410">
-                                                                <mat-select formControlName="times" name="times" multiple>
-                                                                    <mat-option *ngFor="let pm of patiantMeasurements" [value]="pm" (click)="openGraph()">
-                                                                        {{pm.about + ' (' + pm.time + ')'}}
-                                                                    </mat-option>
-                                                                </mat-select>
-                                                                <mat-error *ngIf="assessment.get('times')?.errors?.required">this is required</mat-error>
-                                                            </mat-form-field>
                                                         </span>
 
 

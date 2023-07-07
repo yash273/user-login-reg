@@ -15,9 +15,14 @@
             <mat-form-field appearance="outline">
                 <mat-label>Name</mat-label>
                 <input matInput formControlName="name">
-                <mat-error *ngIf="userform.name.errors?.pattern">Please enter valid input</mat-error>
-                <mat-error *ngIf="userform.name.errors?.required">Name should not be empty</mat-error>
+                <mat-error *ngIf="userform.submitted">
+                    <span *ngIf="userform.name.errors?.pattern ">Please enter valid input</span>
+                    <span *ngIf="userform.name.errors?.required ">Name should not be empty</span>
+                </mat-error>
+                <!-- <mat-error *ngIf="userform.name.errors?.pattern ">Please enter valid input</mat-error>
+                <mat-error *ngIf="userform.name.errors?.required ">Name should not be empty</mat-error> -->
             </mat-form-field>
+            {{userform.name?.dirty}}
             <mat-form-field appearance="outline">
                 <mat-label>Email</mat-label>
                 <input matInput formControlName="email">
@@ -51,6 +56,34 @@
                 <input matInput formControlName="mob" type="tel">
                 <mat-error *ngIf="userform.mob.errors?.pattern">Please enter valid input</mat-error>
             </mat-form-field>
+            <div class="selection-div">
+                <mat-form-field appearance="outline">
+                    <mat-label>Country</mat-label>
+                    <mat-select formControlName="country" (selectionChange)="onCountryIdChange()">
+                        <mat-option *ngFor="let country of countries" [value]="country.id">
+                            {{ country.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>State</mat-label>
+                    <mat-select formControlName="state" (selectionChange)="onStateChange()">
+                        <mat-option *ngFor="let state of states" [value]="state.id">
+                            {{ state.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>City</mat-label>
+                    <mat-select formControlName="city">
+                        <mat-option *ngFor="let city of cities" [value]="city.id">
+                            {{ city.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
             <div class="address-div">
                 <div formArrayName="addresses">
                     <div *ngFor="let address of addresses.controls; let i = index" class="address-innerdiv">
@@ -73,7 +106,7 @@
             </div>
             <div *ngIf="userForm.hasError('addressesRequired')">At least one address is required.</div>
             <mat-card-actions>
-                <button mat-button mat-raised-button [disabled]="userForm.invalid" color="accent" type="submit">Register</button>
+                <button mat-button mat-raised-button color="accent" type="submit">Register</button>
                 <span>
                     <p>Already an user?</p>
                     <a mat-button mat-raised-button type="button" color="primary" routerLink="/login">LOGIN</a>

@@ -38,6 +38,21 @@
                 <td mat-cell *matCellDef="let user"> {{user.type}} </td>
             </ng-container>
 
+            <ng-container matColumnDef="country">
+                <th mat-header-cell *matHeaderCellDef> Country </th>
+                <td mat-cell *matCellDef="let user"> {{ getCountryName(user.country) }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="state">
+                <th mat-header-cell *matHeaderCellDef> State </th>
+                <td mat-cell *matCellDef="let user"> {{ getStateName(user.state) }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="city">
+                <th mat-header-cell *matHeaderCellDef> City </th>
+                ] <td mat-cell *matCellDef="let user"> {{ getCityName(user.city) }}</td>
+            </ng-container>
+
             <ng-container matColumnDef="addresses">
                 <th mat-header-cell *matHeaderCellDef> Address(s) </th>
                 <td mat-cell *matCellDef="let user;let i = index">
