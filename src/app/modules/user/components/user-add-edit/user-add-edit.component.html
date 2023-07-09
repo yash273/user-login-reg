@@ -1,0 +1,50 @@
+<div class="user-wrapper">
+    <mat-card class="user-card">
+        <mat-card-title>User Add</mat-card-title>
+        <mat-card-subtitle>form using template driven form</mat-card-subtitle>
+        <mat-card-content>
+            <form class="user-form" #userForm="ngForm" (ngSubmit)="(userForm.form.valid)" novalidate>
+                <mat-form-field appearance="outline" class="">
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Name" [(ngModel)]="user.name" name="name" required #name="ngModel">
+                    <mat-error *ngIf="userForm.submitted && userForm.hasError('required', 'name')">Name is required</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="">
+                    <mat-label>Email</mat-label>
+                    <input matInput placeholder="Email">
+                    <mat-error>Hint</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>User Type</mat-label>
+                    <mat-select>
+                        <mat-option value="admin">Admin</mat-option>
+                        <mat-option value="user">User</mat-option>
+                        <mat-option value="author">Author</mat-option>
+                    </mat-select>
+                    <mat-error>This is a required Field</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="">
+                    <mat-label>Password</mat-label>
+                    <input matInput placeholder="Password">
+                    <mat-error>Hint</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="">
+                    <mat-label>Confirm Password</mat-label>
+                    <input matInput placeholder="Confirm Password">
+                    <mat-error>Hint</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="">
+                    <mat-label>Mobile No.</mat-label>
+                    <input matInput placeholder="9876543210">
+                    <mat-error>Hint</mat-error>
+                </mat-form-field>
+                <div class="action-button">
+                    <button mat-button type="submit" (click)="submit()">ADD</button>
+                    <button mat-button type="button">CANCLE</button>
+                </div>
+            </form>
+        </mat-card-content>
+
+
+    </mat-card>
+</div>

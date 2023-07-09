@@ -15,19 +15,15 @@
             <mat-form-field appearance="outline">
                 <mat-label>Name</mat-label>
                 <input matInput formControlName="name">
-                <mat-error *ngIf="userform.submitted">
-                    <span *ngIf="userform.name.errors?.pattern ">Please enter valid input</span>
-                    <span *ngIf="userform.name.errors?.required ">Name should not be empty</span>
-                </mat-error>
-                <!-- <mat-error *ngIf="userform.name.errors?.pattern ">Please enter valid input</mat-error>
-                <mat-error *ngIf="userform.name.errors?.required ">Name should not be empty</mat-error> -->
+                    <mat-error *ngIf="userForm.get('name').hasError('pattern') && isSubmitted">Please enter valid input</mat-error>
+                    <mat-error *ngIf="userForm.get('name').hasError('required')">Name should not be empty</mat-error>
             </mat-form-field>
             {{userform.name?.dirty}}
             <mat-form-field appearance="outline">
                 <mat-label>Email</mat-label>
                 <input matInput formControlName="email">
-                <mat-error *ngIf="userform.email.errors?.pattern">Please enter valid input</mat-error>
-                <mat-error *ngIf="userform.email.errors?.required">Email should not be empty</mat-error>
+                <mat-error *ngIf="userForm.get('email').hasError('pattern') && isSubmitted">Please enter valid input</mat-error>
+                <mat-error *ngIf="userForm.get('email').hasError('required')">Email should not be empty</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>User Type</mat-label>
@@ -36,7 +32,7 @@
                     <mat-option value="user">User</mat-option>
                     <mat-option value="author">Author</mat-option>
                 </mat-select>
-                <mat-error *ngIf="userform.email.errors?.required">This is a required Field</mat-error>
+                <mat-error *ngIf="userForm.get('type').hasError('required')">This is a required Field</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>Enter your password</mat-label>
@@ -44,17 +40,17 @@
                 <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                     <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
-                <mat-error *ngIf="userform.pass.errors?.pattern">
+                <mat-error *ngIf="userForm.get('pass').hasError('pattern')  && isSubmitted">
                     Include at least 8 characters which must have at least <br>
                     one upper case characters (A-Z), one lower case character (a-z), <br>
                     a number (0-9) and a symbol (!, #, $, etc.)
                 </mat-error>
-                <mat-error *ngIf="userform.pass.errors?.required">Password should not be empty</mat-error>
+                <mat-error *ngIf="userForm.get('pass').hasError('required')">Password should not be empty</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>Mobile No.</mat-label>
                 <input matInput formControlName="mob" type="tel">
-                <mat-error *ngIf="userform.mob.errors?.pattern">Please enter valid input</mat-error>
+                <mat-error *ngIf="userForm.get('mob').hasError('pattern')  && isSubmitted">Please enter valid input</mat-error>
             </mat-form-field>
             <div class="selection-div">
                 <mat-form-field appearance="outline">
@@ -91,6 +87,8 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>Address {{i + 1}}</mat-label>
                                 <textarea matInput formControlName="add"></textarea>
+                                <!-- <mat-error *ngIf="userForm.get('addresses' + i + 'add').hasError('required')">Address should not be empty</mat-error> -->
+
                                 <mat-error *ngIf="userform.addresses.errors?.required">Address should not be empty</mat-error>
                             </mat-form-field>
                             <button *ngIf="i > 0" class="removeAddress" type="button" mat-icon-button color="warn" (click)="removeAddress(i)">
@@ -104,7 +102,7 @@
                 </div>
 
             </div>
-            <div *ngIf="userForm.hasError('addressesRequired')">At least one address is required.</div>
+            <!-- <div *ngIf="userForm.hasError('addressesRequired')">At least one address is required.</div> -->
             <mat-card-actions>
                 <button mat-button mat-raised-button color="accent" type="submit">Register</button>
                 <span>

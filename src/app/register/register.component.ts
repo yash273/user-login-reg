@@ -38,16 +38,6 @@ export class RegisterComponent implements OnInit {
     this.isSubmitted = false
     this.createUserFormGroup();
     this.countries = this.dataService.getCountries();
-
-    // this.userForm.valueChanges.subscribe((values : any) => {
-    //   for (const controlName in values) {
-    //     const control = this.userForm.get(controlName);
-    //     if (control && control.dirty) {
-    //       control.updateValueAndValidity();
-    //     }
-    //   }
-    // });
-
   }
 
 
@@ -60,32 +50,17 @@ export class RegisterComponent implements OnInit {
     return this.userForm.get('addresses') as FormArray;
   }
 
-  // createUserFormGroup(): FormGroup {
-  //   return this.userForm = this.formBuilder.group({
-  //     name: ['', [Validators.required, Validators.pattern(nameRegx)]],
-  //     email: ['', [Validators.required, Validators.pattern(emailRegx)]],
-  //     type: ['', [Validators.required]],
-  //     pass: ['', [Validators.required, Validators.pattern(passRegx)]],
-  //     mob: ['', [Validators.pattern(mobRegx)]],
-  //     addresses: this.formBuilder.array([this.createAddressGroup()]),
-  //     country: [this.selectedCountryId, [Validators.required]],
-  //     state: [null, [Validators.required]],
-  //     city: [null, [Validators.required]]
-  //   }
-  //   )
-  // }
-
   createUserFormGroup(): FormGroup {
     return this.userForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.pattern(nameRegx)]],
-      email: ['', [this.requiredIfDirty, Validators.pattern(emailRegx)]],
-      type: ['', [this.requiredIfDirty]],
-      pass: ['', [this.requiredIfDirty, Validators.pattern(passRegx)]],
+      email: ['', [Validators.required, Validators.pattern(emailRegx)]],
+      type: ['', [Validators.required]],
+      pass: ['', [Validators.required, Validators.pattern(passRegx)]],
       mob: ['', [Validators.pattern(mobRegx)]],
       addresses: this.formBuilder.array([this.createAddressGroup()]),
-      country: [this.selectedCountryId, [this.requiredIfDirty]],
-      state: [null, [this.requiredIfDirty]],
-      city: [null, [this.requiredIfDirty]]
+      country: [this.selectedCountryId, [Validators.required]],
+      state: [null, [Validators.required]],
+      city: [null, [Validators.required]]
     }
     )
   }
@@ -100,7 +75,7 @@ export class RegisterComponent implements OnInit {
 
   createAddressGroup(): FormGroup {
     return this.formBuilder.group({
-      add: ['', this.requiredIfDirty],
+      add: ['', Validators.required],
     }
     );
   }
@@ -131,24 +106,6 @@ export class RegisterComponent implements OnInit {
     const stateId = this.userForm.get('state').value;
     this.cities = this.dataService.getCities(stateId);
     this.userForm.get('city')?.setValue(null);
-  }
-
-  setValidators() {
-    this.userForm.get('name').setValidators([Validators.required, Validators.pattern(nameRegx)]);
-    this.userForm.get('email').setValidators([Validators.required, Validators.pattern(emailRegx)]);
-    this.userForm.get('type').setValidators([Validators.required]);
-    this.userForm.get('pass').setValidators([Validators.required, Validators.pattern(passRegx)]);
-    this.userForm.get('country').setValidators([Validators.required]);
-    this.userForm.get('state').setValidators([Validators.required]);
-    this.userForm.get('city').setValidators([Validators.required]);
-
-    this.userForm.get('name').updateValueAndValidity();
-    this.userForm.get('email').updateValueAndValidity();
-    this.userForm.get('type').updateValueAndValidity();
-    this.userForm.get('pass').updateValueAndValidity();
-    this.userForm.get('country').updateValueAndValidity();
-    this.userForm.get('state').updateValueAndValidity();
-    this.userForm.get('city').updateValueAndValidity();
   }
 
   onSubmit() {
