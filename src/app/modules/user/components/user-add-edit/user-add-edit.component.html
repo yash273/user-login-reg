@@ -32,14 +32,20 @@
 
                 <mat-form-field appearance="outline" class="">
                     <mat-label>Password</mat-label>
-                    <input matInput placeholder="Password" type="password" [(ngModel)]="user.pass" name="pass" #pass="ngModel" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$" required>
+                    <input matInput placeholder="Password" [type]="hidePass ? 'password' : 'text'" [(ngModel)]="user.pass" name="pass" #pass="ngModel" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$" required>
+                    <button type="button" mat-icon-button matSuffix (click)="hidePass = !hidePass" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePass">
+                        <mat-icon>{{hidePass ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
                     <mat-error *ngIf="userForm.submitted && userForm.hasError('required','pass')">This is a required Field</mat-error>
                     <mat-error *ngIf="userForm.submitted && userForm.hasError('pattern', 'pass')">Please enter a valid password</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="" *ngIf="!userId">
                     <mat-label>Confirm Password</mat-label>
-                    <input (input)="check($event)" matInput placeholder="Confirm Password" type="password" [(ngModel)]="user.confirmPass" name="confirmPass" #confirmPass="ngModel" required appPasswordMatch="pass">
+                    <input matInput placeholder="Confirm Password" [type]="hideConfirm ? 'password' : 'text'" [(ngModel)]="user.confirmPass" name="confirmPass" #confirmPass="ngModel" required appPasswordMatch="pass">
+                    <button type="button" mat-icon-button matSuffix (click)="hideConfirm = !hideConfirm" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideConfirm">
+                        <mat-icon>{{hideConfirm ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
                     <mat-error *ngIf="userForm.submitted && userForm.hasError('required','confirmPass')">This is a required Field</mat-error>
                     <mat-error *ngIf="userForm.hasError('passwordMatch','confirmPass')">Passwords do not match</mat-error>
                 </mat-form-field>

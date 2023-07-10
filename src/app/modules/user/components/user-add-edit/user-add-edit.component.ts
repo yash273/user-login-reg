@@ -28,7 +28,8 @@ export class UserAddEditComponent implements OnInit {
   selectedState: any;
   userId: number | undefined;
   prevdata: any;
-
+  hidePass = true;
+  hideConfirm = true;
 
   constructor(
     private dataService: DataService,
@@ -81,8 +82,7 @@ export class UserAddEditComponent implements OnInit {
       const { confirmPass, ...formData } = this.user;
       console.log(formData);
       this.userService.saveUser(formData);
-      this.router.navigate(['/user']);
-      this.alertService.showAlert('user Added Successfully', 'success')
+      // this.alertService.showAlert('user Added Successfully', 'success')
     } else {
       this.alertService.showAlert('Please fill all details correctly!', 'error')
     }

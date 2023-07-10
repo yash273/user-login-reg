@@ -36,7 +36,8 @@ export class UserService {
       if (oldEmail === -1) {
         userList.push(data);
         localStorage.setItem('userData', JSON.stringify(userList));
-        this.alertsService.showAlert('Registration Successful!', 'success')
+        this.alertsService.showAlert('Registration Successful!', 'success');
+        this.router.navigate(['/user']);
       }
       else {
         this.alertsService.showAlert('User already Exists! Please register with different Email Id..', 'error')
@@ -45,6 +46,7 @@ export class UserService {
       const userArr = [data];
       localStorage.setItem('userData', JSON.stringify(userArr));
       this.alertsService.showAlert('Registration Successful!', 'success')
+      this.router.navigate(['/user']);
     }
   }
 
