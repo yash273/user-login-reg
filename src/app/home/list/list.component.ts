@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user/user.service';
 import { userObj } from 'src/app/interfaces/user';
 import { AlertService } from 'src/app/alerts/alert.service';
-import { DataService } from 'src/app/shared/services/data.service';
+import { DataService } from '../../../shared/services/data.service';
 
 @Component({
   selector: 'app-userlist',

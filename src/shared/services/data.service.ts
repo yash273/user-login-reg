@@ -38,4 +38,8 @@ export class DataService {
     const city = cities.find((city: City) => city.id === cityId);
     return city ? city.name : '';
   }
+
+  getName(id: string) {
+
+  }
 }

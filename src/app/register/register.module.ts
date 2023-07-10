@@ -4,7 +4,7 @@ import { MaterialModule } from '../material/material.module';
 import { RouterModule } from '@angular/router';
 import { RegisterComponent } from './register.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   declarations: [

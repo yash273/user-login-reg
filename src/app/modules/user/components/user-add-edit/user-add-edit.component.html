@@ -1,46 +1,94 @@
 <div class="user-wrapper">
     <mat-card class="user-card">
-        <mat-card-title>User Add</mat-card-title>
+        <mat-card-title *ngIf="!userId">User Add</mat-card-title>
+        <mat-card-title *ngIf="userId">User Update</mat-card-title>
         <mat-card-subtitle>form using template driven form</mat-card-subtitle>
         <mat-card-content>
-            <form class="user-form" #userForm="ngForm" (ngSubmit)="(userForm.form.valid)" novalidate>
+            <form class="user-form" #userForm="ngForm" (ngSubmit)="(userForm)" novalidate>
+
                 <mat-form-field appearance="outline" class="">
                     <mat-label>Name</mat-label>
-                    <input matInput placeholder="Name" [(ngModel)]="user.name" name="name" required #name="ngModel">
+                    <input matInput placeholder="Name" [(ngModel)]="user.name" name="name" #name="ngModel" pattern="^[A-Za-z\s\-']+$" required>
                     <mat-error *ngIf="userForm.submitted && userForm.hasError('required', 'name')">Name is required</mat-error>
+                    <mat-error *ngIf="userForm.submitted && userForm.hasError('pattern', 'name')">Please enter a valid name</mat-error>
                 </mat-form-field>
+
                 <mat-form-field appearance="outline" class="">
                     <mat-label>Email</mat-label>
-                    <input matInput placeholder="Email">
-                    <mat-error>Hint</mat-error>
+                    <input matInput placeholder="Email" [(ngModel)]="user.email" name="email" #email="ngModel" pattern="^[a-zA-Z0-9_\.-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,3}$" required>
+                    <mat-error *ngIf="userForm.submitted && userForm.hasError('required','email')">Email is required </mat-error>
+                    <mat-error *ngIf="userForm.submitted && userForm.hasError('pattern', 'email')">Please enter a valid email</mat-error>
                 </mat-form-field>
+
                 <mat-form-field appearance="outline">
                     <mat-label>User Type</mat-label>
-                    <mat-select>
-                        <mat-option value="admin">Admin</mat-option>
-                        <mat-option value="user">User</mat-option>
-                        <mat-option value="author">Author</mat-option>
+                    <mat-select [(ngModel)]="user.uType" name="uType" #uType="ngModel" required>
+                        <mat-option *ngFor="let item of userRole" [value]="item.id">
+                            {{item.role}}
+                        </mat-option>
                     </mat-select>
-                    <mat-error>This is a required Field</mat-error>
+                    <mat-error *ngIf="userForm.submitted && userForm.hasError('required','uType')">This is a required Field</mat-error>
                 </mat-form-field>
+
                 <mat-form-field appearance="outline" class="">
                     <mat-label>Password</mat-label>
-                    <input matInput placeholder="Password">
-                    <mat-error>Hint</mat-error>
+                    <input matInput placeholder="Password" type="password" [(ngModel)]="user.pass" name="pass" #pass="ngModel" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$" required>
+                    <mat-error *ngIf="userForm.submitted && userForm.hasError('required','pass')">This is a required Field</mat-error>
+                    <mat-error *ngIf="userForm.submitted && userForm.hasError('pattern', 'pass')">Please enter a valid password</mat-error>
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="">
+
+                <mat-form-field appearance="outline" class="" *ngIf="!userId">
                     <mat-label>Confirm Password</mat-label>
-                    <input matInput placeholder="Confirm Password">
-                    <mat-error>Hint</mat-error>
+                    <input (input)="check($event)" matInput placeholder="Confirm Password" type="password" [(ngModel)]="user.confirmPass" name="confirmPass" #confirmPass="ngModel" required appPasswordMatch="pass">
+                    <mat-error *ngIf="userForm.submitted && userForm.hasError('required','confirmPass')">This is a required Field</mat-error>
+                    <mat-error *ngIf="userForm.hasError('passwordMatch','confirmPass')">Passwords do not match</mat-error>
                 </mat-form-field>
+
                 <mat-form-field appearance="outline" class="">
                     <mat-label>Mobile No.</mat-label>
-                    <input matInput placeholder="9876543210">
-                    <mat-error>Hint</mat-error>
+                    <input matInput placeholder="9876543210" type="number" [(ngModel)]="user.mob" name="mob" #mob="ngModel" pattern="^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$" required>
+                    <mat-error *ngIf="userForm.submitted && userForm.hasError('required','mob')">This is a required Field</mat-error>
+                    <mat-error *ngIf="userForm.submitted && userForm.hasError('pattern', 'mob')">Please enter a valid mobile No.</mat-error>
                 </mat-form-field>
+
+                <div class="selection-div">
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Country</mat-label>
+                        <mat-select name="country" [(ngModel)]="user.country" (selectionChange)="onCountryChange(null)" required>
+                            <mat-option *ngFor="let country of countries" [value]="country.id">
+                                {{ country.name }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="userForm.submitted && userForm.hasError('required','country')">This is a required Field</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>State</mat-label>
+                        <mat-select name="state" [(ngModel)]="user.state" (selectionChange)="onStateChange(null)" required>
+                            <mat-option *ngFor="let state of states" [value]="state.id">
+                                {{ state.name }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="userForm.submitted && userForm.hasError('required','state')">This is a required Field</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>City</mat-label>
+                        <mat-select name="city" [(ngModel)]="user.city" required>
+                            <mat-option *ngFor="let city of cities" [value]="city.id">
+                                {{ city.name }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="userForm.submitted && userForm.hasError('required','city')">This is a required Field</mat-error>
+                    </mat-form-field>
+
+                </div>
+
                 <div class="action-button">
-                    <button mat-button type="submit" (click)="submit()">ADD</button>
-                    <button mat-button type="button">CANCLE</button>
+                    <button mat-stroked-button *ngIf="!userId" type="submit" matTooltip="Add User" color="accent" (click)="submit(userForm)">Add</button>
+                    <button mat-stroked-button *ngIf="userId" type="submit" matTooltip="Update User" color="accent" (click)="update(userForm)">Update</button>
+                    <button mat-stroked-button type="button" matTooltip="Cancel" color="accent" routerLink="/user">Cancel</button>
                 </div>
             </form>
         </mat-card-content>

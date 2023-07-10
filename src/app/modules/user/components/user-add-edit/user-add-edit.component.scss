@@ -2,6 +2,13 @@
     .user-card{margin: auto;width: 100%; max-width: 500px;
         .user-form{display: flex;padding:0 20px;flex-direction: column;
             mat-form-field{width: 100%; margin: 0 auto;}
+            .selection-div{display: flex;justify-content: space-between;width: 100%;
+                mat-form-field {width: 30%;margin: 0;}
+            }
         }
     }
 }
+.user-wrapper .action-button{ display: flex;justify-content: start;
+    .mat-stroked-button {border: 1px solid currentColor;background: #FFF7FA;
+        &:nth-child(2){margin-left: 24px;}}
+} 

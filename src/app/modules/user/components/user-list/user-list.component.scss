@@ -1,0 +1,13 @@
+mat-card{height: fit-content;justify-content: center;}
+.mat-column-Action a{margin: 0 5px;}
+th{ background-color: beige; color: indigo; font-size: 20px; text-align: center; }
+.mat-column-addresses>div{display: flex;justify-content: space-between;align-items: center;max-width: 500px;
+    &>span{margin-right: 5px;}
+    .address-display{white-space: pre-wrap;}
+}
+.user-wrapper{min-height: calc(100vh - 40px);display: flex;padding: 20px;
+    .inner-div{display: flex;width: 90%;margin: auto;flex-direction: column;
+        .top-div{display: flex;width: calc(100% - 40px); background-color: #FFFFFF;margin-bottom: 40px;justify-content: space-between;align-items: center;padding: 20px;
+                box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+            .mat-raised-button {border: 1px solid currentColor;background: #3F51B5;color: #eceef8;}
+        }}}

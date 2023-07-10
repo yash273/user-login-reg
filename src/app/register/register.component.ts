@@ -5,7 +5,7 @@ import { UserService } from '../home/user/user.service';
 import { Router } from '@angular/router';
 import { emailRegx, mobRegx, nameRegx, passRegx } from '../regex-rules/regex';
 import { AlertService } from '../alerts/alert.service';
-import { DataService } from '../shared/services/data.service';
+import { DataService } from '../../shared/services/data.service';
 import { Country, State, City } from '../interfaces/country-state-city';
 
 @Component({

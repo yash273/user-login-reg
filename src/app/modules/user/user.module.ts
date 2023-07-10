@@ -6,18 +6,23 @@ import { UserRoutingModule } from './user-routing.module';
 import { UserAddEditComponent } from './components/user-add-edit/user-add-edit.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { MaterialModule } from 'src/app/material/material.module';
-
+import { PasswordMatchDirective } from './directives/password-match.directive';
+import { SharedModule } from 'src/shared/shared.module';
+import { UserDeleteComponent } from './dialog/user-delete/user-delete.component';
 
 @NgModule({
   declarations: [
     UserAddEditComponent,
-    UserListComponent
+    UserListComponent,
+    PasswordMatchDirective,
+    UserDeleteComponent,
   ],
   imports: [
     CommonModule,
     UserRoutingModule,
     MaterialModule,
-    FormsModule
+    FormsModule,
+    SharedModule
   ]
 })
 export class UserModule { }

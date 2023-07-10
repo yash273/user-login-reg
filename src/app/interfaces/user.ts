@@ -7,3 +7,8 @@ export interface userObj {
     mob?: number;
     addresses: Array<{ add: string }>;
 }
+
+export interface userRoles {
+    id: string;
+    role: string
+}
