@@ -3,6 +3,8 @@ import { UserService } from '../user/user.service';
 import { userObj } from 'src/app/interfaces/user';
 import { AlertService } from 'src/app/alerts/alert.service';
 import { DataService } from '../../../shared/services/data.service';
+import { countries, states, cities } from 'src/app/const/country-state-city';
+import { Country, State, City } from 'src/app/interfaces/country-state-city';
 
 @Component({
   selector: 'app-userlist',
@@ -14,7 +16,9 @@ export class ListComponent implements OnInit {
   userList: any;
   user?: userObj | null;
   currentUser: userObj | null | undefined;
-
+  countries: Country[] = countries;
+  states: State[] = states;
+  cities: City[] = cities;
 
   displayedColumns: string[] = ['srNo', 'name', 'mobile', 'type', 'email', 'addresses', 'country', 'state', 'city', 'Action'];
 
@@ -76,21 +80,4 @@ export class ListComponent implements OnInit {
     return name;
   }
 
-  truncateAddress(address: any): any {
-    const maxLength = 40;
-    if (address.length > maxLength) {
-      return address.slice(0, maxLength) + '...';
-    }
-    return address;
-  }
-
-  getCountryName(countryId: string) {
-    return this.dataService.getCountryName(countryId)
-  }
-  getStateName(stateId: string) {
-    return this.dataService.getStateName(stateId)
-  }
-  getCityName(cityId: string) {
-    return this.dataService.getCityName(cityId)
-  }
 }

@@ -1,11 +1,15 @@
 <div class="user-wrapper">
     <div class="inner-div">
         <div class="top-div">
-            <mat-form-field appearance="fill" class="">
-                <input matInput placeholder="Search" type="text">
+            <mat-form-field appearance="standard" class="search-bar">
+                <mat-label>Search</mat-label>
+                <input matInput placeholder="Search Name, Mobile and Email" (input)="applyFilter($event)" #search>
+                <button mat-icon-button matSuffix *ngIf="search.value" (click)="clearSearchInput()">
+                    <mat-icon>close</mat-icon>
+                </button>
             </mat-form-field>
 
-            <button mat-raised-button class="add-button" routerLink="/user/add" matTooltip="Add User">
+            <button mat-raised-button class="add-button" routerLink="/user/add" matTooltip="Add User" matTooltipClass="custom-tooltip">
                 <mat-icon>add</mat-icon>
                 Add
             </button>
@@ -14,62 +18,88 @@
         <mat-card>
             <div class="table-res">
 
-                <table mat-table [dataSource]="userList" class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
                     <ng-container matColumnDef="srNo">
                         <th mat-header-cell *matHeaderCellDef> Sr .No. </th>
-                        <td mat-cell *matCellDef="let user;  let i= index"> {{i + 1}}</td>
+                        <td mat-cell *matCellDef="let user;  let i= index">
+                            <!-- {{i + 1}} -->
+                            {{user.id}}
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef> Name </th>
-                        <td mat-cell *matCellDef="let user"> {{ user.name | truncate : 20}} </td>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                        <td mat-cell *matCellDef="let user">
+                            <span [matTooltip]="user.name.length > 20 ? user.name : null" matTooltipClass="custom-tooltip">
+                                <!-- {{ user.name | truncate : 20}} -->
+                                <span class="truncate-text">{{ user.name }}</span>
+                            </span>
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="mobile">
-                        <th mat-header-cell *matHeaderCellDef> Mobile </th>
-                        <td mat-cell *matCellDef="let user"> {{user.mob}} </td>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Mobile </th>
+                        <td mat-cell *matCellDef="let user">
+                            {{user.mob}}
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="email">
-                        <th mat-header-cell *matHeaderCellDef> Email </th>
-                        <td mat-cell *matCellDef="let user"> {{user.email | lowercase}} </td>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+                        <td mat-cell *matCellDef="let user">
+                            {{user.email | lowercase}}
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="type">
                         <th mat-header-cell *matHeaderCellDef> Type </th>
-                        <td mat-cell *matCellDef="let user"> {{user.uType | nameById : userRoles : 'role'}} </td>
+                        <td mat-cell *matCellDef="let user">
+                            {{user.uType | nameById : userRoles : 'role'}}
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="country">
                         <th mat-header-cell *matHeaderCellDef> Country </th>
-                        <td mat-cell *matCellDef="let user"> {{ user.country | nameById : countries : 'name' }}</td>
+                        <td mat-cell *matCellDef="let user">
+                            {{ user.country | nameById : countries : 'name' }}
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="state">
                         <th mat-header-cell *matHeaderCellDef> State </th>
-                        <td mat-cell *matCellDef="let user"> {{ user.state | nameById : states : 'name'}}</td>
+                        <td mat-cell *matCellDef="let user">
+                            {{ user.state | nameById : states : 'name'}}
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="city">
                         <th mat-header-cell *matHeaderCellDef> City </th>
-                        ] <td mat-cell *matCellDef="let user"> {{ user.city | nameById : cities : 'name'}}</td>
+                        ] <td mat-cell *matCellDef="let user">
+                            {{ user.city | nameById : cities : 'name'}}
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="Action">
                         <th mat-header-cell *matHeaderCellDef> Action </th>
                         <td mat-cell *matCellDef="let user">
-                            <a [routerLink]="['/user/update',user.id]"><mat-icon color="primary" matTooltip="Edit User">edit</mat-icon></a>
-                            <a (click)="delete(user.id)"><mat-icon color="warn" matTooltip="Delete User">delete</mat-icon></a>
+                            <button mat-icon-button [routerLink]="['/user/update',user.id]"><mat-icon color="primary" matTooltip="Edit User" matTooltipClass="custom-tooltip">edit</mat-icon></button>
+                            <button mat-icon-button (click)="delete(user.id)"><mat-icon color="warn" matTooltip="Delete User" matTooltipClass="custom-tooltip">delete</mat-icon></button>
                         </td>
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="10">No data matching the filter "{{search.value}}"</td>
+                    </tr>
+
                 </table>
 
             </div>
+            <mat-paginator [pageSizeOptions]="[5, 10, 25]" aria-label="Select page of users"></mat-paginator>
+
         </mat-card>
     </div>
 </div>

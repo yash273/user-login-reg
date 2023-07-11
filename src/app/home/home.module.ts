@@ -5,6 +5,7 @@ import { MaterialModule } from '../material/material.module';
 import { UserModule } from './user/user.module'
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home.component';
+import { SharedModule } from 'src/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { HomeComponent } from './home.component';
     MaterialModule,
     UserModule,
     RouterModule,
+    SharedModule
   ]
 })
 export class HomeModule { }

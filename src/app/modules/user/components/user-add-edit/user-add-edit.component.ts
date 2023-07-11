@@ -90,7 +90,7 @@ export class UserAddEditComponent implements OnInit {
   }
 
   populateForm(uId: number) {
-    this.prevdata = this.userService.getdata(uId);
+    this.prevdata = this.userService.getData(uId);
     this.user = this.prevdata;
     this.onCountryChange('update');
     this.onStateChange('update');

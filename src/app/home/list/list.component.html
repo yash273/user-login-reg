@@ -20,7 +20,7 @@
 
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef> Name </th>
-                <td mat-cell *matCellDef="let user"> {{ truncateName(user?.name) }} </td>
+                <td mat-cell *matCellDef="let user"> {{ user.name | truncate : 20 }} </td>
             </ng-container>
 
             <ng-container matColumnDef="mobile">
@@ -40,17 +40,17 @@
 
             <ng-container matColumnDef="country">
                 <th mat-header-cell *matHeaderCellDef> Country </th>
-                <td mat-cell *matCellDef="let user"> {{ getCountryName(user.country) }}</td>
+                <td mat-cell *matCellDef="let user">{{ user.country | nameById : countries : 'name' }}</td>
             </ng-container>
 
             <ng-container matColumnDef="state">
                 <th mat-header-cell *matHeaderCellDef> State </th>
-                <td mat-cell *matCellDef="let user"> {{ getStateName(user.state) }}</td>
+                <td mat-cell *matCellDef="let user"> {{ user.state | nameById : states : 'name' }}</td>
             </ng-container>
 
             <ng-container matColumnDef="city">
                 <th mat-header-cell *matHeaderCellDef> City </th>
-                ] <td mat-cell *matCellDef="let user"> {{ getCityName(user.city) }}</td>
+                ] <td mat-cell *matCellDef="let user"> {{ user.city | nameById : cities : 'name' }}</td>
             </ng-container>
 
             <ng-container matColumnDef="addresses">
@@ -58,7 +58,7 @@
                 <td mat-cell *matCellDef="let user;let i = index">
                     <ng-container *ngFor="let address of user.addresses; let j = index">
                         <div>
-                            <div>{{ truncateAddress(address.add) }}</div>
+                            <div>{{ address.add | truncate : 40 }}</div>
                             <button mat-icon-button color="accent" *ngIf="address.add.length > 40" (click)="onViewAddress(address.add,j)">
                                 <mat-icon>arrow_drop_down_circle</mat-icon>
                             </button>

@@ -18,6 +18,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MatExpansionModule } from '@angular/material/expansion'
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSortModule } from '@angular/material/sort';
 
 const matModules = [
   MatButtonModule,
@@ -37,7 +38,8 @@ const matModules = [
   MatSlideToggleModule,
   NgxMaterialTimepickerModule,
   MatExpansionModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatSortModule
 ];
 
 @NgModule({

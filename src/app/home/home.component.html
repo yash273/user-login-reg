@@ -2,10 +2,12 @@
     <mat-toolbar-row>
         <span>Home</span>
         <span class="example-spacer"></span>
-        <button mat-button mat-raised-button color="warn" routerLink="/chart">Chart</button>
-        <button mat-button mat-raised-button color="accent" routerLink="/postlist">JSON API</button>
-        <button mat-button mat-raised-button color="warn" routerLink="/weather">Weather</button>
-        <button mat-button mat-raised-button color="accent" routerLink="/products">Products</button>
+        <button mat-stroked-button routerLink="/chart">Chart</button>
+        <button mat-stroked-button routerLink="/postlist">JSON API</button>
+        <button mat-stroked-button routerLink="/weather">Weather</button>
+        <button mat-stroked-button routerLink="/products">Products</button>
+        <button mat-stroked-button routerLink="/user">User</button>
+        <button mat-stroked-button routerLink="/employee">Employee</button>
 
         <button mat-raised-button color="warn" (click)="onLogout()">Logout</button>
     </mat-toolbar-row>

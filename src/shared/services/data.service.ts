@@ -24,22 +24,4 @@ export class DataService {
     return this.cities.filter((city: City) => city.stateId === stateId);
   }
 
-  getCountryName(countryId: string): string {
-    const country = countries.find((country: Country) => country.id === countryId);
-    return country ? country.name : '';
-  }
-
-  getStateName(stateId: string): string {
-    const state = states.find((state: State) => state.id === stateId);
-    return state ? state.name : '';
-  }
-
-  getCityName(cityId: string): string {
-    const city = cities.find((city: City) => city.id === cityId);
-    return city ? city.name : '';
-  }
-
-  getName(id: string) {
-
-  }
 }

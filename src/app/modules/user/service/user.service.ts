@@ -50,7 +50,7 @@ export class UserService {
     }
   }
 
-  getdata(id: number) {
+  getData(id: number) {
     const oldRecords = localStorage.getItem('userData');
     if (oldRecords !== null) {
       const userList = JSON.parse(oldRecords);
