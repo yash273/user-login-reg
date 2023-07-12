@@ -12,16 +12,12 @@
                     </button>
                 </mat-form-field>
             </span>
-            <!-- <button mat-raised-button class="add-button" routerLink="/user/add" matTooltip="Add User" matTooltipClass="custom-tooltip">
-                <mat-icon>add</mat-icon>
-                Add
-            </button> -->
 
         </div>
         <mat-card>
             <div class="table-res">
 
-                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
 
                     <ng-container matColumnDef="srNo">
                         <th mat-header-cell *matHeaderCellDef>ID </th>

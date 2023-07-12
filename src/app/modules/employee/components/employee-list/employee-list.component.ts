@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { AlertService } from 'src/app/alerts/alert.service';
 import { countries, states, cities } from 'src/app/const/country-state-city';
@@ -29,11 +29,11 @@ export class EmployeeListComponent implements OnInit {
   itemsPerPage = this.pageSizeOption[0];
   currentPage = 1;
 
-  pageSize: number = 5;
-  totalItems: number = 0;
+  pageSize: number = 2;
+  totalItems: number = 7;
 
   startIndex = 0;
-  endIndex = 10;
+  endIndex = 2;
   // endIndex = this.itemsPerPage;
 
   displayedColumns: string[] = ['srNo', 'name', 'mob', 'type', 'email', 'country', 'state', 'city', 'Action'];
@@ -43,22 +43,22 @@ export class EmployeeListComponent implements OnInit {
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
-    this.setDataSource();
+    // this.setDataSource();
   }
 
   @ViewChild(MatSort) set content(content: ElementRef) {
     this.sort = content;
-    if (this.sort) {
-      this.dataSource.sort = this.sort;
-      this.dataSource.sortData = (data, sort) => this.customSort(data, sort);
-    }
+    // if (this.sort) {
+    //   this.dataSource.sort = this.sort;
+    //   this.dataSource.sortData = (data, sort) => this.customSort(data, sort);
+    // }
   }
 
-  setDataSource() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    this.dataSource.sortData = (data, sort) => this.customSort(data, sort);
-  }
+  // setDataSource() {
+  //   this.dataSource.paginator = this.paginator;
+  //   this.dataSource.sort = this.sort;
+  //   this.dataSource.sortData = (data, sort) => this.customSort(data, sort);
+  // }
 
   @ViewChild('search') searchInput!: ElementRef;
 
@@ -91,8 +91,6 @@ export class EmployeeListComponent implements OnInit {
       }
       return false
     };
-    console.log(this.userList)
-    console.log("ip: ", this.itemsPerPage, " cp: ", this.currentPage);
   }
 
   pageChangeEvent(event: PageEvent) {
@@ -100,27 +98,34 @@ export class EmployeeListComponent implements OnInit {
     this.currentPage = event.pageIndex + 1;
     this.startIndex = (this.currentPage - 1) * this.pageSize;
     this.endIndex = this.startIndex + this.pageSize
-    console.log("CurrentPageIndex: ", event.pageIndex);
-    console.log("pageSize: ", event.pageSize);
-    console.log("previousPageIndex: ", event.previousPageIndex);
     this.paginationData();
   }
 
   getTotalDataCount(): number {
     const oldRecords = localStorage.getItem('userData');
     if (oldRecords !== null) {
-      const userList = JSON.parse(oldRecords);
-      return userList.length;
+      this.dataList = JSON.parse(oldRecords);
+      return this.dataList.length;
     }
     return 0;
   }
 
+  dataList!: User[]
+  sortData(sort: Sort) {
+    console.log(sort)
+    console.log(sort.active, "active");
+    console.log(sort.direction, "dir");
+    this.customSort(this.dataList, sort)
+  }
 
-  customSort(data: User[], sort: MatSort): User[] {
+
+  customSort(data: User[], sort: Sort): User[] {
+    // debugger
+    console.log(data)
     const active = sort.active;
     const direction = sort.direction;
 
-    if (!active || direction === '') {
+    if (!sort.active || sort.direction === '') {
       return data;
     }
 
