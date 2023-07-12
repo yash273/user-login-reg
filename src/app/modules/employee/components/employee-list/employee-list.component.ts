@@ -9,7 +9,7 @@ import { Country, State, City } from 'src/app/interfaces/country-state-city';
 import { userRoles } from 'src/app/interfaces/user';
 import { User } from 'src/app/modules/user/model/user.model';
 import { userRole } from 'src/shared/constants/user-role';
-// import { timeStamp } from 'console';
+import { EmployeeService } from '../../service/employee.service';
 
 @Component({
   selector: 'app-employee-list',
@@ -17,7 +17,7 @@ import { userRole } from 'src/shared/constants/user-role';
   styleUrls: ['./employee-list.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class EmployeeListComponent implements OnInit, AfterViewInit {
+export class EmployeeListComponent implements OnInit {
 
   userList: User[];
   countries: Country[] = countries;
@@ -25,55 +25,128 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
   cities: City[] = cities;
   userRoles: userRoles[] = userRole;
 
-  pageSizeOption = [5, 10, 25];
-  itemsPerPage: number = this.pageSizeOption[0];
+  pageSizeOption = [2, 4, 6, 10];
+  itemsPerPage = this.pageSizeOption[0];
   currentPage = 1;
-  totalCount = 0;
 
-  displayedColumns: string[] = ['srNo', 'name', 'mobile', 'type', 'email', 'country', 'state', 'city', 'Action'];
+  pageSize: number = 5;
+  totalItems: number = 0;
+
+  startIndex = 0;
+  endIndex = 10;
+  // endIndex = this.itemsPerPage;
+
+  displayedColumns: string[] = ['srNo', 'name', 'mob', 'type', 'email', 'country', 'state', 'city', 'Action'];
   dataSource!: MatTableDataSource<User>;
+  private paginator!: MatPaginator;
+  private sort: any;
 
-  @ViewChild(MatSort) sort: MatSort | null = null;
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    this.paginator = mp;
+    this.setDataSource();
+  }
+
+  @ViewChild(MatSort) set content(content: ElementRef) {
+    this.sort = content;
+    if (this.sort) {
+      this.dataSource.sort = this.sort;
+      this.dataSource.sortData = (data, sort) => this.customSort(data, sort);
+    }
+  }
+
+  setDataSource() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.dataSource.sortData = (data, sort) => this.customSort(data, sort);
+  }
+
   @ViewChild('search') searchInput!: ElementRef;
 
   constructor(
     private userService: UserService,
     private alertService: AlertService,
+    private employeeService: EmployeeService
   ) {
     this.userList = [];
   }
 
   ngOnInit(): void {
     const oldRecords = localStorage.getItem('userData');
+    this.totalItems = this.getTotalDataCount();
+    console.log(this.totalItems)
     if (oldRecords !== null) {
-      this.userList = JSON.parse(oldRecords);
-
-      this.userList.sort((a, b) => {
-        if (a.id && b.id) {
-          return a.id - b.id;
-        }
-        return 0;
-      });
-
-      this.dataSource = new MatTableDataSource<User>(this.userList);
-
-      this.totalCount = this.userList.length
-
-      this.dataSource.filterPredicate = (data: User, filter: any): boolean => {
-        if (data.name && data.mob && data.email) {
-          return data.name.toLowerCase().includes(filter) ||
-            data.mob.toString().toLowerCase().includes(filter) ||
-            data.email.toLowerCase().includes(filter)
-        }
-        return false
-      };
+      this.paginationData();
     }
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  paginationData() {
+
+    this.userList = this.employeeService.getPaginatedData(this.startIndex, this.endIndex);
+    this.dataSource = new MatTableDataSource<User>(this.userList);
+    this.dataSource.filterPredicate = (data: User, filter: any): boolean => {
+      if (data.name && data.mob && data.email) {
+        return data.name.toLowerCase().includes(filter) ||
+          data.mob.toString().toLowerCase().includes(filter) ||
+          data.email.toLowerCase().includes(filter)
+      }
+      return false
+    };
+    console.log(this.userList)
+    console.log("ip: ", this.itemsPerPage, " cp: ", this.currentPage);
+  }
+
+  pageChangeEvent(event: PageEvent) {
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex + 1;
+    this.startIndex = (this.currentPage - 1) * this.pageSize;
+    this.endIndex = this.startIndex + this.pageSize
+    console.log("CurrentPageIndex: ", event.pageIndex);
+    console.log("pageSize: ", event.pageSize);
+    console.log("previousPageIndex: ", event.previousPageIndex);
+    this.paginationData();
+  }
+
+  getTotalDataCount(): number {
+    const oldRecords = localStorage.getItem('userData');
+    if (oldRecords !== null) {
+      const userList = JSON.parse(oldRecords);
+      return userList.length;
+    }
+    return 0;
+  }
+
+
+  customSort(data: User[], sort: MatSort): User[] {
+    const active = sort.active;
+    const direction = sort.direction;
+
+    if (!active || direction === '') {
+      return data;
+    }
+
+    return data.sort((a, b) => {
+      let comparison = 0;
+
+      switch (active) {
+        case 'name':
+          if (a.name && b.name)
+            comparison = a.name.localeCompare(b.name);
+          break;
+        case 'mob':
+          if (a.mob && b.mob)
+            comparison = a.mob - b.mob;
+          break;
+        case 'email':
+          if (a.email && b.email)
+            comparison = a.email.localeCompare(b.email);
+          break;
+      }
+      if (direction === 'desc') {
+        comparison = -comparison;
+      }
+
+      return comparison;
+    });
   }
 
   delete(id: number) {
@@ -123,10 +196,4 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     this.searchInput.nativeElement.value = '';
     this.applyFilter(null);
   }
-
-  pageChangeEvent(event: PageEvent) {
-    console.log(event)
-  }
-
-
 }

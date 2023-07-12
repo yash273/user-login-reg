@@ -13,8 +13,8 @@ export class AuthGuard implements CanActivate, CanLoad {
   canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const user = this.userService.userValue
     if (user) {
-      // this.router.navigate(['/home'])
-      this.router.navigate(['/user'])
+      this.router.navigate(['/home'])
+      // this.router.navigate(['/user'])
       return false;
     }
     return true;

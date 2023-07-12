@@ -16,7 +16,6 @@ import { SharedModule } from 'src/shared/shared.module';
     EmployeeRoutingModule,
     MaterialModule,
     SharedModule
-
   ]
 })
 export class EmployeeModule { }
