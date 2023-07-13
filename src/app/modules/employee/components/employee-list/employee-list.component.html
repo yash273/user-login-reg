@@ -6,7 +6,7 @@
 
                 <mat-form-field appearance="standard" class="search-bar">
                     <mat-label>Search</mat-label>
-                    <input matInput placeholder="Search Name, Mobile or Email" (input)="applyFilter($event)" #search>
+                    <input matInput placeholder="Search Name, Mobile or Email" (keyup)="applyFilter($event)" #search>
                     <button mat-icon-button matSuffix *ngIf="search.value" (click)="clearSearchInput()">
                         <mat-icon>close</mat-icon>
                     </button>
@@ -17,7 +17,7 @@
         <mat-card>
             <div class="table-res">
 
-                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort (matSortChange)="sortData($event)">
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort (matSortChange)="customSort($event)">
 
                     <ng-container matColumnDef="srNo">
                         <th mat-header-cell *matHeaderCellDef>ID </th>
@@ -82,7 +82,6 @@
                         <th mat-header-cell *matHeaderCellDef> Action </th>
                         <td mat-cell *matCellDef="let user">
                             <button mat-icon-button [routerLink]="['/user/update',user.id]"><mat-icon color="primary" matTooltip="Edit User" matTooltipClass="custom-tooltip">edit</mat-icon></button>
-                            <button mat-icon-button (click)="delete(user.id)"><mat-icon color="warn" matTooltip="Delete User" matTooltipClass="custom-tooltip">delete</mat-icon></button>
                         </td>
                     </ng-container>
 
