@@ -68,20 +68,24 @@ export class EmployeeListComponent implements OnInit {
   }
 
   pageChangeEvent(event: PageEvent) {
-    debugger
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex + 1;
     this.startIndex = (this.currentPage - 1) * this.pageSize;
     this.endIndex = this.startIndex + this.pageSize;
 
     if (this.filterValue !== '') {
-      this.totalItems = this.allFilteredData.length;
-      this.nextFilteredData = this.xyz(this.startIndex, this.endIndex, this.paginationSort, this.allFilteredData);
-      this.dataSource = new MatTableDataSource<User>(this.nextFilteredData);
-      console.log(this.allFilteredData)
+
+      if (this.startIndex >= this.totalItems) {
+        this.startIndex = 0;
+        this.endIndex = this.itemsPerPage;
+      }
+
+      this.nextFilteredData = this.getFilteredData(this.startIndex, this.endIndex, this.paginationSort, this.allFilteredData);
+      this.dataSource.data = this.nextFilteredData
     } else {
       this.paginationData();
     }
+
   }
 
   getTotalDataCount(): number {
@@ -94,8 +98,13 @@ export class EmployeeListComponent implements OnInit {
   }
 
   customSort(sort: Sort) {
+
     this.paginationSort = sort;
-    const data = this.dataList.slice();
+
+    let data = this.dataList.slice();
+    if (this.filterValue !== '') {
+      data = this.allFilteredData.slice();
+    }
 
     if (!sort.active || sort.direction === '') {
       data.sort((a: any, b: any) => {
@@ -134,9 +143,9 @@ export class EmployeeListComponent implements OnInit {
 
 
   applyFilter(event: Event | null) {
-    debugger
     this.filterValue = event ? (event.target as HTMLInputElement).value : '';
     if (this.filterValue !== '') {
+      //if there is some filterValue
       this.filteredData = this.dataList.filter((item: User) => {
         return (
           item.name?.toLowerCase().includes(this.filterValue.toLowerCase()) ||
@@ -145,33 +154,29 @@ export class EmployeeListComponent implements OnInit {
         );
       });
 
-      // this.totalItems = this.filteredData.length;
       this.allFilteredData = this.filteredData;
       this.totalItems = this.allFilteredData.length;
-      // this.startIndex = 0;
-      // this.endIndex = this.itemsPerPage;
-      this.filteredData = this.xyz(this.startIndex, this.endIndex, this.paginationSort, this.filteredData);
-      this.dataSource = new MatTableDataSource<User>(this.filteredData);
 
-    } else {
-
-      this.totalItems = this.getTotalDataCount()
-      this.dataSource = new MatTableDataSource<User>(this.userList);
+      if (this.startIndex >= this.totalItems) {
+        this.startIndex = 0;
+        this.endIndex = this.itemsPerPage;
+      }
+      this.filteredData = this.getFilteredData(this.startIndex, this.endIndex, this.paginationSort, this.filteredData);
+      this.paginator.firstPage();
+      this.dataSource.data = this.filteredData;
     }
-    // if (this.dataSource.paginator) {
-    //   this.dataSource.paginator.firstPage();
-    // }
-
+    else {
+      this.totalItems = this.getTotalDataCount();
+    }
   }
 
   clearSearchInput() {
     this.searchInput.nativeElement.value = '';
     this.applyFilter(null);
-    // this.paginationData()
+    this.paginationData();
   }
 
-
-  xyz(startIndex: number, endIndex: number, sort: Sort, data: User[]): User[] {
+  getFilteredData(startIndex: number, endIndex: number, sort: Sort, data: User[]): User[] {
     return this.employeeService.sortingFunction(startIndex, endIndex, sort, data)
   }
 }

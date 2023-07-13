@@ -23,7 +23,6 @@ export class EmployeeService {
   }
 
   sortingFunction(startIndex: number, endIndex: number, sort: Sort, data: User[]) {
-    debugger
     if (sort.direction === '' || !sort.active) {
       data.sort((a: User, b: User) => {
         if (a.id && b.id) {
