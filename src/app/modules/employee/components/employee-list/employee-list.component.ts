@@ -45,7 +45,7 @@ export class EmployeeListComponent implements OnInit {
   dataSource!: MatTableDataSource<User>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  // @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('search') searchInput!: ElementRef;
 
   constructor(
@@ -81,7 +81,7 @@ export class EmployeeListComponent implements OnInit {
       }
 
       this.nextFilteredData = this.getFilteredData(this.startIndex, this.endIndex, this.paginationSort, this.allFilteredData);
-      this.dataSource.data = this.nextFilteredData
+      this.dataSource.data = this.nextFilteredData;
     } else {
       this.paginationData();
     }

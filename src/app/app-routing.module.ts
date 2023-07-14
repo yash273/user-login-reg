@@ -54,6 +54,11 @@ const routes: Routes = [
     canLoad: [AuthGuard]
   },
   {
+    path: 'users',
+    loadChildren: () => import('./modules/users/users.module').then(m => m.UsersModule),
+    canLoad: [AuthGuard]
+  },
+  {
     path: '**',
     redirectTo: '/login',
     pathMatch: 'full'
