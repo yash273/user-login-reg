@@ -17,7 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class UserAddEditComponent implements OnInit {
 
-  @ViewChild('userForm') userForm!: NgForm;
+  // @ViewChild('userForm') userForm!: NgForm;
   user = new User();
   userRole = userRole;
   selectedCountryId!: string;

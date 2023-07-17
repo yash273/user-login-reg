@@ -1,15 +1,12 @@
-export interface Users {
-    id: number,
-    username: string,
-    firstName: string,
-    lastName?: string,
-    email: string,
-    phone: string,
-    address: {
-        street?: string,
-        city?: string,
-        state?: string,
-        postalCode?: string,
-        country: string
-    }
+export class Users {
+    id: number | undefined;
+    username: string | undefined;
+    firstName: string | undefined;
+    lastName?: string | undefined;
+    email: string | undefined;
+    phone: string | undefined;
+    country: string | undefined;
+
 }
+
+

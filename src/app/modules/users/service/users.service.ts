@@ -13,7 +13,7 @@ export class UsersService {
     private http: HttpClient
   ) { }
 
-  getUser(id: number): Observable<Users> {
+  getUser(id: number | undefined): Observable<Users> {
     return this.http.get<Users>
       (environment.baseURL +
         `users/${id}`
@@ -27,4 +27,23 @@ export class UsersService {
       )
   }
 
+  addUser(data: Users): Observable<Users> {
+    return this.http.post<Users>
+      (environment.baseURL +
+        `users`, data)
+  }
+
+  updateUser(data: Users, id: number | undefined): Observable<Users> {
+    return this.http.put<Users>
+      (environment.baseURL +
+        `users/${id}`, data
+      )
+  }
+
+  deleteUser(id: number | undefined): Observable<Users> {
+    return this.http.delete<Users>
+      (environment.baseURL +
+        `users/${id}`
+      );
+  }
 }

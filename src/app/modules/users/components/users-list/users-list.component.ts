@@ -1,14 +1,19 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { UsersService } from '../../service/users.service';
 import { Users } from '../../model/users';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
+import { UsersDeleteComponent } from '../../dialog/users-delete/users-delete.component';
+import { AlertService } from 'src/app/alerts/alert.service';
 
 @Component({
   selector: 'app-users-list',
   templateUrl: './users-list.component.html',
-  styleUrls: ['./users-list.component.scss']
+  styleUrls: ['./users-list.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+
 })
 export class UsersListComponent implements OnInit {
 
@@ -33,7 +38,9 @@ export class UsersListComponent implements OnInit {
   @ViewChild('search') searchInput!: ElementRef;
 
   constructor(
-    private usersService: UsersService
+    private usersService: UsersService,
+    public dialog: MatDialog,
+    private alertService: AlertService
   ) { }
 
   ngOnInit(): void {
@@ -62,14 +69,17 @@ export class UsersListComponent implements OnInit {
   }
 
   applyFilter(event: Event | null) {
-    this.filterValue = event ? (event.target as HTMLInputElement).value : '';
-    this.usersService.getUserListFilter(this.sortItem, this.sortDirection, this.currentPage, this.itemsPerPage, this.filterValue).subscribe(
-      (res) => {
-        this.paginator.firstPage();
-        this.dataSource.data = res;
-        this.totalItems = res.length;
-      }
-    );
+    let x = event ? (event.target as HTMLInputElement).value : '';
+    if (x.length > 2 || x == '') {
+      this.filterValue = x;
+      this.usersService.getUserListFilter(this.sortItem, this.sortDirection, this.currentPage, this.itemsPerPage, this.filterValue).subscribe(
+        (res) => {
+          this.paginator.firstPage();
+          this.dataSource.data = res;
+          this.totalItems = res.length;
+        }
+      )
+    }
   }
 
   clearSearchInput() {
@@ -77,4 +87,25 @@ export class UsersListComponent implements OnInit {
     this.applyFilter(null);
     this.getUserData();
   }
+
+  delete(id: number) {
+    const dialogRef = this.dialog.open(UsersDeleteComponent, {
+      width: '400px',
+      disableClose: true,
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.usersService.deleteUser(id).subscribe(
+          (res) => {
+            if (res) {
+              this.alertService.showAlert('User Deleted Successfully !', 'success');
+              this.getUserData();
+            } else {
+              this.alertService.showAlert('Something Went Wrong !', 'error')
+            }
+          });
+      }
+    });
+  }
+
 }

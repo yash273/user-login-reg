@@ -6,12 +6,18 @@
 
                 <mat-form-field appearance="standard" class="search-bar">
                     <mat-label>Search</mat-label>
-                    <input matInput placeholder="Search Name, Mobile or Email" (keyup)="applyFilter($event)" #search>
+                    <input matInput placeholder="Search Username" (keyup)="applyFilter($event)" #search>
                     <button mat-icon-button matSuffix *ngIf="search.value" (click)="clearSearchInput()">
                         <mat-icon>close</mat-icon>
                     </button>
                 </mat-form-field>
             </span>
+
+            <button mat-raised-button class="add-button" routerLink="/users/add" matTooltip="Add User" matTooltipClass="custom-tooltip">
+                <mat-icon>add</mat-icon>
+                Add
+            </button>
+
 
         </div>
         <mat-card>
@@ -59,7 +65,7 @@
                     <ng-container matColumnDef="country">
                         <th mat-header-cell *matHeaderCellDef> Country </th>
                         <td mat-cell *matCellDef="let user">
-                            {{ user.address.country }}
+                            {{ user.country }}
                         </td>
                     </ng-container>
 
@@ -68,7 +74,13 @@
                     <ng-container matColumnDef="Action">
                         <th mat-header-cell *matHeaderCellDef> Action </th>
                         <td mat-cell *matCellDef="let user">
-                            <!-- <button mat-icon-button [routerLink]="['/user/update',user.id]"><mat-icon color="primary" matTooltip="Edit User" matTooltipClass="custom-tooltip">edit</mat-icon></button> -->
+                            <button mat-icon-button [routerLink]="['/users/update',user.id]">
+                                <mat-icon color="primary" matTooltip="Edit User" matTooltipClass="custom-tooltip">edit</mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="delete(user.id)">
+                                <mat-icon color="warn" matTooltip="delete User" matTooltipClass="custom-tooltip">delete</mat-icon>
+                            </button>
+
                         </td>
                     </ng-container>
 
