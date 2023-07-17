@@ -8,6 +8,10 @@ import { userRoles } from 'src/app/interfaces/user';
 import { User } from 'src/app/modules/user/model/user.model';
 import { userRole } from 'src/shared/constants/user-role';
 import { EmployeeService } from '../../service/employee.service';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatDialog } from '@angular/material/dialog';
+import { EmployeeDeleteComponent } from '../../dialog/employee-delete/employee-delete.component';
+import { AlertService } from 'src/app/alerts/alert.service';
 
 @Component({
   selector: 'app-employee-list',
@@ -41,17 +45,38 @@ export class EmployeeListComponent implements OnInit {
   nextFilteredData: User[] = [];
   allFilteredData: User[] = [];
 
-  displayedColumns: string[] = ['srNo', 'name', 'mob', 'type', 'email', 'country', 'state', 'city', 'Action'];
+  displayedColumns: string[] = ['select', 'srNo', 'name', 'mob', 'type', 'email', 'country', 'state', 'city', 'Action'];
   dataSource!: MatTableDataSource<User>;
+  selection = new SelectionModel<User>(true, []);
+
+  selectedRow !: User['name']
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  // @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('search') searchInput!: ElementRef;
 
   constructor(
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private dialog: MatDialog,
+    private alertService: AlertService
   ) {
     this.userList = [];
+  }
+
+  isAllSelected() {
+
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.data.forEach((row: User) => this.selection.select(row));
+  }
+
+  getSelectedNames(): string {
+    return this.selection.selected.map(row => row.name).join(', ');
   }
 
   ngOnInit(): void {
@@ -85,7 +110,7 @@ export class EmployeeListComponent implements OnInit {
     } else {
       this.paginationData();
     }
-
+    this.selection.clear();
   }
 
   getTotalDataCount(): number {
@@ -144,7 +169,8 @@ export class EmployeeListComponent implements OnInit {
 
   applyFilter(event: Event | null) {
     this.filterValue = event ? (event.target as HTMLInputElement).value : '';
-    if (this.filterValue !== '') {
+
+    if (this.filterValue !== '' && this.filterValue.length > 2) {
       //if there is some filterValue
       this.filteredData = this.dataList.filter((item: User) => {
         return (
@@ -179,4 +205,39 @@ export class EmployeeListComponent implements OnInit {
   getFilteredData(startIndex: number, endIndex: number, sort: Sort, data: User[]): User[] {
     return this.employeeService.sortingFunction(startIndex, endIndex, sort, data)
   }
+
+  deleteAll() {
+    if (this.selection.selected.length > 0) {
+      const dialogRef = this.dialog.open(EmployeeDeleteComponent, {
+        width: '400px',
+        disableClose: true,
+        data: this.selection.selected
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          const selectedRows = this.selection.selected;
+
+          const oldRecords = localStorage.getItem('userData');
+          if (oldRecords !== null) {
+            const userList = JSON.parse(oldRecords);
+
+            selectedRows.forEach(row => {
+              const idToDelete = row.id;
+              userList.splice(userList.findIndex((a: any) => a.id == idToDelete), 1);
+              localStorage.setItem('userData', JSON.stringify(userList))
+            });
+          }
+          this.alertService.showAlert('Data deleted Successfully!', 'success')
+          this.totalItems = this.getTotalDataCount();
+          this.paginationData();
+          this.selection.clear();
+        }
+      });
+    } else {
+      this.alertService.showAlert('You have not selected any row to perform action! Please select any', 'default')
+    }
+  }
+
+
 }

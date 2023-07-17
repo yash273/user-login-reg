@@ -1,0 +1,67 @@
+<div class="user-wrapper">
+    <div class="inner-div">
+        <div class="top-div">
+            <span>
+                <span class="page-title">Users list With JSON API</span>
+
+                <mat-form-field appearance="standard" class="search-bar">
+                    <mat-label>Search</mat-label>
+                    <input matInput placeholder="Search Username" (keyup)="applyFilter($event)" #search>
+                    <button mat-icon-button matSuffix *ngIf="search.value" (click)="clearSearchInput()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
+            </span>
+
+            <button mat-raised-button class="add-button" routerLink="/users/add" matTooltip="Add User" matTooltipClass="custom-tooltip">
+                <mat-icon>add</mat-icon>
+                Add
+            </button>
+
+
+        </div>
+        <mat-card>
+            <div class="table-res">
+
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort matSortDisableClear (matSortChange)="onSortChange($event)">
+
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID </th>
+                        <td mat-cell *matCellDef="let user">
+                            {{user.id}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="username">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> User Name</th>
+                        <td mat-cell *matCellDef="let user">
+                            {{user.username}}
+                        </td>
+                    </ng-container>
+
+
+
+
+
+
+
+
+
+
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="10">No data matching the "{{search.value}}"</td>
+                    </tr>
+
+                </table>
+
+            </div>
+            <mat-paginator [length]="totalItems" [pageSize]="itemsPerPage" [pageSizeOptions]="pageSizeOption" [showFirstLastButtons]="true" (page)="onPageChange($event)">
+            </mat-paginator>
+        </mat-card>
+    </div>
+</div>

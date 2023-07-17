@@ -19,6 +19,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MatExpansionModule } from '@angular/material/expansion'
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSortModule } from '@angular/material/sort';
+import { MatMenuModule } from '@angular/material/menu';
 
 const matModules = [
   MatButtonModule,
@@ -39,7 +40,8 @@ const matModules = [
   NgxMaterialTimepickerModule,
   MatExpansionModule,
   MatTooltipModule,
-  MatSortModule
+  MatSortModule,
+  MatMenuModule
 ];
 
 @NgModule({
