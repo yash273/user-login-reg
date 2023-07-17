@@ -104,5 +104,8 @@ export class UserListComponent implements OnInit {
   //   });
   // }
 
+  clickedRow(id: number) {
+    console.log("id : ", id)
+  }
 
 }

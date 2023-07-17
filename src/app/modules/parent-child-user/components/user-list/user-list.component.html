@@ -2,7 +2,7 @@
     <div class="inner-div">
         <div class="top-div">
             <span>
-                <span class="page-title">Users list With JSON API</span>
+                <span class="page-title">Expandible Users list With JSON API</span>
 
                 <mat-form-field appearance="standard" class="search-bar">
                     <mat-label>Search</mat-label>
@@ -39,19 +39,8 @@
                         </td>
                     </ng-container>
 
-
-
-
-
-
-
-
-
-
-
-
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="clickedRow(row.id)"></tr>
 
                     <tr class="mat-row" *matNoDataRow>
                         <td class="mat-cell" colspan="10">No data matching the "{{search.value}}"</td>
