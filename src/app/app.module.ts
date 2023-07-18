@@ -8,11 +8,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AlertComponent } from './alerts/alert.component';
 import { HttpClientModule } from '@angular/common/http';
 import { WeatherModule } from './weather/weather.module';
-
+import { SharedModule } from 'src/shared/shared.module';
+import { HeaderComponent } from 'src/shared/components/header/header.component';
+// 
 @NgModule({
   declarations: [
     AppComponent,
     AlertComponent,
+    // HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -21,7 +24,8 @@ import { WeatherModule } from './weather/weather.module';
     MaterialModule,
     ReactiveFormsModule,
     HttpClientModule,
-    WeatherModule
+    WeatherModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]

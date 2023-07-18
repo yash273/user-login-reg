@@ -1,0 +1,20 @@
+<mat-toolbar color="primary" class="mat-elevation-z6">
+    <mat-toolbar-row>
+        <span>Home</span>
+        <span class="example-spacer"></span>
+        <button mat-raised-button [matMenuTriggerFor]="menu" color="accent">Select Color</button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item disabled>Select Any color to change bg</button>
+            <button mat-menu-item>
+                <div class="red-color">
+                    <b>RED</b>
+                </div>
+            </button>
+            <button mat-menu-item>
+                <div class="green-color">
+                    <b>GREEN</b>
+                </div>
+            </button>
+        </mat-menu>
+    </mat-toolbar-row>
+</mat-toolbar>

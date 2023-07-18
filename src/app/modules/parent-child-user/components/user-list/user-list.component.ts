@@ -4,30 +4,39 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { AlertService } from 'src/app/alerts/alert.service';
+import { User } from 'src/app/modules/user/model/user.model';
 import { UsersDeleteComponent } from 'src/app/modules/users/dialog/users-delete/users-delete.component';
 import { UsersService } from 'src/app/modules/users/service/users.service';
+import { DeleteUserComponent } from '../../dialog/delete-user/delete-user.component';
+import { Users } from 'src/app/modules/users/model/users';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
-  styleUrls: ['./user-list.component.scss']
+  styleUrls: ['./user-list.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', animate('250ms ease-in-out')),
+    ]),
+  ],
+
 })
 export class UserListComponent implements OnInit {
 
 
-  displayedColumns: string[] = ['id', 'username'];
+  displayedColumns: string[] = ['id', 'username', 'expand'];
   dataSource = new MatTableDataSource();
-
+  expandedElement!: Users | null;
   pageSizeOption = [5, 10, 20];
   itemsPerPage = this.pageSizeOption[0];
   currentPage = 1;
-
-  pageSize: number = this.itemsPerPage
+  pageSize: number = this.itemsPerPage;
   totalItems: number = 20;
-
   sortDirection: string = 'asc';
   sortItem: string = 'id';
-
   filterValue: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -84,28 +93,30 @@ export class UserListComponent implements OnInit {
     this.getUserData();
   }
 
-  // delete(id: number) {
-  //   const dialogRef = this.dialog.open(UsersDeleteComponent, {
-  //     width: '400px',
-  //     disableClose: true,
-  //   });
-  //   dialogRef.afterClosed().subscribe((result) => {
-  //     if (result) {
-  //       this.usersService.deleteUser(id).subscribe(
-  //         (res) => {
-  //           if (res) {
-  //             this.alertService.showAlert('User Deleted Successfully !', 'success');
-  //             this.getUserData();
-  //           } else {
-  //             this.alertService.showAlert('Something Went Wrong !', 'error')
-  //           }
-  //         });
-  //     }
-  //   });
-  // }
-
-  clickedRow(id: number) {
-    console.log("id : ", id)
+  delete(userDetails: User) {
+    const dialogRef = this.dialog.open(DeleteUserComponent, {
+      width: '400px',
+      disableClose: true,
+      data: userDetails
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.usersService.deleteUser(userDetails.id).subscribe(
+          (res) => {
+            if (res) {
+              this.alertService.showAlert('User Deleted Successfully !', 'success');
+              this.getUserData();
+              this.paginator.firstPage();
+            } else {
+              this.alertService.showAlert('Something Went Wrong !', 'error')
+            }
+          });
+      }
+    });
   }
 
+  uID: number = 0;
+  getUserId(id: number) {
+    this.uID = id;
+  }
 }

@@ -23,7 +23,7 @@
         <mat-card>
             <div class="table-res">
 
-                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort matSortDisableClear (matSortChange)="onSortChange($event)">
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort matSortDisableClear (matSortChange)="onSortChange($event)" multiTemplateDataRows>
 
                     <ng-container matColumnDef="id">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>ID </th>
@@ -39,8 +39,25 @@
                         </td>
                     </ng-container>
 
+                    <ng-container matColumnDef="expand">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let user">
+                            <mat-icon *ngIf="expandedElement !== user">keyboard_arrow_down</mat-icon>
+                            <mat-icon *ngIf="expandedElement === user">keyboard_arrow_up</mat-icon>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="expandedDetail">
+                        <td mat-cell *matCellDef="let user" [attr.colspan]="displayedColumns.length">
+                            <div class="example-element-detail" [@detailExpand]="user == expandedElement ? 'expanded' : 'collapsed'">
+                                <app-user-details *ngIf="user == expandedElement" (userInfo)="delete($event)" [userId]="user.id"></app-user-details>
+                            </div>
+                        </td>
+                    </ng-container>
+
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="clickedRow(row.id)"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.example-expanded-row]="expandedElement === row" (click)="expandedElement = expandedElement === row ? null : row;" matTooltip="Click to expand row"></tr>
+                    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
 
                     <tr class="mat-row" *matNoDataRow>
                         <td class="mat-cell" colspan="10">No data matching the "{{search.value}}"</td>
@@ -49,8 +66,11 @@
                 </table>
 
             </div>
+
             <mat-paginator [length]="totalItems" [pageSize]="itemsPerPage" [pageSizeOptions]="pageSizeOption" [showFirstLastButtons]="true" (page)="onPageChange($event)">
             </mat-paginator>
+
         </mat-card>
     </div>
+
 </div>

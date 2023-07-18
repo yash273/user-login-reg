@@ -4,12 +4,14 @@ import { DataService } from './services/data.service';
 import { MaterialModule } from '../app/material/material.module';
 import { NameByIdPipe } from './pipes/name-by-id.pipe';
 import { TruncatePipe } from './pipes/truncate.pipe';
+import { HeaderComponent } from './components/header/header.component';
 
 
 @NgModule({
   declarations: [
     NameByIdPipe,
     TruncatePipe,
+    HeaderComponent,
   ],
   imports: [
     CommonModule,
@@ -21,6 +23,7 @@ import { TruncatePipe } from './pipes/truncate.pipe';
   exports: [
     NameByIdPipe,
     TruncatePipe,
+    HeaderComponent
   ]
 })
 export class SharedModule { }

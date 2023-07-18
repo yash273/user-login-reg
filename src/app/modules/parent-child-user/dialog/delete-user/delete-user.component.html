@@ -1,1 +1,9 @@
-<p>delete-user works!</p>
+<h1 mat-dialog-title>Delete User</h1>
+<div mat-dialog-content>
+    Would you like to delete data of <strong>{{data.firstName}}</strong> ?
+</div>
+<div mat-dialog-actions>
+    <button mat-button mat-dialog-close cdkFocusInitial [mat-dialog-close]="'yes'">Yes</button>
+    <button mat-button mat-dialog-close>No</button>
+
+</div>

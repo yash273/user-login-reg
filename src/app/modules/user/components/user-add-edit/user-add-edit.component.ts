@@ -80,9 +80,7 @@ export class UserAddEditComponent implements OnInit {
 
     if (userForm.valid) {
       const { confirmPass, ...formData } = this.user;
-      console.log(formData);
       this.userService.saveUser(formData);
-      // this.alertService.showAlert('user Added Successfully', 'success')
     } else {
       this.alertService.showAlert('Please fill all details correctly!', 'error')
     }
