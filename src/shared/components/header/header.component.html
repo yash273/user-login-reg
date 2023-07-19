@@ -2,17 +2,15 @@
     <mat-toolbar-row>
         <span>Home</span>
         <span class="example-spacer"></span>
-        <button mat-raised-button [matMenuTriggerFor]="menu" color="accent">Select Color</button>
+
+        <button mat-raised-button [matMenuTriggerFor]="menu" color="accent">Select Color
+            <mat-icon>arrow_drop_down</mat-icon>
+        </button>
         <mat-menu #menu="matMenu">
             <button mat-menu-item disabled>Select Any color to change bg</button>
-            <button mat-menu-item>
-                <div class="red-color">
-                    <b>RED</b>
-                </div>
-            </button>
-            <button mat-menu-item>
-                <div class="green-color">
-                    <b>GREEN</b>
+            <button mat-menu-item *ngFor="let option of colorOptions" (click)="changeBackgroundColor(option.color)">
+                <div class="color-picker" [style.background]="option.color">
+                    <em>{{ option.label }}</em>
                 </div>
             </button>
         </mat-menu>

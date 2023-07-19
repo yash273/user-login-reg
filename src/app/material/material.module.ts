@@ -21,6 +21,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSortModule } from '@angular/material/sort';
 import { MatMenuModule } from '@angular/material/menu';
 
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 const matModules = [
   MatButtonModule,
   MatIconModule,
@@ -41,7 +43,8 @@ const matModules = [
   MatExpansionModule,
   MatTooltipModule,
   MatSortModule,
-  MatMenuModule
+  MatMenuModule,
+  DragDropModule
 ];
 
 @NgModule({

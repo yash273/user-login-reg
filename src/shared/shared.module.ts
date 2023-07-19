@@ -5,7 +5,7 @@ import { MaterialModule } from '../app/material/material.module';
 import { NameByIdPipe } from './pipes/name-by-id.pipe';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { HeaderComponent } from './components/header/header.component';
-
+import { ThemeService } from './services/theme.service'
 
 @NgModule({
   declarations: [
@@ -18,7 +18,8 @@ import { HeaderComponent } from './components/header/header.component';
     MaterialModule
   ],
   providers: [
-    DataService
+    DataService,
+    ThemeService
   ],
   exports: [
     NameByIdPipe,

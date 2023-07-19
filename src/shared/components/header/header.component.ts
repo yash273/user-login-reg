@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { colorOptions } from 'src/shared/constants/colors';
+import { ThemeService } from 'src/shared/services/theme.service';
+
+
 
 @Component({
   selector: 'app-header',
@@ -7,9 +11,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  colorOptions = colorOptions;
+
+  constructor(
+    private themeService: ThemeService
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  changeBackgroundColor(color: string) {
+    this.themeService.updateBackgroundColor(color);
   }
 
 }

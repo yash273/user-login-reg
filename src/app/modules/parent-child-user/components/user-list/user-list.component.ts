@@ -10,6 +10,7 @@ import { UsersService } from 'src/app/modules/users/service/users.service';
 import { DeleteUserComponent } from '../../dialog/delete-user/delete-user.component';
 import { Users } from 'src/app/modules/users/model/users';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ThemeService } from 'src/shared/services/theme.service';
 
 @Component({
   selector: 'app-user-list',
@@ -38,6 +39,7 @@ export class UserListComponent implements OnInit {
   sortDirection: string = 'asc';
   sortItem: string = 'id';
   filterValue: string = '';
+  bgColor: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild('search') searchInput!: ElementRef;
@@ -45,11 +47,20 @@ export class UserListComponent implements OnInit {
   constructor(
     private usersService: UsersService,
     public dialog: MatDialog,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private themeService: ThemeService
   ) { }
 
   ngOnInit(): void {
     this.getUserData();
+  }
+
+  backGroundColor$ = this.themeService.backgroundColor$.subscribe((res) => {
+    this.bgColor = res;
+  })
+
+  getColorCount(color: string): number {
+    return this.themeService.getColorCount(color);
   }
 
   getUserData() {

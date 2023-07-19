@@ -1,4 +1,4 @@
-<div class="user-wrapper">
+<div class="user-wrapper" [style.background]="bgColor">
     <div class="inner-div">
         <div class="top-div">
             <span>
@@ -18,8 +18,13 @@
                 Add
             </button>
 
-
         </div>
+        <ng-container *ngIf="getColorCount(bgColor) > 0">
+            <span class="selected-bg-info">
+                clicked <em>{{getColorCount(bgColor)}}</em> times
+            </span>
+        </ng-container>
+
         <mat-card>
             <div class="table-res">
 

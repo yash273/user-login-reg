@@ -64,6 +64,11 @@ const routes: Routes = [
     canLoad: [AuthGuard]
   },
   {
+    path: 'create-form',
+    loadChildren: () => import('./modules/dynamic-form/dynamic-form.module').then(m => m.DynamicFormModule),
+    canLoad: [AuthGuard]
+  },
+  {
     path: '**',
     redirectTo: '/login',
     pathMatch: 'full'
