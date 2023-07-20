@@ -3,9 +3,10 @@
 .inner-container{display: flex;flex-direction: row;justify-content: space-between;width: 100%;}
 .user-wrapper{min-height: calc(100vh - 110px);display: flex;padding: 20px;}
 .user-card{width: 100%; max-width: 500px;    height: fit-content}
-.card{display: flex;justify-content: space-between;
+.card{display: flex;justify-content: space-between;align-items: center;
     &:nth-child(n + 2){margin-top: 10px;}
 }
 .user-wrapper .action-button{ display: flex;justify-content: flex-start;
     .mat-stroked-button:nth-child(2){margin-left: 24px;}
 } 
+.card-text{display: flex; align-items: center;}

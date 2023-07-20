@@ -5,7 +5,7 @@ import { DynamicFormRoutingModule } from './dynamic-form-routing.module';
 import { CreateFormComponent } from './components/create-form/create-form.component';
 import { ViewFormComponent } from './components/view-form/view-form.component';
 import { MaterialModule } from 'src/app/material/material.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -17,7 +17,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     DynamicFormRoutingModule,
     MaterialModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class DynamicFormModule { }

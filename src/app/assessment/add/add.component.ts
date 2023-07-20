@@ -154,47 +154,6 @@ export class AddComponent implements OnInit {
     );
   }
 
-  // patchFormValues() {
-  //   const newValues = this.pData
-
-
-  //   this.assessmentForm.patchValue({
-  //     template: newValues.template,
-  //     bodyRegion: newValues.bodyRegion,
-  //     description: newValues.description
-  //   });
-
-  //   const measurementsFormArray = this.assessmentForm.get(
-  //     'measurements'
-  //   ) as FormArray;
-  //   measurementsFormArray.clear();
-  //   newValues.measurements.forEach((measurement) => {
-  //     measurementsFormArray.push(this.createMeasurement(measurement));
-  //   });
-
-  //   const categoryFormArray = this.assessmentForm.get(
-  //     'category'
-  //   ) as FormArray;
-  //   categoryFormArray.clear();
-  //   newValues.category.forEach((category) => {
-  //     categoryFormArray.push(this.createCategory(category));
-  //   });
-  // }
-
-  // createCategory(category?: any) {
-  //   return this.formBuilder.group({
-  //     catName: [category?.catName || '', [Validators.required]],
-  //     assessment: this.formBuilder.array([
-  //       this.createAssessments(category?.assessment)
-  //     ])
-  //   });
-  // }
-
-
-
-  // Call the `patchFormValues()` function whenever you want to patch the new values
-
-
   categoryValid(index: number) {
     const isTempValid = this.assessmentForm.get('template')?.valid;
     const isBRValid = this.assessmentForm.get('bodyRegion')?.valid;
