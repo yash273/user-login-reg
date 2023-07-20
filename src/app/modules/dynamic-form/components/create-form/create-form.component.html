@@ -1,77 +1,64 @@
-<form [formGroup]="form">
-    <div class="user-wrapper">
-        <div class="inner-container">
-            <mat-card class="user-card">
-                <mat-form-field appearance="fill">
-                    <mat-label>Form Name</mat-label>
-                    <input matInput type="text" formControlName="formName">
-                </mat-form-field>
-                <div class="create-field-container " formArrayName="formDetails">
-                    <ng-container *ngFor="let fd of formDetailsControls.controls; let i = index">
-                        <ng-container [formGroupName]="i">
+<div class="user-wrapper">
+    <mat-card class="user-card">
+        <form [formGroup]="form">
+            <mat-form-field appearance="standard">
+                <mat-label>Form Name</mat-label>
+                <input matInput type="text" formControlName="formName">
+            </mat-form-field>
+            <div class="create-field-container " formArrayName="formDetails">
+                <ng-container *ngFor="let fd of formDetailsControls.controls; let i = index">
+                    <ng-container [formGroupName]="i">
 
-                            <mat-form-field appearance="standard">
-                                <mat-label>Field Type</mat-label>
-                                <mat-select formControlName="type" (selectionChange)="setIndex(i)">
-                                    <mat-option value="text">Text</mat-option>
-                                    <mat-option value="textarea">Textarea</mat-option>
-                                    <mat-option value="select">Dropdown</mat-option>
-                                    <mat-option value="radio">Radio</mat-option>
-                                    <mat-option value="checkbox">Checkbox</mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                        <mat-form-field appearance="standard">
+                            <mat-label>Field Type</mat-label>
+                            <mat-select formControlName="type">
+                                <mat-option value="text">Text</mat-option>
+                                <mat-option value="textarea">Textarea</mat-option>
+                                <mat-option value="select">Dropdown</mat-option>
+                                <mat-option value="radio">Radio</mat-option>
+                                <mat-option value="checkbox">Checkbox</mat-option>
+                            </mat-select>
+                        </mat-form-field>
 
-                            <mat-form-field appearance="standard">
-                                <mat-label>Label</mat-label>
-                                <input matInput type="text" formControlName="label">
-                            </mat-form-field>
+                        <mat-form-field appearance="standard">
+                            <mat-label>Label</mat-label>
+                            <input matInput type="text" formControlName="label">
+                        </mat-form-field>
 
-                            <mat-checkbox formControlName="required">Required</mat-checkbox>
+                        <mat-checkbox formControlName="required">Required</mat-checkbox>
 
-                            <div *ngIf="['select', 'radio', 'checkbox'].includes(form.get('formDetails.'+ i + '.type')?.value)">
+                        <div *ngIf="isSpecialFieldType(i)">
 
-                                <div formArrayName="options">
-                                    <div *ngFor="let optionCtrl of newFieldOptions.controls; let j = index">
-                                        <mat-form-field appearance="fill">
-                                            <mat-label>Option {{ j + 1 }}</mat-label>
-                                            <input matInput type="text" formControlName={{j}}>
+                            <div formArrayName="options">
+                                <div *ngFor="let optionCtrl of newFieldOptions.controls; let j = index">
+                                    <mat-form-field appearance="standard">
+                                        <mat-label>Option {{ j + 1 }}</mat-label>
+                                        <input matInput type="text" formControlName={{j}}>
 
-                                        </mat-form-field>
-                                        <button mat-icon-button color="warn" (click)="removeOption(j)">
-                                            <mat-icon>delete</mat-icon>
-                                        </button>
-                                        {{i}}
-                                    </div>
+                                    </mat-form-field>
+                                    <button mat-icon-button color="warn" (click)="removeOption(j)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                    {{i}}
                                 </div>
-
-                                <button mat-raised-button color="primary" (click)="addOption()">Add Option</button>
-
                             </div>
 
-                        </ng-container>
+                            <button mat-raised-button color="primary" (click)="addOption()">Add Option</button>
 
+                        </div>
+                        <button *ngIf="i > 0" mat-stroked-button color="warn" (click)="remove(i)">remove Field</button>
 
 
                     </ng-container>
-                    <div class="action-button">
-                        <button mat-stroked-button color="primary" (click)="addField()">Add Field</button>
-                        <button mat-stroked-button color="accent" type="submit" (click)="submitForm()">Submit</button>
-                    </div>
-                </div>
-            </mat-card>
 
-            <!-- <div class="created-form-fields" cdkDropList (cdkDropListDropped)="drop($event)">
-                <h4>preview</h4>
-                <ng-container *ngFor="let item of formFields; let i = index">
-                    <mat-card class="card" cdkDragBoundary=".created-form-fields" cdkDrag>
-                        <span class="card-text">
-                            <mat-icon>drag_indicator</mat-icon>
-                            <span><strong>{{item.order}})</strong> {{item.type}} :: {{item.label}}</span>
-                        </span>
-                        <button mat-flat-button color="accent" (click)="removeField(item)">remove</button>
-                    </mat-card>
+
                 </ng-container>
-            </div> -->
-        </div>
-    </div>
-</form>
+                <div class="action-button">
+                    <button mat-stroked-button color="primary" (click)="addField()">Add Field</button>
+                    <button mat-stroked-button color="accent" type="submit" (click)="submitForm()">Submit</button>
+                </div>
+            </div>
+        </form>
+
+    </mat-card>
+</div>

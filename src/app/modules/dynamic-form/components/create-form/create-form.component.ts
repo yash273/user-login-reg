@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormField } from '../../model/form-field';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl, AbstractControl } from '@angular/forms';
+import { DynamicFormService } from '../../service/dynamic-form.service';
 
 @Component({
   selector: 'app-create-form',
@@ -16,7 +17,10 @@ export class CreateFormComponent implements OnInit {
   newOption: string = '';
   order: number = 1;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    private fb: FormBuilder,
+    private formService: DynamicFormService
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -45,68 +49,34 @@ export class CreateFormComponent implements OnInit {
     return this.form.get('formDetails') as FormArray;
   }
 
+  detailIndex !: number
   get newFieldOptions(): FormArray {
-    return this.form.get('formDetails.' + this.xxx + '.options') as FormArray;
+    return this.form.get('formDetails.' + this.detailIndex + '.options') as FormArray;
   }
 
-  index = 1;
-  xxx = 0;
-
-  setIndex(index: number) {
-    this.xxx = index;
-    console.log(this.xxx)
+  isSpecialFieldType(index: number): boolean {
+    const field = this.form.get(`formDetails.${index}.type`);
+    this.detailIndex = index;
+    return ['select', 'radio', 'checkbox'].includes(field?.value);
   }
+
   addOption() {
-    const x = this.index;
-    if (this.form.get(`newField.options.${x}`)?.value.trim() !== '') {
-      const newOption = this.form.get(`newField.options.${x}`)?.value.trim();
-      this.newFieldOptions.push(this.fb.control(newOption));
-      this.form.get(`newField.options.${x}`)?.reset();
-      this.index = x + 1;
-    }
+    this.newFieldOptions.push(this.fb.control(''))
   }
 
   removeOption(index: number) {
     this.newFieldOptions.removeAt(index);
   }
 
-  newId: number = 1;
-
   addField() {
-    const formDetailsArray = this.form.get('formDetails') as FormArray;
-
-    formDetailsArray.controls.forEach((formDetailsGroup: AbstractControl, index: number) => {
-      if (formDetailsGroup instanceof FormGroup) {
-        if (!formDetailsGroup.get('id')) {
-          formDetailsGroup.addControl('id', this.fb.control(''));
-          formDetailsGroup.get('id')?.setValue(this.newId);
-          this.newId = formDetailsGroup.get('id')?.value + 1;
-        }
-      }
-    });
-    console.log(this.form.value);
-    formDetailsArray.push(this.formDetails());
-  }
-
-  removeField(field: FormField) {
-    const index = this.formFields.indexOf(field);
-    if (index !== -1) {
-      this.formFields.splice(index, 1);
-      this.formFields.forEach((item) => {
-        item.order = this.formFields.indexOf(item) + 1;
-      });
-    }
+    this.formDetailsControls.push(this.formDetails());
   }
 
   submitForm() {
-    console.log(this.form.value);
+    this.formService.saveFormData(this.form)
   }
 
-  drop(event: CdkDragDrop<FormField[]>) {
-    moveItemInArray(this.formFields, event.previousIndex, event.currentIndex);
-    this.formFields.forEach((item) => {
-      item.order = this.formFields.indexOf(item) + 1;
-    });
+  remove(index: number) {
+    this.formDetailsControls.removeAt(index)
   }
-
 }

@@ -1,1 +1,39 @@
-<p>view-form works!</p>
+<div class="user-wrapper">
+    <mat-card class="user-card">
+        <div class="user-form">
+            {{formData.formName}}
+            <ng-container *ngFor="let item of formData.formDetails">
+                <ng-container *ngIf="item.type == 'select'">
+                    <mat-form-field appearance="standard">
+                        <mat-label>{{item.label}}</mat-label>
+                        <mat-select>
+                            <mat-option *ngFor="let op of item.options" [value]="op">{{op}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </ng-container>
+                <ng-container *ngIf="item.type == 'textarea'">
+                    <mat-form-field appearance="standard">
+                        <mat-label>{{item.label}}</mat-label>
+                        <textarea matInput></textarea>
+                    </mat-form-field>
+                </ng-container>
+                <ng-container *ngIf="item.type == 'text'">
+                    <mat-form-field appearance="standard">
+                        <mat-label>{{item.label}}</mat-label>
+                        <input matInput>
+                    </mat-form-field>
+                </ng-container>
+                <ng-container *ngIf="item.type == 'radio'">
+                    <mat-label>{{item.label}}</mat-label>
+                    <mat-radio-group>
+                        <mat-radio-button *ngFor="let op of item.options" [value]="op">{{op}}</mat-radio-button>
+                    </mat-radio-group>
+                </ng-container>
+                <ng-container *ngIf="item.type == 'checkbox'">
+                    <mat-label>{{item.label}}</mat-label>
+                    <mat-checkbox *ngFor="let op of item.options">{{op}}</mat-checkbox>
+                </ng-container>
+            </ng-container>
+        </div>
+    </mat-card>
+</div>

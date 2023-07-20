@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DynamicFormService } from '../../service/dynamic-form.service';
 
 @Component({
   selector: 'app-view-form',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ViewFormComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private formService: DynamicFormService
+  ) { }
+
+  formData: any;
 
   ngOnInit(): void {
+    this.formData = this.formService.getData();
+    console.log(this.formData)
   }
 
 }
