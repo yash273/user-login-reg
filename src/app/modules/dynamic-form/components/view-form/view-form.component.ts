@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DynamicFormService } from '../../service/dynamic-form.service';
 import { FormData } from '../../model/form-field';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AlertService } from 'src/app/alerts/alert.service';
 
 @Component({
   selector: 'app-view-form',
@@ -12,7 +13,8 @@ export class ViewFormComponent implements OnInit {
 
   constructor(
     private formService: DynamicFormService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private alertService: AlertService
   ) { }
 
   formData!: FormData;
@@ -27,23 +29,36 @@ export class ViewFormComponent implements OnInit {
 
   setFormControls() {
     for (const item of this.formData.formDetails) {
-      let control: FormControl;
+      debugger
+      const control = this.formBuilder.control('', []);
+      if (item.required && item.type !== 'checkbox') {
+        this.userForm.get(item.label)?.setValidators(Validators.required);
+        this.userForm.get(item.label)?.updateValueAndValidity();
+      }
       if (item.type === 'checkbox') {
         item.options?.forEach(element => {
-          this.userForm.addControl(element, this.formBuilder.control(false));
+          this.userForm.addControl(element, this.formBuilder.control(false, []));
         });
-        control = this.formBuilder.control('');
-      } else {
-        control = this.formBuilder.control('', item.required ? Validators.required : []);
       }
-      this.userForm.addControl(item.label, control);
+      else {
+        this.userForm.addControl(item.label, control);
+      }
     }
-    console.log(this.userForm);
+    console.log(this.userForm.controls)
   }
 
 
+
   submit() {
-    console.log(this.userForm.valid)
+    if (this.userForm.valid) {
+      this.alertService.showAlert('valid', 'success')
+
+    } else {
+      this.alertService.showAlert('invalid', 'error')
+
+    }
+    console.log(this.userForm)
+
     console.log(this.userForm.value)
   }
 

@@ -51,26 +51,6 @@
 
                         </ng-container>
 
-                        <!-- <ng-container *ngIf="isCheckbox(i)">
-                        
-                            <div class="options" formArrayName="options">
-                                <div class="item" *ngFor="let item of newFieldOptions.controls; let j = index">
-                                    <mat-form-field appearance="standard">
-                                        <mat-label>Option {{ j + 1 }}</mat-label>
-                                        <input matInput type="text" formControlName={{j}}>
-                                        <mat-error *ngIf="form.get('formDetails.'+ i +'.options.' + j)?.hasError('required')">This field is required.</mat-error>
-                                    </mat-form-field>
-                                    <button mat-icon-button color="warn" type="button" *ngIf="optionsLength > 1" (click)="removeOption(j)">
-                                        <mat-icon>delete</mat-icon>
-                                    </button>
-                                </div>
-                            </div>
-                        
-                            <button mat-raised-button color="primary" type="button" (click)="addOption()">Add Option</button>
-                        
-                        </ng-container> -->
-
-
                         <button class="remove-field-btn" *ngIf="formDetailLength > 1" mat-raised-button color="warn" type="button" (click)="remove(i)">
                             <mat-icon>delete</mat-icon>
                         </button>
