@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormField } from '../../model/form-field';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { FormGroup, FormBuilder, Validators, FormArray, FormControl, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { DynamicFormService } from '../../service/dynamic-form.service';
+import { AlertService } from 'src/app/alerts/alert.service';
 
 @Component({
   selector: 'app-create-form',
@@ -12,36 +11,34 @@ import { DynamicFormService } from '../../service/dynamic-form.service';
 export class CreateFormComponent implements OnInit {
 
   form!: FormGroup;
-  formFields: FormField[] = [];
-  newField: FormField = {} as FormField;
-  newOption: string = '';
-  order: number = 1;
 
   constructor(
-    private fb: FormBuilder,
-    private formService: DynamicFormService
+    private formBuilder: FormBuilder,
+    private formService: DynamicFormService,
+    private alertService: AlertService
   ) { }
 
   ngOnInit(): void {
     this.initForm();
-    this.newField.order = this.order;
   }
 
   initForm() {
-    this.form = this.fb.group({
-      formName: [''],
-      formDetails: this.fb.array([
+    this.form = this.formBuilder.group({
+      formName: ['', Validators.required],
+      formDetails: this.formBuilder.array([
         this.formDetails()
       ]),
     });
   }
 
   formDetails() {
-    return this.fb.group({
+    return this.formBuilder.group({
       type: ['', Validators.required],
       label: ['', Validators.required],
       required: [false],
-      options: this.fb.array([this.fb.control('')]),
+      options: this.formBuilder.array([
+        this.formBuilder.control('')
+      ]),
     })
   }
 
@@ -50,8 +47,17 @@ export class CreateFormComponent implements OnInit {
   }
 
   detailIndex !: number
+
   get newFieldOptions(): FormArray {
     return this.form.get('formDetails.' + this.detailIndex + '.options') as FormArray;
+  }
+
+  get formDetailLength() {
+    return this.formDetailsControls.length;
+  }
+
+  get optionsLength() {
+    return this.newFieldOptions.length;
   }
 
   isSpecialFieldType(index: number): boolean {
@@ -59,9 +65,13 @@ export class CreateFormComponent implements OnInit {
     this.detailIndex = index;
     return ['select', 'radio', 'checkbox'].includes(field?.value);
   }
+  isCheckbox(index: number): boolean {
+    const field = this.form.get(`formDetails.${index}.type`);
+    return ['checkbox'].includes(field?.value);
+  }
 
   addOption() {
-    this.newFieldOptions.push(this.fb.control(''))
+    this.newFieldOptions.push(this.formBuilder.control('', Validators.required));
   }
 
   removeOption(index: number) {
@@ -73,7 +83,12 @@ export class CreateFormComponent implements OnInit {
   }
 
   submitForm() {
-    this.formService.saveFormData(this.form)
+    if (this.form.valid) {
+      this.formService.saveFormData(this.form);
+      this.alertService.showAlert('saved', 'success');
+    } else {
+      this.alertService.showAlert('please fill required data', 'error');
+    }
   }
 
   remove(index: number) {

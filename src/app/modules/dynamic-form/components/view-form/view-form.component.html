@@ -1,39 +1,70 @@
 <div class="user-wrapper">
     <mat-card class="user-card">
-        <div class="user-form">
-            {{formData.formName}}
+        <form class="user-form" [formGroup]="userForm">
+            <h1>{{formData.formName}}</h1>
             <ng-container *ngFor="let item of formData.formDetails">
-                <ng-container *ngIf="item.type == 'select'">
-                    <mat-form-field appearance="standard">
-                        <mat-label>{{item.label}}</mat-label>
-                        <mat-select>
-                            <mat-option *ngFor="let op of item.options" [value]="op">{{op}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </ng-container>
-                <ng-container *ngIf="item.type == 'textarea'">
-                    <mat-form-field appearance="standard">
-                        <mat-label>{{item.label}}</mat-label>
-                        <textarea matInput></textarea>
-                    </mat-form-field>
-                </ng-container>
-                <ng-container *ngIf="item.type == 'text'">
-                    <mat-form-field appearance="standard">
-                        <mat-label>{{item.label}}</mat-label>
-                        <input matInput>
-                    </mat-form-field>
-                </ng-container>
-                <ng-container *ngIf="item.type == 'radio'">
-                    <mat-label>{{item.label}}</mat-label>
-                    <mat-radio-group>
-                        <mat-radio-button *ngFor="let op of item.options" [value]="op">{{op}}</mat-radio-button>
-                    </mat-radio-group>
-                </ng-container>
-                <ng-container *ngIf="item.type == 'checkbox'">
-                    <mat-label>{{item.label}}</mat-label>
-                    <mat-checkbox *ngFor="let op of item.options">{{op}}</mat-checkbox>
+                <ng-container [ngSwitch]="item.type">
+                    <ng-container *ngSwitchCase="'select'">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{item.label}}</mat-label>
+                            <mat-select [formControlName]="item.label">
+                                <mat-option *ngFor="let op of item.options" [value]="op">
+                                    {{op}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="userForm.get(item.label)?.hasError('required')">
+                                This field is required.
+                            </mat-error>
+                        </mat-form-field>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'textarea'">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{item.label}}</mat-label>
+                            <textarea matInput [formControlName]="item.label"></textarea>
+                            <mat-error *ngIf="userForm.get(item.label)?.hasError('required')">
+                                This field is required.
+                            </mat-error>
+                        </mat-form-field>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'text'">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{item.label}}</mat-label>
+                            <input matInput [formControlName]="item.label">
+                            <mat-error *ngIf="userForm.get(item.label)?.hasError('required')">
+                                This field is required.
+                            </mat-error>
+                        </mat-form-field>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'radio'">
+                        <div class="radio-field">
+                            <mat-label>{{item.label}} : </mat-label>
+                            <mat-radio-group [formControlName]="item.label">
+                                <mat-radio-button *ngFor="let op of item.options" [value]="op">
+                                    {{op}}
+                                </mat-radio-button>
+                                <mat-error *ngIf="userForm.get(item.label)?.hasError('required')">
+                                    This field is required.
+                                </mat-error>
+                            </mat-radio-group>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'checkbox'">
+                        <div class="checkbox-field">
+                            <mat-label>{{item.label}} :</mat-label>
+                            <div class="check-option">
+                                <ng-container *ngFor="let op of item.options">
+                                    <mat-checkbox [formControlName]="op" required>
+                                        {{op}}
+                                    </mat-checkbox>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </ng-container>
                 </ng-container>
             </ng-container>
-        </div>
+            <div class="action-button">
+                <button mat-stroked-button color="accent" type="submit" (click)="submit()">Submit</button>
+            </div>
+        </form>
     </mat-card>
 </div>

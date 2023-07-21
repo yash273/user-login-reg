@@ -3,9 +3,17 @@
 .card{display: flex;justify-content: space-between;align-items: center;
     &:nth-child(n + 2){margin-top: 10px;}
 }
-.user-wrapper .action-button{ display: flex;justify-content: flex-start;
-    .mat-stroked-button:nth-child(2){margin-left: 24px;}
-} 
+.user-wrapper .action-button{ display: flex;justify-content: space-between;margin-top: 30px;}
 .card-text{display: flex; align-items: center;}
 .user-wrapper{min-height: calc(100vh - 110px);display: flex;padding: 20px;
-    .user-card{margin: auto;width: 100%; max-width: 500px;}}
+    .user-card{margin: auto;width: 100%; max-width: 500px;min-height: calc( 100vh - 170px);background-color: #ebebeb;}}
+.form-group{ position: relative;display: flex;flex-direction: column;
+    &:nth-child(n + 2){margin-top: 20px;}
+    .remove-field-btn{position: absolute;padding: 0px 8px;min-width: 20px;right: -45px;top: 0;}
+}
+.options {display: flex;flex-direction: column;
+    .item{display: flex;flex-direction: row;align-items: center;}
+    mat-form-field{width: 100%;}
+}
+.form-name-card{display: flex;margin-bottom: 20px;
+ mat-form-field{width: 100%;}}

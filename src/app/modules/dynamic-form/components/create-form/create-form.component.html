@@ -1,13 +1,16 @@
 <div class="user-wrapper">
     <mat-card class="user-card">
         <form [formGroup]="form">
-            <mat-form-field appearance="standard">
-                <mat-label>Form Name</mat-label>
-                <input matInput type="text" formControlName="formName">
-            </mat-form-field>
+            <mat-card class="form-name-card">
+                <mat-form-field appearance="standard">
+                    <mat-label>Form Name</mat-label>
+                    <input matInput type="text" formControlName="formName">
+                    <mat-error *ngIf="form.get('formName')?.hasError('required')">This field is required.</mat-error>
+                </mat-form-field>
+            </mat-card>
             <div class="create-field-container " formArrayName="formDetails">
                 <ng-container *ngFor="let fd of formDetailsControls.controls; let i = index">
-                    <ng-container [formGroupName]="i">
+                    <mat-card class="form-group" [formGroupName]="i">
 
                         <mat-form-field appearance="standard">
                             <mat-label>Field Type</mat-label>
@@ -18,44 +21,67 @@
                                 <mat-option value="radio">Radio</mat-option>
                                 <mat-option value="checkbox">Checkbox</mat-option>
                             </mat-select>
+                            <mat-error *ngIf="form.get('formDetails.'+ i +'.type')?.hasError('required')">This field is required.</mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="standard">
                             <mat-label>Label</mat-label>
                             <input matInput type="text" formControlName="label">
+                            <mat-error *ngIf="form.get('formDetails.'+ i +'.label')?.hasError('required')">This field is required.</mat-error>
                         </mat-form-field>
 
-                        <mat-checkbox formControlName="required">Required</mat-checkbox>
+                        <mat-checkbox *ngIf="!isCheckbox(i)" formControlName="required">Required</mat-checkbox>
 
-                        <div *ngIf="isSpecialFieldType(i)">
+                        <ng-container *ngIf="isSpecialFieldType(i)">
 
-                            <div formArrayName="options">
-                                <div *ngFor="let optionCtrl of newFieldOptions.controls; let j = index">
+                            <div class="options" formArrayName="options">
+                                <div class="item" *ngFor="let item of newFieldOptions.controls; let j = index">
                                     <mat-form-field appearance="standard">
                                         <mat-label>Option {{ j + 1 }}</mat-label>
                                         <input matInput type="text" formControlName={{j}}>
-
+                                        <mat-error *ngIf="form.get('formDetails.'+ i +'.options.' + j)?.hasError('required')">This field is required.</mat-error>
                                     </mat-form-field>
-                                    <button mat-icon-button color="warn" (click)="removeOption(j)">
+                                    <button mat-icon-button color="warn" type="button" *ngIf="optionsLength > 1" (click)="removeOption(j)">
                                         <mat-icon>delete</mat-icon>
                                     </button>
-                                    {{i}}
                                 </div>
                             </div>
 
-                            <button mat-raised-button color="primary" (click)="addOption()">Add Option</button>
+                            <button mat-raised-button color="primary" type="button" (click)="addOption()">Add Option</button>
 
-                        </div>
-                        <button *ngIf="i > 0" mat-stroked-button color="warn" (click)="remove(i)">remove Field</button>
+                        </ng-container>
+
+                        <!-- <ng-container *ngIf="isCheckbox(i)">
+                        
+                            <div class="options" formArrayName="options">
+                                <div class="item" *ngFor="let item of newFieldOptions.controls; let j = index">
+                                    <mat-form-field appearance="standard">
+                                        <mat-label>Option {{ j + 1 }}</mat-label>
+                                        <input matInput type="text" formControlName={{j}}>
+                                        <mat-error *ngIf="form.get('formDetails.'+ i +'.options.' + j)?.hasError('required')">This field is required.</mat-error>
+                                    </mat-form-field>
+                                    <button mat-icon-button color="warn" type="button" *ngIf="optionsLength > 1" (click)="removeOption(j)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        
+                            <button mat-raised-button color="primary" type="button" (click)="addOption()">Add Option</button>
+                        
+                        </ng-container> -->
 
 
-                    </ng-container>
+                        <button class="remove-field-btn" *ngIf="formDetailLength > 1" mat-raised-button color="warn" type="button" (click)="remove(i)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+
+                    </mat-card>
 
 
                 </ng-container>
                 <div class="action-button">
-                    <button mat-stroked-button color="primary" (click)="addField()">Add Field</button>
-                    <button mat-stroked-button color="accent" type="submit" (click)="submitForm()">Submit</button>
+                    <button mat-raised-button color="primary" type="button" (click)="addField()">Add Field</button>
+                    <button mat-raised-button color="accent" type="submit" (click)="submitForm()">Submit and View Form</button>
                 </div>
             </div>
         </form>
